@@ -1,0 +1,44 @@
+{
+  "nav": {
+    "home": "Etusivu",
+    "services": "Palvelut",
+    "work": "Työt",
+    "contact": "Yhteys"
+  },
+  "hero": {
+    "title": "Nettisivut yrityksille tai henkilökohtaiseen käyttöön",
+    "subtitle": "Alkaen 50€",
+    "ctaPrimary": "Pyydä tarjous",
+    "ctaSecondary": "Katso töitä",
+    "scroll": "Vieritä alas"
+  },
+  "services": {
+    "title": "Palvelut",
+    "items": {
+      "web": {
+        "title": "Verkkosivut",
+        "desc": "Nopeat, saavutettavat ja SEO-optimoidut sivustot."
+      },
+      "shop": {
+        "title": "Verkkokaupat",
+        "desc": "Kassavirtaa tuottavat kaupat (Shopify/Saleor/Stripe)."
+      },
+      "care": {
+        "title": "Ylläpito",
+        "desc": "Päivitykset, analytiikka ja konversioiden seuranta."
+      }
+    }
+  },
+  "work": { "title": "Viimeisimmät työt", "cta": "Katso lisää" },
+  "footer": { "copyright": "© {year} Digipaja. Kaikki oikeudet pidätetään." },
+  "cta": { "contact": "Pyydä tarjous" 
+},
+  "contact": {
+    "title": "Ota yhteyttä",
+    "desc": "Täytä lomake ja palaamme pian. Tai laita suoraan sähköpostia osoitteeseen contact@digipaja.fi.",
+    "name": "Nimi",
+    "email": "Sähköposti",
+    "message": "Viesti",
+    "submit": "Lähetä"
+  }
+}
