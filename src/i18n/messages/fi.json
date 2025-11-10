@@ -7,13 +7,14 @@
   },
   "hero": {
     "title": "Nettisivut yrityksille tai henkilökohtaiseen käyttöön",
-    "subtitle": "Alkaen 50€",
+    "subtitle": "Tähän joku lyhyt ja ytimekäs paska",
     "ctaPrimary": "Pyydä tarjous",
     "ctaSecondary": "Katso töitä",
     "scroll": "Vieritä alas"
   },
   "services": {
     "title": "Palvelut",
+    "subtitle": "Jotain?",
     "items": {
       "web": {
         "title": "Verkkosivut",
@@ -29,10 +30,32 @@
       }
     }
   },
-  "work": { "title": "Viimeisimmät työt", "cta": "Katso lisää" },
-  "footer": { "copyright": "© {year} Digipaja. Kaikki oikeudet pidätetään." },
-  "cta": { "contact": "Pyydä tarjous" 
+  "work": {
+  "title": "Referenssit",
+  "subtitle": "Nopeasti toimitettavat ja helposti ylläpidettävät ratkaisut. Valitse tarpeellinen — loput voi lisätä myöhemmin.",
+  "cta": "Katso lisää",
+  "viewCase": "Näytä projekti",
+  "items": {
+    "project1": {
+      "title": "Yrityssivusto",
+      "desc": "Moderni, monikielinen yrityssivusto nopealla latauksella ja erinomaisella saavutettavuudella.",
+      "tags": ["Next.js", "Tailwind"]
+    },
+    "project2": {
+      "title": "Verkkokauppa",
+      "desc": "Stripe-maksut, varastosynkronointi ja räätälöity tuotesivu konversiota varten.",
+      "tags": ["E-commerce", "Stripe"]
+    },
+    "project3": {
+      "title": "Blogi + SEO",
+      "desc": "Sisällönhallinta, hakukoneoptimointi ja jaettavat artikkelikortit.",
+      "tags": ["i18n", "SEO"]
+    }
+  }
 },
+
+  "footer": { "copyright": "© {year} Digipaja. Kaikki oikeudet pidätetään." },
+  "cta": { "contact": "Pyydä tarjous" },
   "contact": {
     "title": "Ota yhteyttä",
     "desc": "Täytä lomake ja palaamme pian. Tai laita suoraan sähköpostia osoitteeseen contact@digipaja.fi.",
@@ -40,5 +63,61 @@
     "email": "Sähköposti",
     "message": "Viesti",
     "submit": "Lähetä"
+  },
+  "estimator": {
+    "title": "Sivuston hinta-arvio",
+    "badges": {
+      "type": "{type}",
+      "pages": "{count} sivua",
+      "deadline": "{deadline}"
+    },
+    "fields": {
+      "type": "Tyyppi",
+      "pages": "Sivut",
+      "features": "Ominaisuudet",
+      "deadline": "Aikataulu"
+    },
+    "options": {
+      "type": {
+        "business": "Yrityssivusto",
+        "portfolio": "Portfolio",
+        "ecommerce": "Verkkokauppa",
+        "booking": "Varausjärjestelmä",
+        "custom": "Räätälöity"
+      },
+      "features": {
+        "blog": "Blogi",
+        "gallery": "Galleria",
+        "contact": "Yhteydenottolomake",
+        "checkout": "Kassa",
+        "booking": "Varaus",
+        "multilingual": "Monikielisyys",
+        "seo": "SEO-asetukset",
+        "cms": "Sisällönhallinta (CMS)"
+      },
+      "deadline": {
+        "normal": "Normaali",
+        "fast": "Nopea",
+        "rush": "Pikatoimitus"
+      }
+    },
+    "helper": {
+      "pagesHint": "Ensimmäinen sivu sisältyy hintaan, lisäsivut 40 € / kpl",
+      "featuresTip": "Ominaisuuksia voi lisätä/poistaa myöhemmin projektin aikana",
+      "deadlineHint": "Normaali = 1x, Nopea = 1.2x, Pikatoimitus = 1.5x"
+    },
+    "breakdown": {
+      "see": "Näytä hintaerittely",
+      "base": "Perushinta ({type})",
+      "extraPages": "Lisäsivut ({count})",
+      "features": "Ominaisuudet {list}",
+      "none": "(ei valittuna)",
+      "multiplier": "Aikataulukerroin"
+    },
+    "total": {
+      "label": "Arvioitu kokonaishinta",
+      "approxNote": "(Suuntaa-antava, lopullinen hinta neuvotellaan projektin yksityiskohtien perusteella)"
+    },
+    "cta": "Pyydä tarjous"
   }
 }
