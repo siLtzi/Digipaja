@@ -6,6 +6,7 @@ import { Poppins } from "next/font/google";
 import ParticlesLayer from "@/components/ParticlesLayer";
 import localFont from "next/font/local";
 import SectionDots from "@/components/SectionDots";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const clashDisplay = localFont({
   src: [
@@ -51,7 +52,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+      {/* 👈 optional: smooth anchor jumps */}
       <body
         className={`
           ${geistSans.variable} ${geistMono.variable}
@@ -59,7 +61,8 @@ export default function RootLayout({
           antialiased bg-white/10 dark:bg-zinc-900/10
         `}
       >
-        <SplashScreen /> {/* 👈 added this line */}
+        <SmoothScroll /> {/* 👈 mount once, before your content */}
+        <SplashScreen />
         <ParticlesLayer />
         <div className="relative z-10">
           {children}

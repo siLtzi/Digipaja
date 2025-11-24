@@ -9,7 +9,7 @@ export default function Contact({ locale }: { locale: "fi" | "en" }) {
   const t = useTranslations("contact");
   const est = useEstimatorStore();
   const [message, setMessage] = useState("");
-  const [dirty, setDirty] = useState(false); // user has typed -> stop auto-updating
+  const [dirty, setDirty] = useState(false); 
 
   const prefill = useMemo(() => {
     const featuresPretty = est.features.length ? est.features.map(f => f[0].toUpperCase() + f.slice(1)).join(", ") : "None";
