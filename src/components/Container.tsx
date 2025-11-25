@@ -14,7 +14,7 @@ export default function Container({
   return (
     <div
       className={`mx-auto w-full ${clamp ? 'max-w-6xl' : 'max-w-none'} ${className}`}
-      style={{ paddingInline: `max(${padVW}vw, 1rem)` }} // never smaller than 16px
+      style={{ paddingInline: `max(${padVW}vw, 1rem)` }} 
     >
       {children}
     </div>

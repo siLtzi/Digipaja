@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-// 👉 your base JSON config
 const BASE = {
   particles: {
     number: { value: 80, density: { enable: true, value_area: 800 } },
@@ -41,7 +40,7 @@ const BASE = {
     },
   },
   interactivity: {
-    detect_on: "window", // we'll still forward manually
+    detect_on: "window",
     events: {
       onhover: { enable: true, mode: "bubble" },
       onclick: { enable: false, mode: "repulse" },
@@ -81,7 +80,7 @@ export default function ParticlesLayer() {
         config.particles.color.value = dark ? "#ffffff" : "#111111";
         config.particles.line_linked.color = dark ? "#ffffff" : "#111111";
 
-        // ensure global detection (we still do manual forwarding below)
+        // ensure global detection
         config.interactivity.detect_on = "window";
 
         (window as any).particlesJS(id, config);
@@ -106,7 +105,6 @@ export default function ParticlesLayer() {
         }
 
         if (inst) {
-          // helpful: tell particles which element is interactive
           if (canvas) inst.interactivity.el = canvas;
 
           w.__particlesMove = (e: MouseEvent) => {
@@ -144,13 +142,10 @@ export default function ParticlesLayer() {
     };
 
     const handleVisibility = () => {
-      // placeholder if you want to pause on hidden
     };
 
     const destroy = () => {
       const w = window as any;
-
-      // remove our global mouse forwarders
       if (w.__particlesMove) {
         window.removeEventListener("mousemove", w.__particlesMove);
         w.__particlesMove = null;

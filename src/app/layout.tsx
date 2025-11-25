@@ -53,7 +53,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
-      {/* 👈 optional: smooth anchor jumps */}
       <body
         className={`
           ${geistSans.variable} ${geistMono.variable}
@@ -61,7 +60,7 @@ export default function RootLayout({
           antialiased bg-white/10 dark:bg-zinc-900/10
         `}
       >
-        <SmoothScroll /> {/* 👈 mount once, before your content */}
+        <SmoothScroll /> 
         <SplashScreen />
         <ParticlesLayer />
         <div className="relative z-10">

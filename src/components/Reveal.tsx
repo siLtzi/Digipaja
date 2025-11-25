@@ -1,6 +1,6 @@
 "use client";
-import { motion, useReducedMotion } from "framer-motion";
-import React from "react";
+import { motion, useReducedMotion, cubicBezier } from "framer-motion";
+import React, { ElementType } from "react";
 
 type Props = {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ type Props = {
   delay?: number;      // seconds
   y?: number;          // px translate on enter
   once?: boolean;      // only animate first time
-  as?: keyof JSX.IntrinsicElements; // optional tag
+  as?: ElementType;    // optional tag
 };
 
 export default function Reveal({
@@ -22,7 +22,7 @@ export default function Reveal({
   const prefersReduced = useReducedMotion();
   const variants = {
     hidden: { opacity: 0, y: prefersReduced ? 0 : y },
-    show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay } },
+    show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: cubicBezier(0.22, 1, 0.36, 1), delay } },
   };
 
   return (

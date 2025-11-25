@@ -1,4 +1,3 @@
-// src/components/SmoothScroll.tsx
 "use client";
 import { useEffect } from "react";
 import Lenis from "lenis";
@@ -10,8 +9,8 @@ export default function SmoothScroll() {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Tuning
-    const DURATION = prefersReduced ? 0.25 : 1.0; // shorter = snappier
-    const WHEEL    = prefersReduced ? 1.0  : 1.8; // higher = faster scroll
+    const DURATION = prefersReduced ? 0.25 : 1.0; 
+    const WHEEL    = prefersReduced ? 1.0  : 1.8; 
 
     const lenis = new Lenis({
       duration: DURATION,
@@ -29,14 +28,13 @@ export default function SmoothScroll() {
     };
     raf = requestAnimationFrame(loop);
 
-    // Optional: make internal hash links glide too
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement)?.closest("a[href^='#']") as HTMLAnchorElement | null;
       if (!a) return;
       const el = document.querySelector(a.getAttribute("href")!) as HTMLElement;
       if (!el) return;
       e.preventDefault();
-      lenis.scrollTo(el, { offset: -8 }); // adjust if you have a sticky header
+      lenis.scrollTo(el, { offset: -8 }); 
     };
     document.addEventListener("click", onClick);
 

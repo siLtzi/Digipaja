@@ -1,4 +1,3 @@
-// components/Work.tsx
 import Container from "./Container";
 import { getTranslations } from "next-intl/server";
 import Reveal from "./Reveal";
@@ -50,7 +49,6 @@ export default async function Work({ locale }: { locale: "fi" | "en" }) {
           ))}
         </div>
 
-        {/* Optional "View more" CTA */}
         <div className="mt-10 text-center">
           <Link
             href="/work"

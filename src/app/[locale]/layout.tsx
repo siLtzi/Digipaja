@@ -9,16 +9,17 @@ export default async function RootLayout({
   params,
 }: {
   children: ReactNode;
-  params: Promise<{ locale: "fi" | "en" }>;
+  params: Promise<{ locale: string }>; 
 }) {
-  const { locale } = await params; // ✅ unwrap the Promise
+  const { locale } = await params; 
+
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <Navbar locale={locale} />
+      <Navbar locale={locale as "fi" | "en"} />
       {children}
-      <Footer locale={locale} />
+      <Footer locale={locale as "fi" | "en"} />
     </NextIntlClientProvider>
   );
 }

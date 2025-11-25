@@ -19,7 +19,6 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
     >
       {/* Left side — main text */}
       <div className="relative z-10 text-left">
-        {/* frosted glass background ONLY for this content */}
         <div
           aria-hidden
           className="

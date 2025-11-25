@@ -93,8 +93,6 @@ export default async function Services({ locale }: { locale: "fi" | "en" }) {
             </p>
           </div>
         </Reveal>
-
-        {/* changed: keep max 3 cols at large screens and center the grid tracks */}
         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 justify-center">
           {[
             {

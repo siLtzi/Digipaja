@@ -7,7 +7,7 @@ export default function SplashScreen() {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShow(false), 2000); // stays for 2s
+    const timer = setTimeout(() => setShow(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -16,12 +16,13 @@ export default function SplashScreen() {
       {show && (
         <motion.div
           key="splash"
+          suppressHydrationWarning // ✅ prevents SSR mismatch
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="fixed inset-0 z-9999 flex items-center justify-center 
-                     bg-zinc-950 dark:bg-zinc-900"
+                 bg-zinc-950 dark:bg-zinc-900"
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}

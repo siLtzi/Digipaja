@@ -62,7 +62,6 @@ export default function Contact({ locale }: { locale: "fi" | "en" }) {
 
           <Reveal delay={0.1} y={24}>
             <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4 w-full max-w-md">
-              {/* hidden fields sent alongside the message for easy parsing on backend */}
               <input type="hidden" name="estimator_type" value={est.type} />
               <input type="hidden" name="estimator_pages" value={est.pages} />
               <input type="hidden" name="estimator_features" value={est.features.join(",")} />
