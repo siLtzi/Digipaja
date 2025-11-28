@@ -17,5 +17,149 @@
     "bizTitle": "Jouko – bisnes & selkokieli",
     "bizBody": "Huolehdin siitä, että sivu palvelee oikeita asiakkaita. Autan jäsentämään palvelut, järkevän rakenteen ja selkeät viestit – ilman teknistä jargonia.",
     "note": "Lopputulos: inhimillinen kumppani, jolta saat sekä toimivan sivuston että apua sen ympärillä tehtäviin päätöksiin."
+  },
+
+  "whyUs": {
+    "eyebrow": "Miksi valita Digipaja?",
+    "title": "Pieni tiimi, iso vastuu – juuri sinulle.",
+    "subtitle": "Emme myy kikkailevaa koodia tai turhaa hienostelua. Teemme sivuja, jotka tuntuvat omilta ja tuovat sinulle oikeita yhteydenottoja.",
+
+    "point1Title": "Selkeä hinta, ei yllätyksiä",
+    "point1Body": "Sovimme budjetin etukäteen ja kerromme rehellisesti, mitä siihen mahtuu. Ei piilokuluja, ei \"lisäpaketteja\" tunteja myöhemmin.",
+
+    "point2Title": "Moderni tekniikka ilman teknistä jargonia",
+    "point2Body": "Next.js, Tailwind, analytiikka ja seuranta – mutta puhumme kaikesta selkokielellä. Sinun ei tarvitse ymmärtää koodia, riittää että ymmärrät bisnestäsi.",
+
+    "point3Title": "Nopea ja mutkaton yhteistyö",
+    "point3Body": "Olemme kahden ihmisen tiimi, joten sinulla on aina suora yhteys tekijöihin. Vastaukset tulevat nopeasti, ja hommat etenevät ilman turhaa byrokratiaa.",
+
+    "point4Title": "Sivu joka elää mukana",
+    "point4Body": "Emme tee kertakäyttösivua. Rakennamme pohjan, jota on helppo laajentaa ja päivittää, kun yrityksesi kasvaa."
+  },
+
+  "process": {
+    "eyebrow": "Miten homma etenee?",
+    "title": "Selkeä prosessi alusta loppuun.",
+    "subtitle": "Pidämme projektit kevyinä ja läpinäkyvinä. Tiedät koko ajan, missä mennään ja mitä seuraavaksi tapahtuu.",
+
+    "step1Label": "1",
+    "step1Title": "Alkukartoitus & tavoite",
+    "step1Body": "Jutellaan yrityksestäsi, asiakkaistasi ja siitä, mitä sivuilla pitää oikeasti saada aikaan. Tämä voi olla etätapaaminen, puhelu tai kahvihetki.",
+
+    "step2Label": "2",
+    "step2Title": "Rakenne, sisältö & tyyli",
+    "step2Body": "Ehdotamme sivun rakennetta, sisältölohkoja ja visuaalista tyyliä. Autamme sanoittamaan palvelut selkeästi – ilman liikaa markkinajargonia.",
+
+    "step3Label": "3",
+    "step3Title": "Toteutus & testaus",
+    "step3Body": "Rakennamme sivun modernilla teknologialla (Next.js, Tailwind, analytiikka). Pidämme sinut kartalla ja voit kommentoida työtä pitkin matkaa.",
+
+    "step4Label": "4",
+    "step4Title": "Julkaisu & jatko",
+    "step4Body": "Julkaisun jälkeen huolehdimme, että kaikki toimii: lomakkeet, analytiikka, hakukoneet ja nopeus. Voimme jatkaa ylläpidolla tai opastaa sinut käyttämään sivua itse."
+  },
+
+  "services": {
+    "eyebrow": "Mitä me teemme?",
+    "title": "Tarvitset selkeät nettisivut – me hoidamme koko paketin.",
+    "subtitle": "Autamme sinua alusta loppuun: rakenteesta ja sisällöstä aina julkaisuun ja jatkokehitykseen.",
+
+    "service1Label": "Palvelu 1",
+    "service1Title": "Yrityksen kotisivut",
+    "service1Body": "Räätälöidyt, nopeat ja modernit nettisivut yrityksellesi. Selkeä rakenne, responsiivinen toteutus ja hakukoneita varten optimoitu perusta.",
+
+    "service2Label": "Palvelu 2",
+    "service2Title": "Sisältö & rakenne",
+    "service2Body": "Emme odota valmiita tekstejä. Autamme jäsentämään palvelut, kirjoittamaan tekstit ja muotoilemaan viestit niin, että oikeat asiakkaat ymmärtävät ne.",
+
+    "service3Label": "Palvelu 3",
+    "service3Title": "Ylläpito & jatkokehitys",
+    "service3Body": "Voimme huolehtia sivuston päivityksistä, sisällön muutoksista ja pienistä kehitystöistä kuukausisopimuksella tai tuntiperusteisesti."
+  },
+
+  "work": {
+    "eyebrow": "Viimeisimpiä projekteja",
+    "title": "Sivuja, joista asiakkaat voivat olla ylpeitä.",
+    "subtitle": "Tässä muutamia esimerkkejä siitä, millaisia sivuja olemme toteuttaneet. Jokainen projekti on rakennettu yrityksen tarpeiden mukaan.",
+    "ctaLabel": "Katso lisää töitä"
+  },
+
+  "pricing": {
+    "eyebrow": "Hinnoittelu",
+    "title": "Selkeä hinnoittelu ilman yllätyksiä.",
+    "subtitle": "Jokainen projekti on erilainen, mutta suurin osa asiakkaista asettuu näihin kokonaisuuksiin. Saat aina kirjallisen tarjouksen ennen kuin aloitamme.",
+
+    "plan1Name": "Perussivusto",
+    "plan1Price": "alk. 1 200 €",
+    "plan1Body": "Yksinkertaiset, mutta viimeistellyt yrityksen kotisivut. Sopii esimerkiksi yhden palvelun yritykselle tai pienelle toimijalle.",
+    "plan1Includes": [
+      "1–3 sivua (etusivu + yhteystiedot + 1 lisäsivu)",
+      "Responsiivinen toteutus",
+      "Perus-hakukoneoptimointi",
+      "Yhteydenottolomake tai suorat yhteystiedot"
+    ],
+
+    "plan2Name": "Laajempi yrityssivusto",
+    "plan2Price": "alk. 2 400 €",
+    "plan2Body": "Laajempi sivusto useammalle palvelulle, tiimille tai referensseille. Sopii kasvavalle yritykselle.",
+    "plan2Includes": [
+      "Jopa 6–8 sivua",
+      "Räätälöity rakenne ja sisällön suunnittelu",
+      "Hakukoneystävällinen rakenne",
+      "Perusanalytiikka (esim. Google Analytics / Plausible)"
+    ],
+
+    "plan3Name": "Ylläpito & jatkokehitys",
+    "plan3Price": "alk. 80 €/kk",
+    "plan3Body": "Sopimus jatkuvasta kehityksestä ja sisällön päivityksistä. Pysymme rinnalla, kun sivusto ja yritys kehittyvät.",
+    "plan3Includes": [
+      "Sisällön päivitykset ja pienet muutokset",
+      "Tekniset päivitykset ja valvonta",
+      "Pieniä uusia osuuksia sivulle tarpeen mukaan",
+      "Tuki ja sparraus sähköpostilla"
+    ],
+
+    "note": "Nämä paketit ovat esimerkkejä. Jos et tunnista omaa tilannettasi näistä, kerro siitä meille – räätälöimme kokonaisuuden ja hinnan yrityksesi mukaan."
+  },
+
+  "contact": {
+    "eyebrow": "Ota yhteyttä",
+    "title": "Rakennetaan yhdessä seuraava projektisi",
+    "subtitle": "Kerro meille lyhyesti yrityksestäsi ja mitä tarvitset – palaamme pian selkeän suunnitelman ja hintahaarukan kanssa.",
+    "note": "Voimme sopia maksuttoman kartoituspuhelun, jossa käydään läpi nykytilanteesi ja tavoitteesi ilman sitoumuksia.",
+    "firstNameLabel": "Etunimi",
+    "lastNameLabel": "Sukunimi",
+    "emailLabel": "Sähköposti",
+    "phoneLabel": "Puhelin",
+    "messageLabel": "Viesti",
+    "submitLabel": "Lähetä viesti",
+    "helperText": "Vastaamme yleensä 1–2 arkipäivän kuluessa."
+  },
+  "footer": {
+    "companyName": "Digipaja",
+    "tagline": "Pienille ja keskisuurille yrityksille suunniteltuja verkkosivuja ja digiratkaisuja.",
+    "navigationTitle": "Navigaatio",
+    "contactTitle": "Yhteystiedot",
+    "heroLink": "Etusivu",
+    "whyUsLink": "Miksi Digipaja",
+    "processLink": "Miten etenemme",
+    "servicesLink": "Palvelut",
+    "workLink": "Referenssit",
+    "pricingLink": "Hinnoittelu",
+    "contactLink": "Yhteydenotto",
+    "rights": "Kaikki oikeudet pidätetään.",
+    "madeIn": "Tehty rakkaudella Oulussa."
+  },
+  "nav": {
+    "home": "Etusivu",
+    "whyUs": "Miksi Digipaja",
+    "process": "Miten etenemme",
+    "services": "Palvelut",
+    "work": "Referenssit",
+    "pricing": "Hinnoittelu",
+    "contact": "Yhteydenotto"
+  },
+  "cta": {
+    "primary": "Ota yhteyttä"
   }
 }

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
+import Navbar from "@/components/Navbar";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
 export default async function LocaleLayout({
   children,
@@ -8,7 +10,6 @@ export default async function LocaleLayout({
   children: ReactNode;
   params: Promise<{ locale: "fi" | "en" }>;
 }) {
-  // params is a Promise in Next 15 – unwrap it:
   const { locale } = await params;
 
   // Load translations for this locale
@@ -16,7 +17,17 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
+      <SmoothScrollProvider>
+        {/* Everything inside here is now scroll-smoothed */}
+        <div className="min-h-screen bg-black text-zinc-50">
+          <Navbar locale={locale} />
+
+          {/* Padding so content clears the fixed navbar */}
+          <main className="pt-16">
+            {children}
+          </main>
+        </div>
+      </SmoothScrollProvider>
     </NextIntlClientProvider>
   );
 }

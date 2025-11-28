@@ -1,0 +1,131 @@
+import { sanityClient } from "@/sanity/config";
+import { processSettingsQuery } from "@/sanity/queries";
+
+type ProcessMessages = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  step1Label: string;
+  step1Title: string;
+  step1Body: string;
+  step2Label: string;
+  step2Title: string;
+  step2Body: string;
+  step3Label: string;
+  step3Title: string;
+  step3Body: string;
+  step4Label: string;
+  step4Title: string;
+  step4Body: string;
+};
+
+type MessagesFile = {
+  process: ProcessMessages;
+};
+
+type ProcessSettings = {
+  processEyebrow_fi?: string | null;
+  processTitle_fi?: string | null;
+  processSubtitle_fi?: string | null;
+  processStep1Label_fi?: string | null;
+  processStep1Title_fi?: string | null;
+  processStep1Body_fi?: string | null;
+  processStep2Label_fi?: string | null;
+  processStep2Title_fi?: string | null;
+  processStep2Body_fi?: string | null;
+  processStep3Label_fi?: string | null;
+  processStep3Title_fi?: string | null;
+  processStep3Body_fi?: string | null;
+  processStep4Label_fi?: string | null;
+  processStep4Title_fi?: string | null;
+  processStep4Body_fi?: string | null;
+};
+
+export default async function Process({ locale }: { locale: "fi" | "en" }) {
+  const messages = (await import(`@/i18n/messages/${locale}.json`))
+    .default as MessagesFile;
+
+  const m = messages.process;
+
+  const cms =
+    (await sanityClient.fetch<ProcessSettings | null>(
+      processSettingsQuery
+    )) ?? {};
+
+  const isFi = locale === "fi";
+
+  const eyebrow = isFi ? cms.processEyebrow_fi || m.eyebrow : m.eyebrow;
+  const title = isFi ? cms.processTitle_fi || m.title : m.title;
+  const subtitle = isFi ? cms.processSubtitle_fi || m.subtitle : m.subtitle;
+
+  const steps = [
+    {
+      label: isFi ? cms.processStep1Label_fi || m.step1Label : m.step1Label,
+      title: isFi ? cms.processStep1Title_fi || m.step1Title : m.step1Title,
+      body: isFi ? cms.processStep1Body_fi || m.step1Body : m.step1Body,
+    },
+    {
+      label: isFi ? cms.processStep2Label_fi || m.step2Label : m.step2Label,
+      title: isFi ? cms.processStep2Title_fi || m.step2Title : m.step2Title,
+      body: isFi ? cms.processStep2Body_fi || m.step2Body : m.step2Body,
+    },
+    {
+      label: isFi ? cms.processStep3Label_fi || m.step3Label : m.step3Label,
+      title: isFi ? cms.processStep3Title_fi || m.step3Title : m.step3Title,
+      body: isFi ? cms.processStep3Body_fi || m.step3Body : m.step3Body,
+    },
+    {
+      label: isFi ? cms.processStep4Label_fi || m.step4Label : m.step4Label,
+      title: isFi ? cms.processStep4Title_fi || m.step4Title : m.step4Title,
+      body: isFi ? cms.processStep4Body_fi || m.step4Body : m.step4Body,
+    },
+  ];
+
+  return (
+    <section
+      id="process"
+      className="relative border-t border-zinc-900 bg-zinc-950/95"
+    >
+      <div className="mx-auto max-w-6xl px-[clamp(16px,8vw,80px)] py-20 lg:py-24">
+        {/* Eyebrow */}
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400">
+          {eyebrow}
+        </p>
+
+        {/* Title & subtitle */}
+        <div className="mt-4 max-w-3xl space-y-4">
+          <h2
+            style={{ fontFamily: "var(--font-clash-display)" }}
+            className="text-3xl font-normal tracking-tight text-zinc-50 sm:text-4xl lg:text-5xl"
+          >
+            {title}
+          </h2>
+          <p className="text-sm text-zinc-300 sm:text-base">{subtitle}</p>
+        </div>
+
+        {/* Steps */}
+        <div className="mt-10 grid gap-6 lg:grid-cols-4">
+          {steps.map((s, i) => (
+            <div
+              key={i}
+              className="relative flex flex-col gap-3 rounded-3xl border border-zinc-800 bg-zinc-900/80 p-5 sm:p-6 backdrop-blur-xl shadow-[0_12px_35px_rgba(0,0,0,0.45)]"
+            >
+              <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.18em] text-zinc-400">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 text-[11px] text-zinc-100">
+                  {s.label}
+                </span>
+                <span>Vaihe</span>
+              </div>
+              <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
+                {s.title}
+              </h3>
+              <p className="text-sm text-zinc-300 leading-relaxed">
+                {s.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -13,7 +13,6 @@ type HeroMessages = {
 
 type MessagesFile = {
   hero: HeroMessages;
-  // other namespaces allowed, we only care about hero here
 };
 
 type HeroSettings = {
@@ -26,26 +25,25 @@ type HeroSettings = {
 };
 
 export default async function Hero({ locale }: { locale: "fi" | "en" }) {
-  // 1) Load i18n messages for current locale
   const messages = (await import(`@/i18n/messages/${locale}.json`))
     .default as MessagesFile;
 
   const m = messages.hero;
 
-  // 2) Load optional overrides from Sanity
-  const cms = (await sanityClient.fetch<HeroSettings | null>(
-    heroSettingsQuery
-  )) ?? {};
+  const cms =
+    (await sanityClient.fetch<HeroSettings | null>(heroSettingsQuery)) ?? {};
 
-
-  // 3) Decide final text values
   const isFi = locale === "fi";
 
   const badge = isFi ? cms.heroBadge_fi || m.badge : m.badge;
   const title = isFi ? cms.heroTitle_fi || m.title : m.title;
   const subtitle = isFi ? cms.heroSubtitle_fi || m.subtitle : m.subtitle;
-  const ctaPrimary = isFi ? cms.heroCtaPrimary_fi || m.ctaPrimary : m.ctaPrimary;
-  const ctaSecondary = isFi ? cms.heroCtaSecondary_fi || m.ctaSecondary : m.ctaSecondary;
+  const ctaPrimary = isFi
+    ? cms.heroCtaPrimary_fi || m.ctaPrimary
+    : m.ctaPrimary;
+  const ctaSecondary = isFi
+    ? cms.heroCtaSecondary_fi || m.ctaSecondary
+    : m.ctaSecondary;
   const techLine = isFi ? cms.heroTechLine_fi || m.techLine : m.techLine;
 
   const href = (path: string) => `/${locale}${path}`;
@@ -55,7 +53,22 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
       id="hero"
       className="relative min-h-screen w-full overflow-hidden bg-zinc-950 text-zinc-50"
     >
-      {/* Background layer(s) – purely visual, no text */}
+      {/* Background VIDEO */}
+      <video
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        loop
+        muted
+        playsInline
+      >
+        {/* adjust path to your actual file */}
+        <source src="/media/hero2.mp4" type="video/mp4" />
+      </video>
+
+      {/* Dark overlay on top of video for readability */}
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
+
+      {/* Existing gradient glow layers (on top of overlay, still subtle) */}
       <div
         aria-hidden
         className="
@@ -65,11 +78,11 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-32 top-40 h-72 w-72 rounded-full bg-fuchsia-600/20 blur-3xl"
+        className="pointer-events-none absolute -left-32 top-40 h-72 w-72 rounded-full bg-fuchsia-600/25 blur-3xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-32 -bottom-10 h-80 w-80 rounded-full bg-sky-500/20 blur-3xl"
+        className="pointer-events-none absolute -right-32 -bottom-10 h-80 w-80 rounded-full bg-sky-500/25 blur-3xl"
       />
 
       {/* Content */}
@@ -81,7 +94,7 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
         "
       >
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/70 px-4 py-1 text-xs font-medium text-zinc-300">
+        <div className="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/80 px-4 py-1 text-xs font-medium text-zinc-300">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
           <span>{badge}</span>
         </div>
@@ -97,7 +110,7 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
         </h1>
 
         {/* Subtitle */}
-        <p className="max-w-xl text-base text-zinc-300 sm:text-lg">
+        <p className="max-w-xl text-base text-zinc-200 sm:text-lg">
           {subtitle}
         </p>
 
@@ -127,7 +140,7 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
         </div>
 
         {/* Tech line */}
-        <div className="pt-4 text-xs text-zinc-400 sm:text-sm">
+        <div className="pt-4 text-xs text-zinc-300 sm:text-sm">
           <p>{techLine}</p>
         </div>
       </div>
