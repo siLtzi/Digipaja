@@ -1,19 +1,17 @@
-import { getTranslations } from "next-intl/server";
 import Hero from "@/components/Hero";
-import Services from "@/components/Services";
-import Work from "@/components/Work";
-import Contact from "@/components/Contact";
+import Brothers from "@/components/Brothers";
 
-export default function Page({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: "fi" | "en" }>;
+}) {
+  const { locale } = await params;
 
   return (
-    <>
-      {/* cast for components */}
-      <Hero locale={locale as "fi" | "en"} />
-      <Services locale={locale as "fi" | "en"} />
-      <Work locale={locale as "fi" | "en"} />
-      <Contact locale={locale as "fi" | "en"} />
-    </>
+    <main>
+      <Hero locale={locale} />
+      <Brothers locale={locale} />
+    </main>
   );
 }

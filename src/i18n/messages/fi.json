@@ -1,123 +1,21 @@
 {
-  "nav": {
-    "home": "Etusivu",
-    "services": "Palvelut",
-    "work": "Työt",
-    "contact": "Yhteys"
-  },
   "hero": {
-    "title": "Nettisivut yrityksille tai henkilökohtaiseen käyttöön",
-    "subtitle": "Tähän joku lyhyt ja ytimekäs paska",
+    "badge": "Digipaja – kaksi veljestä, yksi tavoite: paremmat nettisivut.",
+    "title": "Modernit kotisivut, jotka näyttävät hyvältä ja tuntuvat nopeilta.",
+    "subtitle": "Suunnittelemme ja toteutamme räätälöityjä Next.js-sivustoja pienille ja keskisuurille yrityksille. Animaatiot, hakukoneet ja mittarit samalla kertaa kuntoon.",
     "ctaPrimary": "Pyydä tarjous",
-    "ctaSecondary": "Katso töitä",
-    "scroll": "Vieritä alas"
+    "ctaSecondary": "Katso esimerkkejä",
+    "techLine": "Next.js • Tailwind • Animaatiot • Monikielisyys • Sanity CMS • Vercel"
   },
-  "services": {
-    "title": "Palvelut",
-    "subtitle": "Jotain?",
-    "items": {
-      "web": {
-        "title": "Verkkosivut",
-        "desc": "Nopeat, saavutettavat ja SEO-optimoidut sivustot."
-      },
-      "shop": {
-        "title": "Verkkokaupat",
-        "desc": "Kassavirtaa tuottavat kaupat (Shopify/Saleor/Stripe)."
-      },
-      "care": {
-        "title": "Ylläpito",
-        "desc": "Päivitykset, analytiikka ja konversioiden seuranta."
-      }
-    }
-  },
-  "work": {
-  "title": "Referenssit",
-  "subtitle": "Nopeasti toimitettavat ja helposti ylläpidettävät ratkaisut. Valitse tarpeellinen — loput voi lisätä myöhemmin.",
-  "cta": "Katso lisää",
-  "viewCase": "Näytä projekti",
-  "items": {
-    "project1": {
-      "title": "Yrityssivusto",
-      "desc": "Moderni, monikielinen yrityssivusto nopealla latauksella ja erinomaisella saavutettavuudella.",
-      "tags": ["Next.js", "Tailwind"]
-    },
-    "project2": {
-      "title": "Verkkokauppa",
-      "desc": "Stripe-maksut, varastosynkronointi ja räätälöity tuotesivu konversiota varten.",
-      "tags": ["E-commerce", "Stripe"]
-    },
-    "project3": {
-      "title": "Blogi + SEO",
-      "desc": "Sisällönhallinta, hakukoneoptimointi ja jaettavat artikkelikortit.",
-      "tags": ["i18n", "SEO"]
-    }
-  }
-},
 
-  "footer": { "copyright": "© {year} Digipaja. Kaikki oikeudet pidätetään." },
-  "cta": { "contact": "Pyydä tarjous" },
-  "contact": {
-    "title": "Ota yhteyttä",
-    "desc": "Täytä lomake ja palaamme pian. Tai laita suoraan sähköpostia osoitteeseen contact@digipaja.fi.",
-    "name": "Nimi",
-    "email": "Sähköposti",
-    "message": "Viesti",
-    "submit": "Lähetä"
-  },
-  "estimator": {
-    "title": "Sivuston hinta-arvio",
-    "badges": {
-      "type": "{type}",
-      "pages": "{count} sivua",
-      "deadline": "{deadline}"
-    },
-    "fields": {
-      "type": "Tyyppi",
-      "pages": "Sivut",
-      "features": "Ominaisuudet",
-      "deadline": "Aikataulu"
-    },
-    "options": {
-      "type": {
-        "business": "Yrityssivusto",
-        "portfolio": "Portfolio",
-        "ecommerce": "Verkkokauppa",
-        "booking": "Varausjärjestelmä",
-        "custom": "Räätälöity"
-      },
-      "features": {
-        "blog": "Blogi",
-        "gallery": "Galleria",
-        "contact": "Yhteydenottolomake",
-        "checkout": "Kassa",
-        "booking": "Varaus",
-        "multilingual": "Monikielisyys",
-        "seo": "SEO-asetukset",
-        "cms": "Sisällönhallinta (CMS)"
-      },
-      "deadline": {
-        "normal": "Normaali",
-        "fast": "Nopea",
-        "rush": "Pikatoimitus"
-      }
-    },
-    "helper": {
-      "pagesHint": "Ensimmäinen sivu sisältyy hintaan, lisäsivut 40 € / kpl",
-      "featuresTip": "Ominaisuuksia voi lisätä/poistaa myöhemmin projektin aikana",
-      "deadlineHint": "Normaali = 1x, Nopea = 1.2x, Pikatoimitus = 1.5x"
-    },
-    "breakdown": {
-      "see": "Näytä hintaerittely",
-      "base": "Perushinta ({type})",
-      "extraPages": "Lisäsivut ({count})",
-      "features": "Ominaisuudet {list}",
-      "none": "(ei valittuna)",
-      "multiplier": "Aikataulukerroin"
-    },
-    "total": {
-      "label": "Arvioitu kokonaishinta",
-      "approxNote": "(Suuntaa-antava, lopullinen hinta neuvotellaan projektin yksityiskohtien perusteella)"
-    },
-    "cta": "Pyydä tarjous"
+  "brothers": {
+    "eyebrow": "Keitä me olemme?",
+    "title": "Kaksi veljestä, yksi tavoite: paremmat nettisivut.",
+    "subtitle": "Digipaja syntyi siitä, että olimme kyllästyneet hitaisiin, rikkinäisiin ja sekaviin kotisivuihin. Halusimme tehdä sivuja, joista asiakkaat voivat olla oikeasti ylpeitä.",
+    "techTitle": "Samuli – tekninen velho",
+    "techBody": "Vastaan sivuston tekniikasta: Next.js, Tailwind, animaatiot, suorituskyky, hakukoneet ja integraatiot. Tavoite on yksinkertainen: sivu jonka koodi ei rajoita bisnestäsi.",
+    "bizTitle": "Jouko – bisnes & selkokieli",
+    "bizBody": "Huolehdin siitä, että sivu palvelee oikeita asiakkaita. Autan jäsentämään palvelut, järkevän rakenteen ja selkeät viestit – ilman teknistä jargonia.",
+    "note": "Lopputulos: inhimillinen kumppani, jolta saat sekä toimivan sivuston että apua sen ympärillä tehtäviin päätöksiin."
   }
 }

@@ -1,5 +1,10 @@
 {
-  "nav": { "home": "Home", "services": "Services", "work": "Work", "contact": "Contact" },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "work": "Work",
+    "contact": "Contact"
+  },
   "hero": {
     "title": "We build fast websites that convert.",
     "subtitle": "Modern Next.js + Tailwind stack, SEO-ready and measurable.",
@@ -11,9 +16,18 @@
     "title": "Services",
     "subtitle": "Something?",
     "items": {
-      "web": { "title": "Websites", "desc": "Fast, accessible, SEO-optimized sites." },
-      "shop": { "title": "E-commerce", "desc": "Revenue-driving stores (Shopify/Saleor/Stripe)." },
-      "care": { "title": "Care & Support", "desc": "Updates, analytics, and conversion tracking." }
+      "web": {
+        "title": "Websites",
+        "desc": "Fast, accessible, SEO-optimized sites."
+      },
+      "shop": {
+        "title": "E-commerce",
+        "desc": "Revenue-driving stores (Shopify/Saleor/Stripe)."
+      },
+      "care": {
+        "title": "Care & Support",
+        "desc": "Updates, analytics, and conversion tracking."
+      }
     }
   },
   "work": { "title": "Recent work", "cta": "View more" },

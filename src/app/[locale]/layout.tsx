@@ -1,25 +1,22 @@
-import "../globals.css";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
   children: ReactNode;
-  params: Promise<{ locale: string }>; 
+  params: Promise<{ locale: "fi" | "en" }>;
 }) {
-  const { locale } = await params; 
+  // params is a Promise in Next 15 – unwrap it:
+  const { locale } = await params;
 
+  // Load translations for this locale
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <Navbar locale={locale as "fi" | "en"} />
       {children}
-      <Footer locale={locale as "fi" | "en"} />
     </NextIntlClientProvider>
   );
 }
