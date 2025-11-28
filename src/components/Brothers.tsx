@@ -121,7 +121,7 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
             {/* IMAGE */}
             <div className="pointer-events-none absolute bottom-0 -left-24 h-80 w-56">
               <Image
-                src="/brothers/samuli.png"
+                src="/brothers/Samuli.png"
                 alt="Samuli – Digipajan tekninen veljeskunta"
                 fill
                 className="object-contain object-bottom scale-[1.00]"
@@ -148,7 +148,7 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
             <div className="pointer-events-none absolute bottom-[24px] right-[-79px] h-80 w-56">
 
               <Image
-                src="/brothers/jouko.png"
+                src="/brothers/Jouko.png"
                 alt="Jouko – Digipajan bisnes & selkokieli"
                 fill
                 className="object-contain object-bottom scale-[1.15] drop-shadow-[0_24px_40px_rgba(0,0,0,0.7)]"
