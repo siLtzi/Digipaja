@@ -25,6 +25,10 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
       const samuli = el.querySelector<HTMLElement>('[data-brothers-card="samuli"]');
       const jouko = el.querySelector<HTMLElement>('[data-brothers-card="jouko"]');
 
+      // NEW: lines
+      const samuliLine = el.querySelector<HTMLElement>('[data-brothers-line="samuli"]');
+      const joukoLine = el.querySelector<HTMLElement>('[data-brothers-line="jouko"]');
+
       // --- PRIMARY HEADING: "Kaksi veljestä, yksi tavoite:" ---
       if (primary) {
         gsap.fromTo(
@@ -36,8 +40,8 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
             ease: "none",
             scrollTrigger: {
               trigger: el,
-              start: "top 100%",  // section a bit more in view before starting
-              end: "top 100%",    // fully visible around mid-top
+              start: "top 100%",
+              end: "top 100%",
               scrub: true,
             },
           }
@@ -46,11 +50,9 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
 
       // --- SECONDARY HEADING: typewriter "paremmat nettisivut." ---
       if (secondary) {
-        // assume the actual text is inside the inner span (your gradient span)
         const textSpan = secondary.querySelector("span") as HTMLElement | null;
         if (textSpan) {
           const fullText = textSpan.textContent ?? "";
-          // start with empty text
           textSpan.textContent = "";
 
           const typeObj = { chars: 0 };
@@ -63,15 +65,14 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
               ease: "none",
               scrollTrigger: {
                 trigger: el,
-                start: "top 90%", // starts after primary has begun
-                end: "top 50%",   // finishes a bit later as you scroll
+                start: "top 90%",
+                end: "top 30%",
                 scrub: true,
               },
               onUpdate() {
                 const current = Math.round(typeObj.chars);
                 textSpan.textContent = fullText.slice(0, current);
               },
-              // make sure text is correct when you scroll past
               onLeave() {
                 textSpan.textContent = fullText;
               },
@@ -83,7 +84,7 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
         }
       }
 
-      // --- CARDS: slide in from sides a bit later ---
+      // --- SAMULI CARD ---
       if (samuli) {
         gsap.fromTo(
           samuli,
@@ -95,14 +96,15 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
             ease: "none",
             scrollTrigger: {
               trigger: el,
-              start: "top 70%",  // slightly after heading starts
-              end: "top 15%",
+              start: "top 40%",
+              end: "top 1%",
               scrub: true,
             },
           }
         );
       }
 
+      // --- JOUKO CARD ---
       if (jouko) {
         gsap.fromTo(
           jouko,
@@ -117,6 +119,44 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
               start: "top 70%",
               end: "top 15%",
               scrub: true,
+            },
+          }
+        );
+      }
+
+      // --- SAMULI LINE: stretch from left ---
+      if (samuliLine) {
+        gsap.fromTo(
+          samuliLine,
+          { scaleX: 0, opacity: 0, transformOrigin: "left center" },
+          {
+            scaleX: 1,
+            opacity: 1,
+            duration: 0.7,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: samuliLine,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+
+      // --- JOUKO LINE: stretch from right ---
+      if (joukoLine) {
+        gsap.fromTo(
+          joukoLine,
+          { scaleX: 0, opacity: 0, transformOrigin: "right center" },
+          {
+            scaleX: 1,
+            opacity: 1,
+            duration: 0.7,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: joukoLine,
+              start: "top 80%",
+              toggleActions: "play none none none",
             },
           }
         );

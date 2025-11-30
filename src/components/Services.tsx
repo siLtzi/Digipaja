@@ -1,5 +1,6 @@
 import { sanityClient } from "@/sanity/config";
 import { servicesSettingsQuery } from "@/sanity/queries";
+import ServicesReveal from "@/components/ServicesReveal";
 
 type ServicesMessages = {
   eyebrow: string;
@@ -89,47 +90,59 @@ export default async function Services({ locale }: { locale: "fi" | "en" }) {
   ];
 
   return (
-    <section
-      id="services"
-      className="relative border-t border-zinc-900 bg-zinc-950"
-    >
-      <div className="mx-auto max-w-6xl px-[clamp(16px,8vw,80px)] py-20 lg:py-24">
-        {/* Eyebrow */}
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400">
-          {eyebrow}
-        </p>
-
-        {/* Title & subtitle */}
-        <div className="mt-4 max-w-3xl space-y-4">
-          <h2
-            style={{ fontFamily: "var(--font-clash-display)" }}
-            className="text-3xl font-normal tracking-tight text-zinc-50 sm:text-4xl lg:text-5xl"
+    <ServicesReveal>
+      <section
+        id="services"
+        className="relative border-t border-zinc-900 bg-zinc-950"
+      >
+        <div className="mx-auto max-w-6xl px-[clamp(16px,8vw,80px)] py-20 lg:py-24">
+          {/* Eyebrow */}
+          <p
+            data-services-eyebrow
+            className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400"
           >
-            {title}
-          </h2>
-          <p className="text-sm text-zinc-300 sm:text-base">{subtitle}</p>
-        </div>
+            {eyebrow}
+          </p>
 
-        {/* Service cards */}
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {services.map((s, i) => (
-            <div
-              key={i}
-              className="relative flex flex-col gap-3 rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 sm:p-7 backdrop-blur-xl shadow-[0_12px_35px_rgba(0,0,0,0.45)]"
+          {/* Title & subtitle */}
+          <div className="mt-4 max-w-3xl space-y-4">
+            <h2
+              data-services-title
+              style={{ fontFamily: "var(--font-clash-display)" }}
+              className="text-3xl font-normal tracking-tight text-zinc-50 sm:text-4xl lg:text-5xl"
             >
-              <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400">
-                {s.label}
+              {title}
+            </h2>
+            <p
+              data-services-subtitle
+              className="text-sm text-zinc-300 sm:text-base"
+            >
+              {subtitle}
+            </p>
+          </div>
+
+          {/* Service cards */}
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {services.map((s, i) => (
+              <div
+                key={i}
+                data-services-card
+                className="relative flex flex-col gap-3 rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 sm:p-7 backdrop-blur-xl shadow-[0_12px_35px_rgba(0,0,0,0.45)]"
+              >
+                <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400">
+                  {s.label}
+                </div>
+                <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
+                  {s.title}
+                </h3>
+                <p className="text-sm text-zinc-300 leading-relaxed">
+                  {s.body}
+                </p>
               </div>
-              <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
-                {s.title}
-              </h3>
-              <p className="text-sm text-zinc-300 leading-relaxed">
-                {s.body}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </ServicesReveal>
   );
 }

@@ -26,7 +26,6 @@ export default async function HomePage({
       <WhyUs locale={locale} />
       <Process locale={locale} />
       <Services locale={locale} />
-      <Work locale={locale} />
       <Pricing locale={locale} />
       <Contact locale={locale} />
       <Footer locale={locale} />

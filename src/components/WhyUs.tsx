@@ -1,5 +1,6 @@
 import { sanityClient } from "@/sanity/config";
 import { whyUsSettingsQuery } from "@/sanity/queries";
+import WhyUsReveal from "@/components/WhyUsReveal";
 
 type WhyUsMessages = {
   eyebrow: string;
@@ -68,51 +69,63 @@ export default async function WhyUs({ locale }: { locale: "fi" | "en" }) {
   ];
 
   return (
-    <section
-      id="why-us"
-      className="relative border-t border-zinc-900 bg-zinc-950"
-    >
-      <div className="mx-auto max-w-6xl px-[clamp(16px,8vw,80px)] py-20 lg:py-24">
-        {/* Eyebrow */}
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400">
-          {eyebrow}
-        </p>
-
-        {/* Title & subtitle */}
-        <div className="mt-4 max-w-3xl space-y-4">
-          <h2
-            style={{ fontFamily: "var(--font-clash-display)" }}
-            className="text-3xl font-normal tracking-tight text-zinc-50 sm:text-4xl lg:text-5xl"
+    <WhyUsReveal>
+      <section
+        id="why-us"
+        className="relative border-t border-zinc-900 bg-zinc-950"
+      >
+        <div className="mx-auto max-w-6xl px-[clamp(16px,8vw,80px)] py-20 lg:py-24">
+          {/* Eyebrow */}
+          <p
+            data-whyus-eyebrow
+            className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400"
           >
-            {title}
-          </h2>
-          <p className="text-sm text-zinc-300 sm:text-base">{subtitle}</p>
-        </div>
+            {eyebrow}
+          </p>
 
-        {/* Value props */}
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {points.map((p, i) => (
-            <div
-              key={i}
-              className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 sm:p-7 backdrop-blur-xl shadow-[0_12px_35px_rgba(0,0,0,0.45)]"
+          {/* Title & subtitle */}
+          <div className="mt-4 max-w-3xl space-y-4">
+            <h2
+              data-whyus-title
+              style={{ fontFamily: "var(--font-clash-display)" }}
+              className="text-3xl font-normal tracking-tight text-zinc-50 sm:text-4xl lg:text-5xl"
             >
+              {title}
+            </h2>
+            <p
+              data-whyus-subtitle
+              className="text-sm text-zinc-300 sm:text-base"
+            >
+              {subtitle}
+            </p>
+          </div>
+
+          {/* Value props */}
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {points.map((p, i) => (
               <div
-                className={`absolute -right-16 -top-16 h-40 w-40 rounded-full blur-3xl ${
-                  i % 2 === 0 ? "bg-sky-500/20" : "bg-fuchsia-500/20"
-                }`}
-              />
-              <div className="relative space-y-2">
-                <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
-                  {p.title}
-                </h3>
-                <p className="text-sm text-zinc-300 leading-relaxed">
-                  {p.body}
-                </p>
+                key={i}
+                data-whyus-card
+                className="relative overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 sm:p-7 backdrop-blur-xl shadow-[0_12px_35px_rgba(0,0,0,0.45)]"
+              >
+                <div
+                  className={`absolute -right-16 -top-16 h-40 w-40 rounded-full blur-3xl ${
+                    i % 2 === 0 ? "bg-sky-500/20" : "bg-fuchsia-500/20"
+                  }`}
+                />
+                <div className="relative space-y-2">
+                  <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
+                    {p.title}
+                  </h3>
+                  <p className="text-sm text-zinc-300 leading-relaxed">
+                    {p.body}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </WhyUsReveal>
   );
 }

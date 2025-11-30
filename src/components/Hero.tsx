@@ -3,7 +3,6 @@ import { sanityClient } from "@/sanity/config";
 import { heroSettingsQuery } from "@/sanity/queries";
 
 type HeroMessages = {
-  badge: string;
   title: string;
   subtitle: string;
   ctaPrimary: string;
@@ -16,7 +15,6 @@ type MessagesFile = {
 };
 
 type HeroSettings = {
-  heroBadge_fi?: string | null;
   heroTitle_fi?: string | null;
   heroSubtitle_fi?: string | null;
   heroCtaPrimary_fi?: string | null;
@@ -34,8 +32,6 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
     (await sanityClient.fetch<HeroSettings | null>(heroSettingsQuery)) ?? {};
 
   const isFi = locale === "fi";
-
-  const badge = isFi ? cms.heroBadge_fi || m.badge : m.badge;
   const title = isFi ? cms.heroTitle_fi || m.title : m.title;
   const subtitle = isFi ? cms.heroSubtitle_fi || m.subtitle : m.subtitle;
   const ctaPrimary = isFi
@@ -93,11 +89,6 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
           px-[clamp(16px,8vw,80px)] py-24
         "
       >
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/80 px-4 py-1 text-xs font-medium text-zinc-300">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          <span>{badge}</span>
-        </div>
 
         {/* Title */}
         <h1

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { brothersSettingsQuery } from "@/sanity/queries";
 import { sanityClient } from "@/sanity/config";
 
+// --- TYPES (Unchanged) ---
 type BrothersMessages = {
   eyebrow: string;
   title: string;
@@ -28,7 +29,9 @@ type BrothersSettings = {
   brothersNote_fi?: string | null;
 };
 
+// --- MAIN COMPONENT ---
 export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
+  // (Data fetching logic remains unchanged)
   const messages = (await import(`@/i18n/messages/${locale}.json`))
     .default as MessagesFile;
 
@@ -52,116 +55,159 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
   const bizBody = isFi ? cms.brothersBizBody_fi || m.bizBody : m.bizBody;
   const note = isFi ? cms.brothersNote_fi || m.note : m.note;
 
-  // Split title at ":" to style primary / secondary differently
   const split = title.split(":");
   const primaryTitle = split.length > 1 ? `${split[0]}:` : title;
   const secondaryTitle =
     split.length > 1 ? split.slice(1).join(":").trim() : "";
 
+  // --- THE REWORKED VIEW ---
   return (
     <section
       id="about"
-      className="relative border-t border-zinc-800 bg-zinc-950/95"
+      // Changed bg to pure black for better contrast with glows
+      className="relative overflow-hidden border-t border-zinc-800 bg-zinc-950"
     >
-      <div className="mx-auto max-w-6xl px-[clamp(16px,8vw,80px)] py-20 lg:py-24">
-        {/* Eyebrow */}
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400">
-          {eyebrow}
-        </p>
+      <div className="mx-auto max-w-7xl px-[clamp(16px,8vw,80px)] py-24 lg:py-32">
+        {/* HEADER SECTION (Centered for cinematic feel) */}
+        <div className="mx-auto mb-24 max-w-3xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-fuchsia-400">
+            {eyebrow}
+          </p>
 
-        {/* Title */}
-        <div className="mt-4 max-w-3xl space-y-4">
-          <h2
-            style={{ fontFamily: "var(--font-clash-display)" }}
-            className="text-3xl font-normal tracking-tight text-zinc-50 sm:text-4xl lg:text-5xl"
-          >
-            <span
-              data-brothers-primary
-              className="block text-sm font-medium uppercase tracking-[0.22em] text-zinc-400 sm:text-xs mb-2"
+          <div className="mt-4 space-y-6">
+            <h2
+              style={{ fontFamily: "var(--font-clash-display)" }}
+              className="text-3xl font-normal tracking-tight text-zinc-50 sm:text-4xl lg:text-6xl"
             >
-              {primaryTitle}
-            </span>
-
-            {secondaryTitle ? (
               <span
-                data-brothers-secondary
-                className="block text-3xl sm:text-4xl lg:text-5xl"
+                data-brothers-primary
+                className="mb-3 block text-sm font-medium uppercase tracking-[0.22em] text-zinc-400 sm:text-base"
               >
-                <span className="bg-gradient-to-r from-fuchsia-400 via-sky-400 to-zinc-100 bg-clip-text text-transparent">
-                  {secondaryTitle}
+                {primaryTitle}
+              </span>
+
+              {secondaryTitle ? (
+                <span data-brothers-secondary className="block">
+                  <span className="bg-gradient-to-r from-fuchsia-400 via-sky-400 to-zinc-100 bg-clip-text text-transparent drop-shadow-sm">
+                    {secondaryTitle}
+                  </span>
                 </span>
-              </span>
-            ) : (
-              <span data-brothers-secondary className="block">
-                {title}
-              </span>
-            )}
-          </h2>
+              ) : (
+                <span data-brothers-secondary className="block">
+                  {title}
+                </span>
+              )}
+            </h2>
 
-          <p className="text-sm text-zinc-300 sm:text-base">{subtitle}</p>
-        </div>
-
-        {/* Two brothers */}
-        <div className="mt-16 grid md:grid-cols-2 gap-10 items-stretch">
-          {/* Samuli card */}
-          <div
-            data-brothers-card="samuli"
-            className="relative rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-[0_18px_45px_rgba(0,0,0,0.45)] px-6 py-10 sm:px-10 overflow-visible flex items-center"
-          >
-            {/* TEXT */}
-            <div className="flex-1 pl-28 sm:pl-36 md:pl-40 space-y-3">
-              <h3 className="text-lg sm:text-xl font-semibold text-sky-200">
-                {techTitle}
-              </h3>
-              <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
-                {techBody}
-              </p>
-            </div>
-
-            {/* IMAGE */}
-            <div className="pointer-events-none absolute bottom-0 -left-24 h-80 w-56">
-              <Image
-                src="/brothers/Samuli.png"
-                alt="Samuli – Digipajan tekninen veljeskunta"
-                fill
-                className="object-contain object-bottom scale-[1.00]"
-              />
-            </div>
-          </div>
-
-          {/* Jouko card */}
-          <div
-            data-brothers-card="jouko"
-            className="relative rounded-3xl border border-zinc-800 bg-zinc-900/80 shadow-[0_18px_45px_rgba(0,0,0,0.45)] px-6 py-10 sm:px-10 overflow-visible flex items-center"
-          >
-            {/* TEXT */}
-            <div className="flex-1 pr-28 sm:pr-36 md:pr-40 space-y-3">
-              <h3 className="text-lg sm:text-xl font-semibold text-fuchsia-200">
-                {bizTitle}
-              </h3>
-              <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
-                {bizBody}
-              </p>
-            </div>
-
-            {/* IMAGE */}
-            <div className="pointer-events-none absolute bottom-[24px] right-[-79px] h-80 w-56">
-
-              <Image
-                src="/brothers/Jouko.png"
-                alt="Jouko – Digipajan bisnes & selkokieli"
-                fill
-                className="object-contain object-bottom scale-[1.15] drop-shadow-[0_24px_40px_rgba(0,0,0,0.7)]"
-
-              />
-            </div>
+            <p className="mx-auto max-w-2xl text-base text-zinc-300 sm:text-lg">
+              {subtitle}
+            </p>
           </div>
         </div>
 
-        {/* Note */}
-        <p className="mt-8 max-w-3xl text-xs text-zinc-400 sm:text-sm">
-          {note}
-        </p>
+        {/* BROTHERS CONTENT CONTAINER */}
+        <div className="space-y-32">
+          {/* --- SAMULI SECTION (Tech / Blue) --- */}
+          <div data-brothers-card="samuli" className="relative">
+            {/* Ambient Background Glow - Blue */}
+            <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-x-1/3 -translate-y-1/2 rounded-full bg-sky-600/20 blur-[120px] mix-blend-screen md:h-[800px] md:w-[800px]"></div>
+
+            <div className="relative grid grid-cols-1 items-center gap-12 md:grid-cols-2 lg:gap-24">
+              {/* IMAGE + NAMEPLATE COMBO (PRESERVED) */}
+              <div className="flex justify-center md:justify-end">
+                <div className="relative w-[240px] sm:w-[280px] lg:w-[320px]">
+                  <Image
+                    src="/brothers/Samuli.png"
+                    alt="Samuli – Digipajan tekninen veljeskunta"
+                    width={520}
+                    height={720}
+                    className="h-auto w-full object-contain drop-shadow-2xl"
+                  />
+
+                  {/* Name Plate */}
+                  <div className="absolute inset-x-0 bottom-0">
+                    <div className="w-full rounded-md bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-700 py-2 shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
+                      <span className="block text-center text-[14px] sm:text-[30px] font-semibold uppercase tracking-[0.24em] text-zinc-50 drop-shadow-[0_1px_3px_rgba(0,0,0,1)]">
+                        Samuli
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* TEXT */}
+              <div className="flex flex-col justify-center space-y-6 text-center md:text-left">
+                <h3
+                  style={{ fontFamily: "var(--font-clash-display)" }}
+                  className="text-2xl font-semibold text-sky-300 sm:text-3xl"
+                >
+                  {techTitle}
+                </h3>
+                {/* Samuli line */}
+                <div
+                  data-brothers-line="samuli"
+                  className="h-1 w-12 bg-sky-500/50 mx-auto md:mx-0"
+                ></div>
+                <p className="max-w-xl text-base leading-relaxed text-zinc-200 sm:text-lg">
+                  {techBody}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* --- JOUKO SECTION (Biz / Fuchsia) --- */}
+          <div data-brothers-card="jouko" className="relative">
+            {/* Ambient Background Glow - Fuchsia */}
+            <div className="absolute right-0 top-1/2 h-[500px] w-[500px] translate-x-1/3 -translate-y-1/2 rounded-full bg-fuchsia-600/20 blur-[120px] mix-blend-screen md:h-[800px] md:w-[800px]"></div>
+
+            <div className="relative grid grid-cols-1 items-center gap-12 md:grid-cols-2 lg:gap-24">
+              {/* TEXT (Order change for zigzag pattern) */}
+              <div className="order-2 flex flex-col justify-center space-y-6 text-center md:order-1 md:text-left lg:items-end lg:text-right">
+                <h3
+                  style={{ fontFamily: "var(--font-clash-display)" }}
+                  className="text-2xl font-semibold text-fuchsia-300 sm:text-3xl"
+                >
+                  {bizTitle}
+                </h3>
+                {/* Jouko line */}
+                <div
+                  data-brothers-line="jouko"
+                  className="h-1 w-12 bg-fuchsia-500/50 mx-auto md:mx-0 lg:ml-auto lg:mr-0"
+                ></div>
+                <p className="max-w-xl text-base leading-relaxed text-zinc-200 sm:text-lg">
+                  {bizBody}
+                </p>
+              </div>
+
+              {/* IMAGE + NAMEPLATE COMBO (PRESERVED) */}
+              <div className="order-1 flex justify-center md:order-2 md:justify-start">
+                <div className="relative w-[240px] sm:w-[280px] lg:w-[320px]">
+                  <Image
+                    src="/brothers/Jouko.png"
+                    alt="Jouko – Digipajan bisnes & selkokieli"
+                    width={520}
+                    height={720}
+                    className="h-auto w-full object-contain drop-shadow-2xl"
+                  />
+
+                  {/* Name Plate */}
+                  <div className="absolute inset-x-0 bottom-0">
+                    <div className="w-full rounded-md bg-gradient-to-r from-fuchsia-500 via-fuchsia-600 to-fuchsia-700 py-2 shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
+                      <span className="block text-center text-[14px] sm:text-[30px] font-semibold uppercase tracking-[0.26em] text-zinc-50 drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
+                        Jouko
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Note Footer */}
+        <div className="mt-32 border-t border-zinc-800/50 pt-8 text-center">
+          <p className="mx-auto max-w-3xl text-sm text-zinc-500">{note}</p>
+        </div>
       </div>
     </section>
   );
