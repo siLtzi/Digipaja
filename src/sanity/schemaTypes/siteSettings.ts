@@ -7,7 +7,6 @@ export default defineType({
   fields: [
     defineField({ name: "title", type: "string", initialValue: "Digipaja" }),
     defineField({ name: "tagline", type: "string" }),
-    defineField({ name: "contactEmail", type: "string" }),
 
     // HERO – FI
     defineField({

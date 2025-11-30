@@ -60,6 +60,9 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
   const secondaryTitle =
     split.length > 1 ? split.slice(1).join(":").trim() : "";
 
+  // text that gets the gradient + typewriter
+  const secondaryText = secondaryTitle || title;
+
   // --- THE REWORKED VIEW ---
   return (
     <section
@@ -86,17 +89,11 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
                 {primaryTitle}
               </span>
 
-              {secondaryTitle ? (
-                <span data-brothers-secondary className="block">
-                  <span className="bg-gradient-to-r from-fuchsia-400 via-sky-400 to-zinc-100 bg-clip-text text-transparent drop-shadow-sm">
-                    {secondaryTitle}
-                  </span>
+              <span data-brothers-secondary className="block">
+                <span className="bg-gradient-to-r from-fuchsia-400 via-sky-400 to-zinc-100 bg-clip-text text-transparent drop-shadow-sm">
+                  {secondaryText}
                 </span>
-              ) : (
-                <span data-brothers-secondary className="block">
-                  {title}
-                </span>
-              )}
+              </span>
             </h2>
 
             <p className="mx-auto max-w-2xl text-base text-zinc-300 sm:text-lg">

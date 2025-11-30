@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { sanityClient } from "@/sanity/config";
 import { heroSettingsQuery } from "@/sanity/queries";
+import HeroAdjective from "@/components/HeroAdjective";
 
 type HeroMessages = {
   title: string;
@@ -44,6 +45,49 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
 
   const href = (path: string) => `/${locale}${path}`;
 
+  // --- ROTATING ADJECTIVE SETUP ---
+  const rotatingWords = isFi
+    ? ["Modernit", "Luotettavat", "Tyylikkäät", "Optimoidut"]
+    : ["Modern", "Reliable", "Stylish", "Optimized"];
+
+  // Drop the first word from the CMS title, let GSAP handle that part
+  const [, ...restWords] = title.split(" ");
+  const restTitle = restWords.join(" ");
+
+  const techIcons: Record<string, string> = {
+    animaatiot: "/tech/gsap.svg",
+    nextjs: "/tech/nextjs.svg",
+    monikielisyys: "/tech/monikielisyys.svg",
+    tailwind: "/tech/tailwind.svg",
+    typescript: "/tech/typescript.svg",
+    sanity: "/tech/sanity.svg",
+    node: "/tech/node.svg",
+    vercel: "/tech/vercel.svg",
+  };
+
+  function renderTechWithIcons(text: string) {
+    const words = text.split(/(\s+)/); // keep spaces intact
+
+    return words.map((word, i) => {
+      const clean = word.toLowerCase().replace(/[^a-zäöå]/g, "");
+
+      if (techIcons[clean]) {
+        return (
+          <span key={i} className="inline-flex items-center gap-1">
+            <img
+              src={techIcons[clean]}
+              alt={clean}
+              className="h-4 w-4 opacity-80 object-contain"
+            />
+            {word}
+          </span>
+        );
+      }
+
+      return <span key={i}>{word}</span>;
+    });
+  }
+
   return (
     <section
       id="hero"
@@ -57,14 +101,13 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
         muted
         playsInline
       >
-        {/* adjust path to your actual file */}
         <source src="/media/hero2.mp4" type="video/mp4" />
       </video>
 
       {/* Dark overlay on top of video for readability */}
       <div className="absolute inset-0 bg-black/70" aria-hidden />
 
-      {/* Existing gradient glow layers (on top of overlay, still subtle) */}
+      {/* Gradient glows */}
       <div
         aria-hidden
         className="
@@ -89,14 +132,14 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
           px-[clamp(16px,8vw,80px)] py-24
         "
       >
-
-        {/* Title */}
+        {/* Title with rotating first word */}
         <h1
           style={{ fontFamily: "var(--font-clash-display)" }}
           className="max-w-3xl text-4xl font-normal leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
         >
+          <HeroAdjective words={rotatingWords} />{" "}
           <span className="bg-gradient-to-br from-zinc-50 via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-            {title}
+            {restTitle}
           </span>
         </h1>
 
@@ -131,8 +174,8 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
         </div>
 
         {/* Tech line */}
-        <div className="pt-4 text-xs text-zinc-300 sm:text-sm">
-          <p>{techLine}</p>
+        <div className="pt-4 text-xs text-zinc-300 sm:text-sm flex items-center gap-2 flex-wrap">
+          {renderTechWithIcons(techLine)}
         </div>
       </div>
     </section>

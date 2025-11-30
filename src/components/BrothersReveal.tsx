@@ -21,15 +21,27 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
 
     const ctx = gsap.context(() => {
       const primary = el.querySelector<HTMLElement>("[data-brothers-primary]");
-      const secondary = el.querySelector<HTMLElement>("[data-brothers-secondary]");
-      const samuli = el.querySelector<HTMLElement>('[data-brothers-card="samuli"]');
-      const jouko = el.querySelector<HTMLElement>('[data-brothers-card="jouko"]');
+      const secondary =
+        el.querySelector<HTMLElement>("[data-brothers-secondary]");
+      const samuli = el.querySelector<HTMLElement>(
+        '[data-brothers-card="samuli"]'
+      );
+      const jouko = el.querySelector<HTMLElement>(
+        '[data-brothers-card="jouko"]'
+      );
 
-      // NEW: lines
-      const samuliLine = el.querySelector<HTMLElement>('[data-brothers-line="samuli"]');
-      const joukoLine = el.querySelector<HTMLElement>('[data-brothers-line="jouko"]');
+      const samuliLine = el.querySelector<HTMLElement>(
+        '[data-brothers-line="samuli"]'
+      );
+      const joukoLine = el.querySelector<HTMLElement>(
+        '[data-brothers-line="jouko"]'
+      );
 
-      // --- PRIMARY HEADING: "Kaksi veljestä, yksi tavoite:" ---
+      const isMobile =
+        typeof window !== "undefined" &&
+        window.matchMedia("(max-width: 768px)").matches;
+
+      // --- PRIMARY HEADING ---
       if (primary) {
         gsap.fromTo(
           primary,
@@ -37,18 +49,18 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
           {
             opacity: 1,
             y: 0,
-            ease: "none",
+            ease: "power3.out",
+            duration: 0.6,
             scrollTrigger: {
               trigger: el,
-              start: "top 100%",
-              end: "top 100%",
-              scrub: true,
+              start: "top 85%",
+              toggleActions: "play none none none",
             },
           }
         );
       }
 
-      // --- SECONDARY HEADING: typewriter "paremmat nettisivut." ---
+      // --- SECONDARY HEADING TYPEWRITER ---
       if (secondary) {
         const textSpan = secondary.querySelector("span") as HTMLElement | null;
         if (textSpan) {
@@ -65,8 +77,8 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
               ease: "none",
               scrollTrigger: {
                 trigger: el,
-                start: "top 90%",
-                end: "top 10%",
+                start: "top 80%",
+                end: "top 40%",
                 scrub: true,
               },
               onUpdate() {
@@ -84,47 +96,61 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
         }
       }
 
-      // --- SAMULI CARD ---
+      // --- SAMULI CARD (simple fade-up) ---
       if (samuli) {
-        gsap.fromTo(
-          samuli,
-          { opacity: 0, x: -60, y: 40 },
-          {
-            opacity: 1,
-            x: 0,
-            y: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 40%",
-              end: "top 1%",
-              scrub: true,
-            },
-          }
-        );
+        if (isMobile) {
+          gsap.fromTo(
+            samuli,
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+          );
+        } else {
+          gsap.fromTo(
+            samuli,
+            { opacity: 0, y: 40 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: samuli,
+                start: "top 85%",
+                toggleActions: "play none none none",
+              },
+            }
+          );
+        }
       }
 
-      // --- JOUKO CARD ---
+      // --- JOUKO CARD (simple fade-up) ---
       if (jouko) {
-        gsap.fromTo(
-          jouko,
-          { opacity: 0, x: 60, y: 40 },
-          {
-            opacity: 1,
-            x: 0,
-            y: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 70%",
-              end: "top 15%",
-              scrub: true,
-            },
-          }
-        );
+        if (isMobile) {
+          gsap.fromTo(
+            jouko,
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
+          );
+        } else {
+          gsap.fromTo(
+            jouko,
+            { opacity: 0, y: 40 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: jouko,
+                start: "top 85%",
+                toggleActions: "play none none none",
+              },
+            }
+          );
+        }
       }
 
-      // --- SAMULI LINE: stretch from left ---
+      // --- SAMULI LINE ---
       if (samuliLine) {
         gsap.fromTo(
           samuliLine,
@@ -136,14 +162,14 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
             ease: "power3.out",
             scrollTrigger: {
               trigger: samuliLine,
-              start: "top 80%",
+              start: "top 90%",
               toggleActions: "play none none none",
             },
           }
         );
       }
 
-      // --- JOUKO LINE: stretch from right ---
+      // --- JOUKO LINE ---
       if (joukoLine) {
         gsap.fromTo(
           joukoLine,
@@ -155,7 +181,7 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
             ease: "power3.out",
             scrollTrigger: {
               trigger: joukoLine,
-              start: "top 80%",
+              start: "top 90%",
               toggleActions: "play none none none",
             },
           }

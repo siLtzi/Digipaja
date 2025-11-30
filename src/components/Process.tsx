@@ -91,12 +91,11 @@ export default async function Process({ locale }: { locale: "fi" | "en" }) {
       <section
         id="process"
         data-process-section
-        className="relative overflow-hidden border-t border-zinc-900 bg-zinc-950/95"
+        className="relative overflow-hidden border-t border-zinc-900 bg-zinc-950"
       >
         <div
           data-process-root
-          // h-screen so the section matches viewport height during pin
-          className="mx-auto flex h-screen max-w-6xl flex-col justify-center px-[clamp(16px,8vw,80px)]"
+          className="mx-auto flex h-screen max-w-6xl flex-col justify-center px-[clamp(16px,8vw,80px)] pt-12 md:pt-20"
         >
           {/* Eyebrow */}
           <p
@@ -124,46 +123,56 @@ export default async function Process({ locale }: { locale: "fi" | "en" }) {
           </div>
 
           {/* Horizontal track wrapper */}
-          <div data-process-wrapper className="relative mt-10 w-full">
+          <div data-process-wrapper className="relative mt-12 w-full">
             <div
               data-process-track
-              className="relative flex w-max gap-10 md:gap-16"
+              className="relative flex w-max gap-6 md:gap-10"
             >
               {steps.map((s, i) => (
                 <div
                   key={i}
                   data-process-step
-                  className="relative flex h-[280px] w-[300px] flex-shrink-0 flex-col justify-center rounded-3xl bg-zinc-900/60 px-6 py-6 backdrop-blur-sm sm:w-[380px] md:w-[420px]"
+                  // --- CARD STYLING UPDATES ---
+                  // 1. Added 'group' to enable hover effects on children
+                  // 2. Used border-white/5 for a subtle glass edge
+                  // 3. Added hover:border-white/10 and transition
+                  className="group relative flex h-[340px] w-[280px] flex-shrink-0 flex-col overflow-hidden rounded-3xl border border-white/5 bg-zinc-900/40 p-5 backdrop-blur-sm transition-colors duration-300 hover:border-white/10 hover:bg-zinc-900/60 sm:w-[320px] md:h-[380px] md:w-[360px]"
                 >
-                  {/* Image header */}
-                  <div className="mb-4 overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900">
-                    <div className="relative h-28 w-full">
+                  {/* Image header container */}
+                  <div className="relative mb-5 shrink-0 overflow-hidden rounded-2xl bg-zinc-950 shadow-inner">
+                    {/* Fixed aspect ratio container */}
+                    <div className="relative aspect-[16/10] w-full">
                       <Image
                         src={s.image}
                         alt={s.title}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 280px, 360px"
                       />
-                      {/* Dark gradient for readability */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                      {/* Gradient overlay for text contrast */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent opacity-80" />
 
-                      {/* Label chip on top of image */}
-                      <div className="absolute bottom-2 left-3">
-                        <span className="inline-flex h-6 items-center justify-center rounded-full bg-black/60 px-3 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-100">
+                      {/* Label chip */}
+                      <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                        <span className="flex h-6 items-center justify-center rounded-full bg-white/10 px-3 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md transition-colors group-hover:bg-white/20">
                           {s.label}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Text */}
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-semibold text-zinc-50 sm:text-base">
-                      {s.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-zinc-300">
-                      {s.body}
-                    </p>
+                  {/* Text Content */}
+                  <div className="flex flex-1 flex-col justify-between">
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-semibold tracking-tight text-white transition-colors group-hover:text-fuchsia-100">
+                        {s.title}
+                      </h3>
+                      <p className="line-clamp-4 text-sm leading-relaxed text-zinc-400">
+                        {s.body}
+                      </p>
+                    </div>
+                    
+                    {/* Decorative bottom line or number could go here if desired */}
                   </div>
                 </div>
               ))}

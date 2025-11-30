@@ -24,19 +24,18 @@ export default function ProcessReveal({ children }: ProcessRevealProps) {
       const section = el.querySelector<HTMLElement>("[data-process-section]");
       const wrapper = el.querySelector<HTMLElement>("[data-process-wrapper]");
       const track = el.querySelector<HTMLElement>("[data-process-track]");
-      
+
       const eyebrow = el.querySelector<HTMLElement>("[data-process-eyebrow]");
       const title = el.querySelector<HTMLElement>("[data-process-title]");
       const subtitle = el.querySelector<HTMLElement>("[data-process-subtitle]");
 
       if (!section || !wrapper || !track) return;
 
-      // 2. Intro Animation (Independent of Scroll Scrub)
-      // This makes the text appear nicely as you arrive, without waiting for the pin
+      // 2. Intro Animation (Runs on BOTH Mobile & Desktop)
       const introTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 60%", // Starts animating when section is 60% up the viewport
+          start: "top 60%",
           toggleActions: "play none none reverse",
         },
       });
@@ -50,41 +49,76 @@ export default function ProcessReveal({ children }: ProcessRevealProps) {
         });
       }
       if (title) {
-        introTl.from(title, { opacity: 0, y: 30, duration: 0.6, ease: "power3.out" }, "-=0.4");
+        introTl.from(
+          title,
+          { opacity: 0, y: 30, duration: 0.6, ease: "power3.out" },
+          "-=0.4"
+        );
       }
       if (subtitle) {
-        introTl.from(subtitle, { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, "-=0.4");
+        introTl.from(
+          subtitle,
+          { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" },
+          "-=0.4"
+        );
       }
-      introTl.from(track.children, {
+      introTl.from(
+        track.children,
+        {
           opacity: 0,
           y: 30,
           stagger: 0.1,
           duration: 0.6,
-          ease: "power3.out"
-      }, "-=0.4");
+          ease: "power3.out",
+        },
+        "-=0.4"
+      );
 
+      // 3. Media Query Logic using gsap.matchMedia()
+      const mm = gsap.matchMedia();
 
-      // 3. Horizontal Scroll Logic
-      
-      // Calculate how much actual overflow exists
-      // If the track is 2000px and the wrapper is 1000px, we need to move -1000px
-      const getScrollAmount = () => {
-        return -(track.scrollWidth - wrapper.clientWidth);
-      };
+      // --- DESKTOP: Scroll-linked Pinning & Scrubbing ---
+      mm.add("(min-width: 768px)", () => {
+        // Reset CSS for desktop mode
+        gsap.set(wrapper, { overflowX: "visible" });
 
-      const tween = gsap.to(track, {
-        x: getScrollAmount,
-        ease: "none", // Linear movement is required for sync with scroll
+        const getScrollAmount = () => {
+          return -(track.scrollWidth - wrapper.clientWidth);
+        };
+
+        const tween = gsap.to(track, {
+          x: getScrollAmount,
+          ease: "none",
+        });
+
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+          end: () => `+=${Math.abs(getScrollAmount())}`,
+          pin: true,
+          animation: tween,
+          scrub: 1,
+          invalidateOnRefresh: true,
+        });
       });
 
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top", // Pin immediately when section hits top
-        end: () => `+=${Math.abs(getScrollAmount())}`, // Scroll length matches track length exactly
-        pin: true,
-        animation: tween,
-        scrub: 1, // Smoothness (0 = instant, 1 = slight inertia)
-        invalidateOnRefresh: true, // Recalculates sizes on window resize
+      // --- MOBILE: Native Horizontal Swipe ---
+      mm.add("(max-width: 767px)", () => {
+        // 1. Reset GSAP transforms so the track sits naturally
+        gsap.set(track, { x: 0 });
+        
+        // 2. Enable native horizontal scrolling on the wrapper
+        // This allows the user to swipe left/right with their finger
+        gsap.set(wrapper, { 
+            overflowX: "auto", 
+            overflowY: "hidden",
+            // Hide scrollbar for cleaner look (optional)
+            scrollbarWidth: "none", 
+            "-ms-overflow-style": "none",
+        });
+        
+        // Optional: Hide webkit scrollbar via inline styles if desired, 
+        // typically better handled in global CSS but this works dynamically.
       });
 
     }, el);
