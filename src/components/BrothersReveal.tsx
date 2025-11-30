@@ -66,7 +66,7 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
               scrollTrigger: {
                 trigger: el,
                 start: "top 90%",
-                end: "top 30%",
+                end: "top 10%",
                 scrub: true,
               },
               onUpdate() {

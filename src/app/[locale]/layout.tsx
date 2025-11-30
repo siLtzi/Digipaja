@@ -12,22 +12,22 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
 
-  // Load translations for this locale
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <SmoothScrollProvider>
-        {/* Everything inside here is now scroll-smoothed */}
-        <div className="min-h-screen bg-black text-zinc-50">
-          <Navbar locale={locale} />
+      <div className="min-h-screen bg-black text-zinc-50">
+        {/* 1. Navbar OUTSIDE SmoothScrollProvider → truly fixed */}
+        <Navbar locale={locale} />
 
-          {/* Padding so content clears the fixed navbar */}
-          <main className="pt-16">
+        {/* 2. Only the scrollable content is smoothed */}
+        <SmoothScrollProvider>
+          {/* Padding-top so content doesn't hide behind fixed navbar */}
+          <main>
             {children}
           </main>
-        </div>
-      </SmoothScrollProvider>
+        </SmoothScrollProvider>
+      </div>
     </NextIntlClientProvider>
   );
 }

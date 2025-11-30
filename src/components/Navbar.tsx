@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { gsap } from "gsap";
+
+gsap.registerPlugin(ScrollSmoother);
 
 type NavbarProps = {
   locale: "fi" | "en";
@@ -10,7 +14,6 @@ type NavbarProps = {
 
 export default function Navbar({ locale }: NavbarProps) {
   const base = `/${locale}`;
-  const sectionHref = (hash: string) => `${base}#${hash}`;
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,14 +30,36 @@ export default function Navbar({ locale }: NavbarProps) {
 
   const closeMenu = () => setMenuOpen(false);
 
-  // NOTE: no "home", no "contact" here → keeps it minimal
   const links = [
-    { key: "whyUs", href: sectionHref("why-us") },
-    { key: "process", href: sectionHref("process") },
-    { key: "services", href: sectionHref("services") },
-    { key: "work", href: sectionHref("work") },
-    { key: "pricing", href: sectionHref("pricing") },
+    { key: "whyUs", id: "why-us" },
+    { key: "process", id: "process" },
+    { key: "services", id: "services" },
+    { key: "work", id: "work" },
+    { key: "pricing", id: "pricing" },
   ];
+
+  const scrollToSection = (id: string) => {
+    const selector = `#${id}`;
+    const smoother = ScrollSmoother.get();
+    const target = document.querySelector(selector) as HTMLElement | null;
+
+    if (smoother && target) {
+      smoother.scrollTo(target, true, "top top"); // smooth scroll with GSAP
+    } else if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Update URL hash without full navigation
+    if (typeof window !== "undefined") {
+      const newUrl = `${base}#${id}`;
+      window.history.pushState(null, "", newUrl);
+    }
+  };
+
+  const handleNavClick = (id: string) => {
+    scrollToSection(id);
+    closeMenu();
+  };
 
   return (
     <header
@@ -65,13 +90,14 @@ export default function Navbar({ locale }: NavbarProps) {
           {/* Desktop nav */}
           <nav className="hidden items-center gap-6 md:flex">
             {links.map((link) => (
-              <Link
+              <button
                 key={link.key}
-                href={link.href}
-                className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400 whitespace-nowrap transition hover:text-zinc-50"
+                type="button"
+                onClick={() => handleNavClick(link.id)}
+                className="text-[11px] font-medium uppercase tracking-[0.18em] text-zinc-400 whitespace-nowrap transition hover:text-zinc-50 cursor-pointer"
               >
                 {tNav(link.key)}
-              </Link>
+              </button>
             ))}
           </nav>
 
@@ -79,12 +105,13 @@ export default function Navbar({ locale }: NavbarProps) {
           <div className="flex items-center gap-2">
             {/* Desktop CTA */}
             <div className="hidden sm:flex">
-              <Link
-                href={sectionHref("contact")}
-                className="inline-flex items-center justify-center rounded-full bg-zinc-50 px-4 py-1.5 text-xs font-medium text-zinc-950 shadow-sm ring-1 ring-zinc-900/10 transition hover:-translate-y-[1px] hover:shadow-md dark:bg-zinc-100"
+              <button
+                type="button"
+                onClick={() => handleNavClick("contact")}
+                className="inline-flex items-center justify-center rounded-full bg-zinc-50 px-4 py-1.5 text-xs font-medium text-zinc-950 shadow-sm ring-1 ring-zinc-900/10 transition hover:-translate-y-[1px] hover:shadow-md dark:bg-zinc-100 cursor-pointer"
               >
                 {tCta("primary")}
-              </Link>
+              </button>
             </div>
 
             {/* Mobile menu button */}
@@ -123,23 +150,23 @@ export default function Navbar({ locale }: NavbarProps) {
           <div className="mx-auto max-w-6xl px-[clamp(16px,8vw,80px)]">
             <nav className="flex flex-col gap-2 py-4 text-sm">
               {links.map((link) => (
-                <Link
+                <button
                   key={link.key}
-                  href={link.href}
-                  onClick={closeMenu}
-                  className="py-1 text-sm font-medium text-zinc-200 transition hover:text-zinc-50"
+                  type="button"
+                  onClick={() => handleNavClick(link.id)}
+                  className="py-1 text-left text-sm font-medium text-zinc-200 transition hover:text-zinc-50"
                 >
                   {tNav(link.key)}
-                </Link>
+                </button>
               ))}
               <div className="pt-2">
-                <Link
-                  href={sectionHref("contact")}
-                  onClick={closeMenu}
+                <button
+                  type="button"
+                  onClick={() => handleNavClick("contact")}
                   className="inline-flex w-full items-center justify-center rounded-full bg-zinc-50 px-4 py-2 text-sm font-medium text-zinc-950 shadow-sm ring-1 ring-zinc-900/10"
                 >
                   {tCta("primary")}
-                </Link>
+                </button>
               </div>
             </nav>
           </div>

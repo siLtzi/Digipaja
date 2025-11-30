@@ -90,8 +90,8 @@ export default function ServicesReveal({ children }: ServicesRevealProps) {
           ease: "power3.out",
           scrollTrigger: {
             trigger: el,
-            start: "top 60%",
-            end: "top 20%",
+            start: "top 40%",
+            end: "top 1%",
             scrub: 1.1, // slight lag for smoothness
           },
         });

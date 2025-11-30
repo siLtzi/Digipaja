@@ -20,79 +20,73 @@ export default function ProcessReveal({ children }: ProcessRevealProps) {
     const el = ref.current;
 
     const ctx = gsap.context(() => {
+      // 1. Select elements
+      const section = el.querySelector<HTMLElement>("[data-process-section]");
+      const wrapper = el.querySelector<HTMLElement>("[data-process-wrapper]");
+      const track = el.querySelector<HTMLElement>("[data-process-track]");
+      
       const eyebrow = el.querySelector<HTMLElement>("[data-process-eyebrow]");
       const title = el.querySelector<HTMLElement>("[data-process-title]");
       const subtitle = el.querySelector<HTMLElement>("[data-process-subtitle]");
-      const steps = gsap.utils.toArray<HTMLElement>("[data-process-step]");
 
-      if (!steps.length) return;
+      if (!section || !wrapper || !track) return;
 
-      // Pinned, scroll-driven timeline
-      const tl = gsap.timeline({
+      // 2. Intro Animation (Independent of Scroll Scrub)
+      // This makes the text appear nicely as you arrive, without waiting for the pin
+      const introTl = gsap.timeline({
         scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: "+=2000", // how long user is "stuck" here – increase for longer scroll
-          scrub: 1.1,
-          pin: true,
-          anticipatePin: 1,
+          trigger: section,
+          start: "top 60%", // Starts animating when section is 60% up the viewport
+          toggleActions: "play none none reverse",
         },
       });
 
-      // Headline comes in first
       if (eyebrow) {
-        tl.from(eyebrow, {
+        introTl.from(eyebrow, {
           opacity: 0,
-          y: 30,
-          letterSpacing: "0.35em",
+          y: 20,
           duration: 0.6,
           ease: "power3.out",
         });
       }
-
       if (title) {
-        tl.from(
-          title,
-          {
-            opacity: 0,
-            y: 50,
-            skewY: 5,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          "-=0.25"
-        );
+        introTl.from(title, { opacity: 0, y: 30, duration: 0.6, ease: "power3.out" }, "-=0.4");
       }
-
       if (subtitle) {
-        tl.from(
-          subtitle,
-          {
-            opacity: 0,
-            y: 25,
-            duration: 0.7,
-            ease: "power3.out",
-          },
-          "-=0.2"
-        );
+        introTl.from(subtitle, { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, "-=0.4");
       }
+      introTl.from(track.children, {
+          opacity: 0,
+          y: 30,
+          stagger: 0.1,
+          duration: 0.6,
+          ease: "power3.out"
+      }, "-=0.4");
 
-      // Then reveal each step one by one as scroll continues
-      steps.forEach((step, index) => {
-        tl.from(
-          step,
-          {
-            opacity: 0,
-            y: 100,
-            scale: 0.94,
-            filter: "blur(10px)",
-            duration: 0.8,
-            ease: "power3.out",
-          },
-          // space them out along the scroll
-          "+=0.4"
-        );
+
+      // 3. Horizontal Scroll Logic
+      
+      // Calculate how much actual overflow exists
+      // If the track is 2000px and the wrapper is 1000px, we need to move -1000px
+      const getScrollAmount = () => {
+        return -(track.scrollWidth - wrapper.clientWidth);
+      };
+
+      const tween = gsap.to(track, {
+        x: getScrollAmount,
+        ease: "none", // Linear movement is required for sync with scroll
       });
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top", // Pin immediately when section hits top
+        end: () => `+=${Math.abs(getScrollAmount())}`, // Scroll length matches track length exactly
+        pin: true,
+        animation: tween,
+        scrub: 1, // Smoothness (0 = instant, 1 = slight inertia)
+        invalidateOnRefresh: true, // Recalculates sizes on window resize
+      });
+
     }, el);
 
     return () => ctx.revert();
