@@ -11,17 +11,34 @@ type SmoothScrollProviderProps = {
   children: ReactNode;
 };
 
-export default function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
+export default function SmoothScrollProvider({
+  children,
+}: SmoothScrollProviderProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     if (typeof window === "undefined") return;
-    if (!wrapperRef.current || !contentRef.current) return;
 
-    // Kill existing smoother on hot reload
+    // 📱 Detect mobile
+    const isMobile =
+      window.innerWidth < 768 ||
+      /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(
+        navigator.userAgent
+      );
+
+    // Kill on hot reload
     ScrollSmoother.get()?.kill();
 
+    if (!wrapperRef.current || !contentRef.current) return;
+
+    // 🚫 Skip smooth scroll on mobile
+    if (isMobile) {
+      document.body.style.overflow = "auto";
+      return;
+    }
+
+    // 🖥️ Desktop → enable smoother
     const smoother = ScrollSmoother.create({
       wrapper: wrapperRef.current,
       content: contentRef.current,
@@ -30,10 +47,6 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
       normalizeScroll: true,
     });
 
-    // Simple global snap between sections (optional)
-    const sections = gsap.utils.toArray<HTMLElement>("section[id]");
-
-    
     return () => {
       smoother.kill();
       ScrollTrigger.getAll().forEach((st) => st.kill());
