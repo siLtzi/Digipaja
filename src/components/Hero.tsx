@@ -135,10 +135,16 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
         {/* Title with rotating first word */}
         <h1
           style={{ fontFamily: "var(--font-clash-display)" }}
-          className="max-w-3xl text-4xl font-normal leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
+          className="flex flex-col gap-2 text-4xl font-normal leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl"
         >
-          <HeroAdjective words={rotatingWords} />{" "}
-          <span className="bg-gradient-to-br from-zinc-50 via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+          {/* Row 1: The Rotating Adjective */}
+          <span className="block w-fit">
+            <HeroAdjective words={rotatingWords} />
+          </span>
+
+          {/* Row 2 & 3: The Rest of the Title */}
+          {/* max-w-[17em] ensures it breaks into 2 lines regardless of screen size */}
+          <span className="block max-w-[17em] bg-gradient-to-br from-zinc-50 via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
             {restTitle}
           </span>
         </h1>
@@ -172,7 +178,6 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
             {ctaSecondary}
           </Link>
         </div>
-
         {/* Tech line */}
         <div className="pt-4 text-xs text-zinc-300 sm:text-sm flex items-center gap-2 flex-wrap">
           {renderTechWithIcons(techLine)}
