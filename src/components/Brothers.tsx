@@ -191,7 +191,7 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
                   <div className="absolute inset-x-0 bottom-0">
                     <div className="w-full rounded-md bg-gradient-to-r from-fuchsia-500 via-fuchsia-600 to-fuchsia-700 py-2 shadow-[0_10px_30px_rgba(0,0,0,0.7)]">
                       <span className="block text-center text-[14px] sm:text-[30px] font-semibold uppercase tracking-[0.26em] text-zinc-50 drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">
-                        Jouko
+                        Jouko testi
                       </span>
                     </div>
                   </div>
