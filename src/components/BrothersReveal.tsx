@@ -21,8 +21,9 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
 
     const ctx = gsap.context(() => {
       const primary = el.querySelector<HTMLElement>("[data-brothers-primary]");
-      const secondary =
-        el.querySelector<HTMLElement>("[data-brothers-secondary]");
+      const secondary = el.querySelector<HTMLElement>(
+        "[data-brothers-secondary]"
+      );
       const samuli = el.querySelector<HTMLElement>(
         '[data-brothers-card="samuli"]'
       );
@@ -62,33 +63,59 @@ export default function BrothersReveal({ children }: BrothersRevealProps) {
 
       // --- SECONDARY HEADING TYPEWRITER ---
       if (secondary) {
+        // Haetaan <span> sisällä oleva tekstielementti
         const textSpan = secondary.querySelector("span") as HTMLElement | null;
+
         if (textSpan) {
+          // Otetaan talteen koko alkuperäinen teksti
           const fullText = textSpan.textContent ?? "";
+
+          // Tyhjennetään teksti näkyvistä ennen animaation alkua
           textSpan.textContent = "";
 
+          // Tämä objekti on "animaatio-arvo", johon GSAP kirjoittaa lukuja 0 → fullText.length
           const typeObj = { chars: 0 };
 
           gsap.fromTo(
+            // ANIMOITAVA OBJEKTI
             typeObj,
+
+            // ALKUTILA
             { chars: 0 },
+
+            // LOPPUTILA + ASETUKSET
             {
-              chars: fullText.length,
-              ease: "none",
+              chars: fullText.length, // animoidaan numero 0 → merkkien kokonaismäärä
+
+              ease: "none", // ei hidastuksia, tasainen "kirjoitusnopeus"
+
+              duration: 1.2, // kuinka kauan koko kirjoitus kestää ajassa (sekunteina)
+
+              // ScrollTrigger kertoo MILLON animaatio käynnistetään
               scrollTrigger: {
-                trigger: el,
-                start: "top 80%",
-                end: "top 40%",
-                scrub: true,
+                trigger: el, // animaation käynnistyspiste on koko tämä osio
+                start: "top 80%", // kun osion yläreuna osuu viewportin 80% korkeuteen
+                toggleActions: "play none none none",
+                // selitys:
+                // play = animaatio pyörii kun trigger täyttyy
+                // none none none = älä tee mitään muissa trigger-tilanteissa
               },
+
               onUpdate() {
+                // Tämä ajetaan joka frame → päivitetään näkyvä tekstimäärä
                 const current = Math.round(typeObj.chars);
+
+                // Otetaan alkuperäisestä tekstistä palanen 0 → current merkkiin
                 textSpan.textContent = fullText.slice(0, current);
               },
+
               onLeave() {
+                // Kun skrollataan ohi → varmistetaan että koko teksti näkyy
                 textSpan.textContent = fullText;
               },
+
               onLeaveBack() {
+                // Kun skrollataan takaisin ylös → tyhjennetään teksti uudelleen
                 textSpan.textContent = "";
               },
             }
