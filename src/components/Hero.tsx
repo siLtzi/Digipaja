@@ -178,7 +178,6 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
             {ctaSecondary}
           </Link>
         </div>
-
         {/* Tech line */}
         <div className="pt-4 text-xs text-zinc-300 sm:text-sm flex items-center gap-2 flex-wrap">
           {renderTechWithIcons(techLine)}
