@@ -2,52 +2,109 @@
 
 import React, { useState } from 'react';
 
-// Mock data
-const MOCK_MESSAGES = {
-  eyebrow: "Hinnoittelu",
-  title: "Selkeä hinnoittelu ilman yllätyksiä.",
-  subtitle: "Jokainen projekti on erilainen, mutta suurin osa asiakkaista asettuu näihin kokonaisuuksiin. Saat aina kirjallisen tarjouksen ennen kuin aloitamme.",
-  
-  // Plan 1: Perussivusto (Updated)
-  plan1Name: "Perussivusto",
-  plan1Price: "alk. 1 200 €",
-  plan1Body: "Yksinkertaiset, mutta viimeistellyt yrityksen kotisivut. Sopii esimerkiksi yhden palvelun yritykselle tai pienelle toimijalle.",
-  plan1Includes: [
-    "1–3 sivua (etusivu + yhteystiedot + 1 lisäsivu)",
-    "Responsiivinen toteutus",
-    "Perus-hakukoneoptimointi",
-    "Yhteydenottolomake tai suorat yhteystiedot"
-  ],
-
-  // Plan 2: Scale (Existing placeholder - update if you have specific text)
-  plan2Name: "Laaja sivusto",
-  plan2Price: "alk. 2 400 €",
-  plan2Body: "Yrityksille, jotka vaativat tuloksia. Täysi CMS-hallinta, laajempi sisältö ja analytiikka.",
-  plan2Includes: [
-    "Kaikki Perussivusto-ominaisuudet", 
-    "Sanity CMS -sisällönhallinta", 
-    "5-8 sivua", 
-    "Kehittynyt analytiikka", 
-    "Mikro-animaatiot"
-  ],
-
-  // Plan 3: Enterprise (Existing placeholder - update if you have specific text)
-  plan3Name: "Räätälöity",
-  plan3Price: "Kysy tarjous",
-  plan3Body: "Räätälöity ekosysteemi vaativiin tarpeisiin. Integraatiot, verkkokaupat ja uniikit visiot.",
-  plan3Includes: [
-    "Kaikki Laaja-ominaisuudet", 
-    "Verkkokauppa tai integraatiot", 
-    "Kustomoidut 3D-elementit", 
-    "Laaja SEO-strategia", 
-    "Design-järjestelmä"
-  ],
-
-  note: "Hinnat alv 0%. Lopullinen tarjous määräytyy spesifikaatioiden mukaan."
+// 1. Define the props interface
+type Props = {
+  locale: "fi" | "en";
 };
 
-export default function Pricing() {
-  const m = MOCK_MESSAGES;
+// 2. Structure data for both languages
+const DICTIONARY = {
+  fi: {
+    eyebrow: "Hinnoittelu",
+    title: "Selkeä hinnoittelu ilman yllätyksiä.",
+    subtitle: "Jokainen projekti on erilainen, mutta suurin osa asiakkaista asettuu näihin kokonaisuuksiin. Saat aina kirjallisen tarjouksen ennen kuin aloitamme.",
+    
+    plan1Name: "Perussivusto",
+    plan1Price: "alk. 1 200 €",
+    plan1Body: "Yksinkertaiset, mutta viimeistellyt yrityksen kotisivut. Sopii esimerkiksi yhden palvelun yritykselle tai pienelle toimijalle.",
+    plan1Includes: [
+      "1–3 sivua (etusivu + yhteystiedot + 1 lisäsivu)",
+      "Responsiivinen toteutus",
+      "Perus-hakukoneoptimointi",
+      "Yhteydenottolomake tai suorat yhteystiedot"
+    ],
+    plan1Category: "ALKUUN PÄÄSY",
+
+    plan2Name: "Laaja sivusto",
+    plan2Price: "alk. 2 400 €",
+    plan2Body: "Yrityksille, jotka vaativat tuloksia. Täysi CMS-hallinta, laajempi sisältö ja analytiikka.",
+    plan2Includes: [
+      "Kaikki Perussivusto-ominaisuudet", 
+      "Sanity CMS -sisällönhallinta", 
+      "5-8 sivua", 
+      "Kehittynyt analytiikka", 
+      "Mikro-animaatiot"
+    ],
+    plan2Category: "KASVUUN",
+
+    plan3Name: "Räätälöity",
+    plan3Price: "Kysy tarjous",
+    plan3Body: "Räätälöity ekosysteemi vaativiin tarpeisiin. Integraatiot, verkkokaupat ja uniikit visiot.",
+    plan3Includes: [
+      "Kaikki Laaja-ominaisuudet", 
+      "Verkkokauppa tai integraatiot", 
+      "Kustomoidut 3D-elementit", 
+      "Laaja SEO-strategia", 
+      "Design-järjestelmä"
+    ],
+    plan3Category: "VAATIVIIN TARPEISIIN",
+
+    cta: "Pyydä Tarjous",
+    popular: "Suosituin",
+    note: "Hinnat alv 0%. Lopullinen tarjous määräytyy spesifikaatioiden mukaan."
+  },
+  en: {
+    eyebrow: "Pricing",
+    title: "Clear pricing, no surprises.",
+    subtitle: "Every project is unique, but most fit into these tiers. You will always receive a written quote before we start.",
+    
+    plan1Name: "Basic Site",
+    plan1Price: "fr. 1 200 €",
+    plan1Body: "Simple but polished company websites. Perfect for single-service businesses or small operators.",
+    plan1Includes: [
+      "1–3 pages (Home + Contact + 1 extra)",
+      "Fully responsive design",
+      "Basic SEO setup",
+      "Contact form or direct details"
+    ],
+    plan1Category: "GET STARTED",
+
+    plan2Name: "Pro Site",
+    plan2Price: "fr. 2 400 €",
+    plan2Body: "For businesses that demand results. Full CMS control, expanded content, and analytics.",
+    plan2Includes: [
+      "All Basic features", 
+      "Sanity CMS content management", 
+      "5-8 pages", 
+      "Advanced analytics", 
+      "Micro-animations"
+    ],
+    plan2Category: "FOR GROWTH",
+
+    plan3Name: "Custom",
+    plan3Price: "Get a Quote",
+    plan3Body: "Tailored ecosystems for demanding needs. Integrations, e-commerce, and unique visions.",
+    plan3Includes: [
+      "All Pro features", 
+      "E-commerce or integrations", 
+      "Custom 3D elements", 
+      "Extensive SEO strategy", 
+      "Design system"
+    ],
+    plan3Category: "ENTERPRISE",
+
+    cta: "Request Quote",
+    popular: "Most Popular",
+    note: "Prices VAT 0%. Final offer depends on specifications."
+  }
+};
+
+// 3. Add props to the component function
+export default function Pricing({ locale }: Props) {
+  
+  // Select language based on the prop
+  const m = DICTIONARY[locale];
+  
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const plans = [
@@ -57,7 +114,7 @@ export default function Pricing() {
       body: m.plan1Body,
       includes: m.plan1Includes,
       highlight: false,
-      category: "ALKUUN PÄÄSY",
+      category: m.plan1Category,
     },
     {
       name: m.plan2Name,
@@ -65,7 +122,7 @@ export default function Pricing() {
       body: m.plan2Body,
       includes: m.plan2Includes,
       highlight: true,
-      category: "KASVUUN",
+      category: m.plan2Category,
     },
     {
       name: m.plan3Name,
@@ -73,7 +130,7 @@ export default function Pricing() {
       body: m.plan3Body,
       includes: m.plan3Includes,
       highlight: false,
-      category: "VAATIVIIN TARPEISIIN",
+      category: m.plan3Category,
     },
   ];
 
@@ -190,7 +247,7 @@ export default function Pricing() {
                     </div>
                     {plan.highlight && (
                       <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-fuchsia-400 drop-shadow-[0_0_10px_rgba(232,121,249,0.5)]">
-                        Suosituin
+                        {m.popular}
                       </span>
                     )}
                   </div>
@@ -241,7 +298,7 @@ export default function Pricing() {
                       }
                     `}>
                       <span className="relative z-10 text-xs font-bold uppercase tracking-[0.15em]">
-                        Pyydä Tarjous
+                        {m.cta}
                       </span>
                       {plan.highlight && (
                         <div className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-in-out" />
