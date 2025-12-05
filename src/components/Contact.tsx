@@ -28,6 +28,57 @@ type ContactSettings = {
   contactPhone?: string | null;
 };
 
+// -------- Floating label helper --------
+
+type FloatingFieldProps = {
+  id: string;
+  name: string;
+  label: string;
+  type?: string;
+  required?: boolean;
+  textarea?: boolean;
+};
+
+function FloatingField({
+  id,
+  name,
+  label,
+  type = "text",
+  required,
+  textarea,
+}: FloatingFieldProps) {
+  const letters = label.split("");
+
+  return (
+    <div className="floating-control">
+      {textarea ? (
+        <textarea
+          id={id}
+          name={name}
+          required={required}
+          rows={4}
+          className=""
+        />
+      ) : (
+        <input id={id} name={name} type={type} required={required} className="" />
+      )}
+
+      <label htmlFor={id}>
+        {letters.map((ch, idx) => (
+          <span
+            key={idx}
+            style={{ transitionDelay: `${idx * 25}ms` }}
+          >
+            {ch === " " ? "\u00A0" : ch}
+          </span>
+        ))}
+      </label>
+    </div>
+  );
+}
+
+// -------- Contact section --------
+
 export default async function Contact({ locale }: { locale: "fi" | "en" }) {
   const messages = (await import(`@/i18n/messages/${locale}.json`))
     .default as MessagesFile;
@@ -73,9 +124,7 @@ export default async function Contact({ locale }: { locale: "fi" | "en" }) {
             <p className="pt-4 text-xs text-zinc-400 sm:text-sm">{note}</p>
 
             <div className="mt-6 space-y-1 text-xs text-zinc-400 sm:text-sm">
-              <p className="font-medium text-zinc-300">
-                {m.helperText}
-              </p>
+              <p className="font-medium text-zinc-300">{m.helperText}</p>
               <p>
                 <span className="font-semibold text-zinc-200">Sähköposti: </span>
                 <a
@@ -100,93 +149,57 @@ export default async function Contact({ locale }: { locale: "fi" | "en" }) {
           <div className="max-w-md">
             <form
               method="POST"
-              action="/api/contact" // you can implement this route or change later
-              className="space-y-4 rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 shadow-[0_14px_45px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+              action="/api/contact"
+              className="rounded-3xl border border-zinc-800 bg-zinc-900/80 p-6 shadow-[0_14px_45px_rgba(0,0,0,0.45)] backdrop-blur-xl"
             >
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-1.5">
-                  <label
-                    htmlFor="firstName"
-                    className="text-xs font-medium text-zinc-300"
-                  >
-                    {m.firstNameLabel}
-                  </label>
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    required
-                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none ring-0 placeholder:text-zinc-500 focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/40"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label
-                    htmlFor="lastName"
-                    className="text-xs font-medium text-zinc-300"
-                  >
-                    {m.lastNameLabel}
-                  </label>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    required
-                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/40"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label
-                  htmlFor="email"
-                  className="text-xs font-medium text-zinc-300"
-                >
-                  {m.emailLabel}
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
+              <div className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
+                <FloatingField
+                  id="firstName"
+                  name="firstName"
+                  label={m.firstNameLabel}
                   required
-                  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/40"
                 />
-              </div>
-
-              <div className="space-y-1.5">
-                <label
-                  htmlFor="phone"
-                  className="text-xs font-medium text-zinc-300"
-                >
-                  {m.phoneLabel}
-                </label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/40"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label
-                  htmlFor="message"
-                  className="text-xs font-medium text-zinc-300"
-                >
-                  {m.messageLabel}
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
+                <FloatingField
+                  id="lastName"
+                  name="lastName"
+                  label={m.lastNameLabel}
                   required
-                  rows={4}
-                  className="w-full resize-none rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-500/40"
                 />
               </div>
 
-              <div className="pt-2">
+              <FloatingField
+                id="email"
+                name="email"
+                type="email"
+                label={m.emailLabel}
+                required
+              />
+
+              <FloatingField
+                id="phone"
+                name="phone"
+                type="tel"
+                label={m.phoneLabel}
+              />
+
+              <FloatingField
+                id="message"
+                name="message"
+                label={m.messageLabel}
+                textarea
+                required
+              />
+
+              <div className="pt-4">
                 <button
                   type="submit"
-                  className="inline-flex w-full items-center justify-center rounded-full bg-zinc-50 px-5 py-2.5 text-sm font-medium text-zinc-950 shadow-sm ring-1 ring-zinc-900/10 transition hover:-translate-y-[1px] hover:shadow-md dark:bg-zinc-100 cursor-pointer"
+                  className="
+                    inline-flex w-full items-center justify-center
+                    rounded-full bg-zinc-50 px-5 py-2.5 text-sm font-medium
+                    text-zinc-950 shadow-sm ring-1 ring-zinc-900/10
+                    transition-transform duration-150 hover:-translate-y-px hover:shadow-md
+                    dark:bg-zinc-100 cursor-pointer
+                  "
                 >
                   {m.submitLabel}
                 </button>

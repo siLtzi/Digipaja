@@ -35,3 +35,60 @@ h1, h2, h3, h4, h5, h6 {
   --bg3: 39 39 42;      /* zinc-800 */
 }
 
+/* --- Floating contact inputs --- */
+
+.floating-control {
+  position: relative;
+  margin: 1.25rem 0 0.5rem;
+  width: 100%;
+}
+
+.floating-control input,
+.floating-control textarea {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px solid rgba(244, 244, 245, 0.55); /* zinc-ish */
+  display: block;
+  width: 100%;
+  padding: 0.9rem 0 0.4rem;
+  font-size: 0.9rem;
+  color: #f9fafb;
+}
+
+.floating-control textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.floating-control input:focus,
+.floating-control input:valid,
+.floating-control textarea:focus,
+.floating-control textarea:valid {
+  outline: 0;
+  border-bottom-color: rgb(232 121 249); /* fuchsia-400 */
+}
+
+.floating-control label {
+  position: absolute;
+  top: 0.6rem;
+  left: 0;
+  pointer-events: none;
+}
+
+.floating-control label span {
+  display: inline-block;
+  font-size: 0.9rem;
+  min-width: 0.25rem;
+  color: rgba(244, 244, 245, 0.8);
+  transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* float up on focus / when valid (not empty) */
+.floating-control input:focus + label span,
+.floating-control input:valid + label span,
+.floating-control textarea:focus + label span,
+.floating-control textarea:valid + label span {
+  color: rgb(232 121 249);
+  transform: translateY(-1.4rem);
+}
+
