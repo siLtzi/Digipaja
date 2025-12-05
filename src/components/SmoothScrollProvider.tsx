@@ -42,7 +42,7 @@ export default function SmoothScrollProvider({
     const smoother = ScrollSmoother.create({
       wrapper: wrapperRef.current,
       content: contentRef.current,
-      smooth: 1.1,
+      smooth: 0.6,
       effects: true,
       normalizeScroll: true,
     });
