@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { sanityClient } from "@/sanity/config";
 import { heroSettingsQuery } from "@/sanity/queries";
-import HeroAdjective from "@/components/HeroAdjective";
-import TechTicker from "@/components/TechTicker";
-import { ArrowRight } from "lucide-react";
+import HeroAdjective from "./Adjective";
+import TechTicker from "@/components/ui/TechTicker";
+// IMPORT THE NEW COMPONENT
+import HeroLinkCTA from "./HeroContent"; 
 
 type HeroMessages = {
   title: string;
@@ -26,94 +27,6 @@ type HeroSettings = {
 };
 
 const BRAND_GRADIENT = "from-purple-500 via-fuchsia-500 to-cyan-500";
-
-// --- NEW COMPONENT: The "Circle Expand & Arrow Swap" Button (Fixed Physics) ---
-const AnimatedHeroButton = ({ text, href }: { text: string; href: string }) => {
-  return (
-    <Link
-      href={href}
-      className={`
-        group relative flex items-center justify-center gap-2 overflow-hidden
-        
-        /* MATCHING CSS: Padding & Base Shape */
-        px-9 py-4 
-        rounded-[100px] /* Fixed pixel value allows smooth interpolation */
-        bg-transparent
-        
-        /* MATCHING CSS: Typography */
-        text-base font-semibold uppercase tracking-widest text-zinc-100
-        
-        /* MATCHING CSS: Box Shadow Border Logic */
-        /* Initial: 2px border simulation */
-        shadow-[0_0_0_2px_theme('colors.zinc.200/20')]
-        
-        /* MATCHING CSS: Transition (0.6s for container) */
-        transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)]
-        
-        /* --- HOVER STATES --- */
-        /* Morph shape to 12px */
-        hover:rounded-[12px] 
-        /* "Explode" the shadow border outwards to transparent (12px spread) */
-        hover:shadow-[0_0_0_12px_transparent]
-        /* Text color change */
-        hover:text-white
-        
-        /* --- ACTIVE STATE --- */
-        active:scale-95
-        active:shadow-[0_0_0_4px_theme('colors.fuchsia.500')]
-      `}
-    >
-      {/* 1. The Expanding Circle Background */
-       /* MATCHING CSS: .animated-button .circle */
-      }
-      <span
-        className={`
-          absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2
-          h-5 w-5 rounded-full bg-gradient-to-r ${BRAND_GRADIENT} opacity-0
-          
-          /* Transition: 0.8s for children */
-          transition-all duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)]
-          
-          /* Hover: Expand to 220px+ and fade in */
-          group-hover:h-[300px] group-hover:w-[300px] group-hover:opacity-100
-        `}
-      />
-
-      {/* 2. The Text */
-       /* MATCHING CSS: .animated-button .text (translateX -12px to 12px) */
-      }
-      <span className="
-        relative z-10 -translate-x-3
-        transition-all duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)]
-        group-hover:translate-x-3
-      ">
-        {text}
-      </span>
-
-      {/* 3. Arrow 1 (Right Arrow) */
-       /* MATCHING CSS: .animated-button .arr-1 */
-      }
-      <ArrowRight
-        className="
-          absolute right-4 z-10 h-5 w-5
-          transition-all duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)]
-          group-hover:-right-[25%]
-        "
-      />
-
-      {/* 4. Arrow 2 (Left Arrow) */
-       /* MATCHING CSS: .animated-button .arr-2 */
-      }
-      <ArrowRight
-        className="
-          absolute -left-[25%] z-10 h-5 w-5
-          transition-all duration-[800ms] ease-[cubic-bezier(0.23,1,0.32,1)]
-          group-hover:left-4
-        "
-      />
-    </Link>
-  );
-};
 
 export default async function Hero({ locale }: { locale: "fi" | "en" }) {
   const messages = (await import(`@/i18n/messages/${locale}.json`))
@@ -206,27 +119,11 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
         {/* CTAs */}
         <div className="flex flex-wrap items-center gap-5">
           
-          {/* PRIMARY CTA: Using the fixed Animated Button */}
-          <AnimatedHeroButton 
+          {/* PRIMARY CTA: The animated showpiece */}
+          <HeroLinkCTA 
             text={ctaPrimary} 
             href={href("/contact")} 
           />
-
-          {/* SECONDARY CTA: Glassmorphic Ghost Pill */}
-          <Link
-            href={href("/work")}
-            className="
-              group relative inline-flex items-center gap-2 overflow-hidden rounded-full
-              border border-white/10 bg-white/5 px-8 py-4
-              text-sm font-bold uppercase tracking-widest text-zinc-300
-              backdrop-blur-md transition-all duration-300 cubic-bezier(0.23, 1, 0.32, 1)
-              hover:border-white/30 hover:bg-white/10 hover:text-white hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]
-              active:scale-95
-            "
-          >
-            {ctaSecondary}
-            <span className="h-1.5 w-1.5 rounded-full bg-zinc-500 transition-colors group-hover:bg-cyan-400" />
-          </Link>
         </div>
 
         {/* Tech Ticker */}

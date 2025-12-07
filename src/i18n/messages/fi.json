@@ -20,21 +20,17 @@
   },
 
   "whyUs": {
-    "eyebrow": "Miksi valita Digipaja?",
-    "title": "Pieni tiimi, iso vastuu – juuri sinulle.",
-    "subtitle": "Emme myy kikkailevaa koodia tai turhaa hienostelua. Teemme sivuja, jotka tuntuvat omilta ja tuovat sinulle oikeita yhteydenottoja.",
-
-    "point1Title": "Selkeä hinta, ei yllätyksiä",
-    "point1Body": "Sovimme budjetin etukäteen ja kerromme rehellisesti, mitä siihen mahtuu. Ei piilokuluja, ei \"lisäpaketteja\" tunteja myöhemmin.",
-
-    "point2Title": "Moderni tekniikka ilman teknistä jargonia",
-    "point2Body": "Next.js, Tailwind, analytiikka ja seuranta – mutta puhumme kaikesta selkokielellä. Sinun ei tarvitse ymmärtää koodia, riittää että ymmärrät bisnestäsi.",
-
-    "point3Title": "Nopea ja mutkaton yhteistyö",
-    "point3Body": "Olemme kahden ihmisen tiimi, joten sinulla on aina suora yhteys tekijöihin. Vastaukset tulevat nopeasti, ja hommat etenevät ilman turhaa byrokratiaa.",
-
-    "point4Title": "Sivu joka elää mukana",
-    "point4Body": "Emme tee kertakäyttösivua. Rakennamme pohjan, jota on helppo laajentaa ja päivittää, kun yrityksesi kasvaa."
+    "eyebrow": "Kilpailuetu",
+    "title": "Huipputason suorituskyky. Nolla turhuutta.",
+    "subtitle": "Useimmat toimistot myyvät hallintoa ja hitaita WordPress-sivuja. Me rakennamme digitaalisia työkaluja, jotka on koodattu kasvua varten.",
+    "point1Title": "Suora yhteys",
+    "point1Body": "Ei rikkinäistä puhelinta. Puhut suoraan kehittäjille. Päätökset tehdään minuuteissa, ei viikkopalavereissa.",
+    "point2Title": "Moderni teknologia",
+    "point2Body": "Emme käytä valmissivupohjia. Koodaamme Next.js:llä ja Sanitylla varmistaaksemme täydelliset Google-tulokset.",
+    "point3Title": "Nopea toimitus",
+    "point3Body": "Isot toimistot vievät kuukausia. Me toimitamme viikoissa. Komponenttipohjainen arkkitehtuurimme mahdollistaa nopeuden laadusta tinkimättä.",
+    "point4Title": "Täysi omistajuus",
+    "point4Body": "Ei toimittajaloukkuja. Omistat koodin, sisällön ja tilit 100-prosenttisesti. Me rakennamme, sinä hallitset."
   },
 
   "process": {
@@ -65,14 +61,14 @@
     "subtitle": "Autamme sinua alusta loppuun: rakenteesta ja sisällöstä aina julkaisuun ja jatkokehitykseen.",
 
     "service1Label": "Palvelu 1",
-    "service1Title": "Yrityksen kotisivut",
+    "service1Title": "Nettisivu",
     "service1Body": "Räätälöidyt, nopeat ja modernit nettisivut yrityksellesi. Selkeä rakenne, responsiivinen toteutus ja hakukoneita varten optimoitu perusta.",
 
     "service2Label": "Palvelu 2",
-    "service2Title": "Sisältö & rakenne",
+    "service2Title": "Verkkokaupat",
     "service2Body": "Emme odota valmiita tekstejä. Autamme jäsentämään palvelut, kirjoittamaan tekstit ja muotoilemaan viestit niin, että oikeat asiakkaat ymmärtävät ne.",
 
-    "service3Label": "Palvelu 3",
+    "service3Label": "Hakukoneoptimointi",
     "service3Title": "Ylläpito & jatkokehitys",
     "service3Body": "Voimme huolehtia sivuston päivityksistä, sisällön muutoksista ja pienistä kehitystöistä kuukausisopimuksella tai tuntiperusteisesti."
   },

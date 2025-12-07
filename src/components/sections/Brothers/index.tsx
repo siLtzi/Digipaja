@@ -67,13 +67,12 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-[#050505] border-t border-white/5"
+      // bg-transparent allows the grid to show through
+      // overflow-hidden is still good to keep glow effects inside
+      className="relative overflow-hidden bg-transparent border-t border-white/5"
     >
-      {/* Global Ambient Glow (Subtle) */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[500px] bg-purple-900/10 blur-[100px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-[clamp(16px,8vw,80px)] py-24 lg:py-32">
-        
         {/* --- HEADER --- */}
         <div className="mx-auto mb-24 max-w-4xl text-center">
           <p className="mb-6 text-xs font-bold uppercase tracking-[0.25em] text-zinc-500">
@@ -84,10 +83,16 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
             style={{ fontFamily: "var(--font-clash-display)" }}
             className="text-4xl font-medium tracking-tight text-zinc-50 sm:text-5xl lg:text-6xl"
           >
-            <span data-brothers-primary className="block text-zinc-400 opacity-80 mb-2 sm:mb-4">
+            <span
+              data-brothers-primary
+              className="block text-zinc-400 opacity-80 mb-2 sm:mb-4"
+            >
               {primaryTitle}
             </span>
-            <span data-brothers-secondary className={`block bg-gradient-to-r ${BRAND_GRADIENT} bg-clip-text text-transparent`}>
+            <span
+              data-brothers-secondary
+              className={`block bg-gradient-to-r ${BRAND_GRADIENT} bg-clip-text text-transparent`}
+            >
               <span>{secondaryText}</span>
             </span>
           </h2>
@@ -99,23 +104,18 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
 
         {/* --- CONTENT CONTAINER --- */}
         <div className="space-y-32">
-          
           {/* --- SAMULI (Tech / Cyan Theme) --- */}
           <div data-brothers-card="samuli" className="group relative">
-            {/* Tech Glow */}
-            <div className="absolute left-[10%] top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-cyan-900/20 blur-[100px] transition-opacity duration-700 group-hover:opacity-100" />
 
             <div className="relative grid grid-cols-1 items-center gap-16 md:grid-cols-2 lg:gap-24">
-              
               {/* IMAGE COLUMN */}
               <div className="flex justify-center md:justify-end">
                 <div className="relative w-[280px] sm:w-[320px] lg:w-[360px]">
-                  
                   {/* Image "Portal" Effect */}
                   <div className="relative z-10 overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-cyan-500/30">
                     {/* Inner Gradient Background */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-cyan-900/20" />
-                    
+
                     <Image
                       src="/brothers/Samuli.png"
                       alt="Samuli"
@@ -164,11 +164,8 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
 
           {/* --- JOUKO (Biz / Fuchsia Theme) --- */}
           <div data-brothers-card="jouko" className="group relative">
-            {/* Biz Glow */}
-            <div className="absolute right-[10%] top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-fuchsia-900/20 blur-[100px] transition-opacity duration-700 group-hover:opacity-100" />
 
             <div className="relative grid grid-cols-1 items-center gap-16 md:grid-cols-2 lg:gap-24">
-              
               {/* TEXT COLUMN (Order Swapped for Desktop) */}
               <div className="order-2 flex flex-col justify-center space-y-6 text-center md:order-1 md:text-left lg:items-end lg:text-right">
                 <div className="flex flex-col gap-4 lg:items-end">
@@ -193,11 +190,10 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
               {/* IMAGE COLUMN */}
               <div className="order-1 flex justify-center md:order-2 md:justify-start">
                 <div className="relative w-[280px] sm:w-[320px] lg:w-[360px]">
-                  
                   {/* Image "Portal" Effect */}
                   <div className="relative z-10 overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-500 hover:border-fuchsia-500/30">
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-fuchsia-900/20" />
-                    
+
                     <Image
                       src="/brothers/Jouko.png"
                       alt="Jouko"
@@ -222,7 +218,6 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
               </div>
             </div>
           </div>
-
         </div>
 
         {/* --- FOOTER NOTE --- */}
@@ -233,7 +228,6 @@ export default async function Brothers({ locale }: { locale: "fi" | "en" }) {
             </p>
           </div>
         </div>
-
       </div>
     </section>
   );

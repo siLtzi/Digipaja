@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/layout/Navbar";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
 export default async function LocaleLayout({

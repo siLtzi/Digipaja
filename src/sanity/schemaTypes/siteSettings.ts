@@ -253,6 +253,7 @@ export default defineType({
       rows: 3,
     }),
 
+    // Service 1
     defineField({
       name: "servicesService1Label_fi",
       title: "Service 1 label (FI)",
@@ -269,7 +270,21 @@ export default defineType({
       type: "text",
       rows: 3,
     }),
+    defineField({
+      name: "servicesService1Image",
+      title: "Service 1 Image",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
+        }),
+      ],
+    }),
 
+    // Service 2
     defineField({
       name: "servicesService2Label_fi",
       title: "Service 2 label (FI)",
@@ -286,7 +301,21 @@ export default defineType({
       type: "text",
       rows: 3,
     }),
+    defineField({
+      name: "servicesService2Image",
+      title: "Service 2 Image",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
+        }),
+      ],
+    }),
 
+    // Service 3
     defineField({
       name: "servicesService3Label_fi",
       title: "Service 3 label (FI)",
@@ -302,6 +331,19 @@ export default defineType({
       title: "Service 3 body (FI)",
       type: "text",
       rows: 3,
+    }),
+    defineField({
+      name: "servicesService3Image",
+      title: "Service 3 Image",
+      type: "image",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alternative Text",
+        }),
+      ],
     }),
 
     // WORK / PORTFOLIO – FI

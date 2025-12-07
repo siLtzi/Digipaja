@@ -61,15 +61,36 @@ export const servicesSettingsQuery = groq /* groq */ `
   servicesEyebrow_fi,
   servicesTitle_fi,
   servicesSubtitle_fi,
+  
   servicesService1Label_fi,
   servicesService1Title_fi,
   servicesService1Body_fi,
+  servicesService1Image {
+    alt,
+    asset->{
+      url
+    }
+  },
+
   servicesService2Label_fi,
   servicesService2Title_fi,
   servicesService2Body_fi,
+  servicesService2Image {
+    alt,
+    asset->{
+      url
+    }
+  },
+
   servicesService3Label_fi,
   servicesService3Title_fi,
-  servicesService3Body_fi
+  servicesService3Body_fi,
+  servicesService3Image {
+    alt,
+    asset->{
+      url
+    }
+  }
 }
 `;
 export const projectsQuery = groq /* groq */ `
