@@ -41,7 +41,7 @@ export default function ServicesContent({
         
         {/* 1. THE IMAGE */}
         <img
-          src="/image/BG4.png"
+          src="/image/BG4.webp"
           alt="Background"
           className="absolute inset-0 h-full w-full object-cover z-0 opacity-80"
         />
