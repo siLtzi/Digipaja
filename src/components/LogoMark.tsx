@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import {
   DIGIPAJA_LOGO_VIEWBOX,
   DOT,
@@ -12,7 +13,8 @@ import {
   type LetterPaths,
 } from "@/components/dLogoPaths";
 
-gsap.registerPlugin(useGSAP);
+// Register GSAP plugins
+gsap.registerPlugin(useGSAP, MotionPathPlugin);
 
 export default function LogoMark() {
   const containerRef = useRef<SVGSVGElement>(null);
@@ -28,7 +30,12 @@ export default function LogoMark() {
 
     tl.set(containerRef.current, { autoAlpha: 0, y: 8, scale: 0.96 });
 
-    tl.to(containerRef.current, { autoAlpha: 1, y: 0, scale: 1, duration: 0.6 });
+    tl.to(containerRef.current, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.6,
+    });
 
     // Icon fade-up
     tl.fromTo(
@@ -61,13 +68,17 @@ export default function LogoMark() {
       { x: 0, opacity: 1, duration: 0.4, stagger: 0.04 },
       "-=0.2"
     );
-  });
+  }, { scope: containerRef });
 
   // ================================
   //     HOVER: DOT ORBIT ANIMATION
   // ================================
   const handleMouseEnter = () => {
-    if (hoverTl.current) hoverTl.current.kill();
+    if (hoverTl.current) {
+      hoverTl.current.kill();
+      hoverTl.current = null;
+    }
+
     const tl = gsap.timeline();
     hoverTl.current = tl;
 
@@ -86,10 +97,12 @@ export default function LogoMark() {
       0
     );
 
-    // DOT ORBIT (circular motion)
+    // DOT orbit (circular-ish path)
     tl.to(
       ".logo-dot",
       {
+        duration: 0.65,
+        ease: "power1.inOut",
         motionPath: {
           path: [
             { x: 0, y: 0 },
@@ -100,8 +113,6 @@ export default function LogoMark() {
           ],
           curviness: 1.4,
         },
-        duration: 0.65,
-        ease: "power1.inOut",
         transformOrigin: "center center",
       },
       0.05
@@ -112,7 +123,7 @@ export default function LogoMark() {
       ".logo-part-wordmark path",
       {
         y: -1,
-        duration: 0.10,
+        duration: 0.1,
         yoyo: true,
         repeat: 1,
         stagger: 0.01,
@@ -141,14 +152,17 @@ export default function LogoMark() {
       hoverTl.current = null;
     }
 
-    // Reset everything freely
-    gsap.to([".logo-dot", iconRef.current, ".logo-part-wordmark path", ".logo-part-oulu path"], {
-      x: 0,
-      y: 0,
-      scale: 1,
-      duration: 0.25,
-      ease: "power2.out",
-    });
+    // Reset transforms
+    gsap.to(
+      [".logo-dot", iconRef.current, ".logo-part-wordmark path", ".logo-part-oulu path"],
+      {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.25,
+        ease: "power2.out",
+      }
+    );
   };
 
   return (
@@ -162,42 +176,64 @@ export default function LogoMark() {
       onMouseLeave={handleMouseLeave}
     >
       <defs>
-        <linearGradient id="digipaja-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient
+          id="digipaja-gradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="0%"
+        >
           <stop offset="0%" stopColor="#ff8a3c" />
           <stop offset="50%" stopColor="#ff4d00" />
           <stop offset="100%" stopColor="#ffcc80" />
         </linearGradient>
 
-        <linearGradient id="digipaja-subtext" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient
+          id="digipaja-subtext"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="0%"
+        >
           <stop offset="0%" stopColor="#e5e7eb" />
           <stop offset="100%" stopColor="#9ca3af" />
         </linearGradient>
       </defs>
 
       {/* ICON (D + DOT) */}
-      <g ref={iconRef} fill="url(#digipaja-gradient)" className="logo-part-icon">
+      <g
+        ref={iconRef}
+        fill="url(#digipaja-gradient)"
+        className="logo-part-icon"
+      >
         {D.map((d, i) => (
-          <path key={i} d={d} />
+          <path key={`icon-d-${i}`} d={d} />
         ))}
         {DOT.map((d, i) => (
-          <path key={i} d={d} className="logo-dot" />
+          <path key={`icon-dot-${i}`} d={d} className="logo-dot" />
         ))}
       </g>
 
-      {/* WORDMARK */}
-      <g fill="url(#digipaja-gradient)" className="logo-part-wordmark">
-        {DIGIPAJA_WORDMARK_LETTERS.map((letter) =>
+      {/* WORDMARK: DIGIPAJA */}
+      <g
+        fill="url(#digipaja-gradient)"
+        className="logo-part-wordmark"
+      >
+        {DIGIPAJA_WORDMARK_LETTERS.map((letter: LetterPaths) =>
           letter.paths.map((d, i) => (
             <path key={`${letter.id}-${i}`} d={d} />
           ))
         )}
       </g>
 
-      {/* OULU */}
-      <g fill="url(#digipaja-subtext)" className="logo-part-oulu">
-        {DIGIPAJA_OULU_LETTERS.map((letter) =>
+      {/* SUBTEXT: OULU */}
+      <g
+        fill="url(#digipaja-subtext)"
+        className="logo-part-oulu"
+      >
+        {DIGIPAJA_OULU_LETTERS.map((letter: LetterPaths) =>
           letter.paths.map((d, i) => (
-            <path key={`${letter.id}-${i}`} d={d} />
+            <path key={`oulu-${letter.id}-${i}`} d={d} />
           ))
         )}
       </g>

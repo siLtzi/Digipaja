@@ -47,5 +47,75 @@
     "eyebrow": "Referenssit",
     "title": "Valikoituja projekteja",
     "subtitle": "Tutustu viimeisimpiin töihimme. Rakennamme digitaalisia kokemuksia, jotka tuottavat tulosta."
+  },
+  "process": {
+    "eyebrow": "Prosessi",
+    "title": "Ideasta valmiiksi sivustoksi",
+    "subtitle": "Selkeä ja suoraviivainen prosessi takaa, että projekti pysyy aikataulussa ja lopputulos on juuri sitä mitä haettiin.",
+    "steps": [
+      {
+        "title": "Kartoitus & Startti",
+        "description": "Kaikki alkaa keskustelusta. Määrittelemme yhdessä sivuston tavoitteet, kohderyhmän ja tarvittavat ominaisuudet."
+      },
+      {
+        "title": "Suunnittelu & Design",
+        "description": "Luomme sivustolle visuaalisen ilmeen ja rakenteen. Tässä vaiheessa näet, miltä lopputulos tulee näyttämään."
+      },
+      {
+        "title": "Tekninen Kehitys",
+        "description": "Rakennamme sivuston Next.js:llä ja Sanityllä. Koodaamme kaiken käsin varmistaaksemme huippunopean suorituskyvyn."
+      },
+      {
+        "title": "Julkaisu & Koulutus",
+        "description": "Kun kaikki on valmista, optimoimme SEO-asetukset, julkaisemme sivuston ja opastamme sinut sisällönhallinnan käyttöön."
+      }
+    ]
+  },
+  "whyUs": {
+    "eyebrow": "Miksi Digipaja?",
+    "title": "Kun muut massatuottavat, me taomme.",
+    "subtitle": "Emme kasaa sivuja liukuhihnalla. Me taomme ne yksitellen, juuri sinun ehdoilla.",
+    "cards": [
+      {
+        "title": "Räätälöity, Ei Tehtaalta",
+        "description": "Massatuotettu sivu on kuin halpa keittiöveitsi: se näyttää hyvältä, kunnes todella tarvitset sitä. Me emme käytä valmiita teemoja. Jokaista mutteria ja animaatiota varten on tehty päätös sinun eduksesi.",
+        "icon": "forge"
+      },
+      {
+        "title": "Huippunopea Suorituskyky",
+        "description": "WordPress on kuin pakettiauto täynnä laatikoita. Next.js on urheiluauto. Google ja asiakkaat palkitsevat nopeuden, siksi emme rakenna mitään hidasta.",
+        "icon": "speed"
+      },
+      {
+        "title": "Jättiyritysten Teknologiaa",
+        "description": "Netflix, TikTok, Nike. Kaikki käyttävät samoja teknologioita (React/Next.js) kuin me. Ei siksi että se on muotia, vaan siksi että se toimii – nyt ja vuonna 2030.",
+        "icon": "tech"
+      },
+      {
+        "title": "Oikeat ihmiset. Oikeasti paikalla.",
+        "description": "Ei offshore-tiimejä. Ei robotteja. Saat meidät – veljeskaksikon Oulusta. Ihmiset, jotka välittävät lopputuloksesta, koska meidän nimemme on siinä alla.",
+        "icon": "local"
+      },
+      {
+        "title": "Tietoturva ja vakaus",
+        "description": "Lisäosa on riski. Tyypillisessä WP-sivussa niitä on kymmeniä. Meidän sivuissa ei ole mitään turhaa. Yksinkertainen on luotettava.",
+        "icon": "shield"
+      },
+      {
+        "title": "Uniikki Identiteetti",
+        "description": "Haluatko erottua vai sulautua massaan? Me emme konfiguroi asetuksia, me suunnittelemme identiteetin, joka saa kilpailijat kysymään: 'Keitä nää jätkät on?'",
+        "icon": "fingerprint"
+      },
+      {
+        "title": "Laukaisu, ei vain luovutus",
+        "description": "Kun muut pesevät kätensä, me vasta aloitamme. Testaamme nopeuden, mobiilin, SEO:n ja saavutettavuuden. Kun sivu julkaistaan, se on valmis liiketoimintaan.",
+        "icon": "rocket"
+      },
+      {
+        "title": "Miksi Digipaja voittaa?",
+        "description": "Tämä ei ole verkkosivu. Tämä on kilpailuetu. Et osta koodia, vaan tehokkaamman myyntikoneen ja huolettoman tulevaisuuden.",
+        "icon": "trophy"
+      }
+    ]
   }
 }

@@ -61,3 +61,36 @@ export const referencesQuery = groq`{
     technologies
   }
 }`;
+export const processSettingsQuery = groq`
+  *[_type == "processSettings"][0]{
+    processEyebrow_fi,
+    processEyebrow_en,
+    processTitle_fi,
+    processTitle_en,
+    processSubtitle_fi,
+    processSubtitle_en,
+    steps[]{
+      title_fi,
+      title_en,
+      description_fi,
+      description_en
+    }
+  }
+`;
+export const whyUsSettingsQuery = groq`
+  *[_type == "whyUsSettings"][0]{
+    whyUsEyebrow_fi,
+    whyUsEyebrow_en,
+    whyUsTitle_fi,
+    whyUsTitle_en,
+    whyUsSubtitle_fi,
+    whyUsSubtitle_en,
+    cards[]{
+      title_fi,
+      title_en,
+      description_fi,
+      description_en,
+      icon
+    }
+  }
+`;

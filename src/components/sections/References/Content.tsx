@@ -13,6 +13,7 @@ export type ReferenceProject = {
   category: string;
   description: string;
   image: string;
+  mobileImage: string;
   slug: string;
   tags: string[];
 };
@@ -38,23 +39,31 @@ export default function ReferencesContent({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
-  // === GSAP: GLITCH & SCROLL RESET ===
+  // === GSAP: SCANLINE & SCROLL RESET ===
   useGSAP(
     () => {
       if (!viewportRef.current) return;
 
       const tl = gsap.timeline();
 
-      // Reset Scroll Positions
+      // Reset scroll position instantly when project changes
       if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollTop = 0;
+        scrollContainerRef.current.scrollTo({
+          top: 0,
+          behavior: "auto",
+        });
         setHasScrolled(false);
       }
+
+      // Reset mobile scroll too
       if (mobileScrollRef.current) {
-        mobileScrollRef.current.scrollTop = 0;
+        mobileScrollRef.current.scrollTo({
+          top: 0,
+          behavior: "auto",
+        });
       }
 
-      // Scanline sweep
+      // Scanline sweep animation
       tl.fromTo(
         scanlineRef.current,
         { top: "-10%", opacity: 0 },
@@ -185,74 +194,96 @@ export default function ReferencesContent({
           <div className="hidden lg:col-span-7 lg:block">
             <div className="sticky top-32">
               <div ref={viewportRef} className="group relative w-full">
+                
                 {/* ======================================= */}
-                {/* 1. DESKTOP MONITOR (Main View)         */}
+                {/* 1. DESKTOP MONITOR WRAPPER              */}
                 {/* ======================================= */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-white/10 bg-black shadow-2xl">
-                  {/* SCROLLABLE CONTAINER — NOW ON TOP (z-30) */}
-                  <div
-                    ref={scrollContainerRef}
-                    onScroll={handleScroll}
-                    className="absolute inset-0 z-30 h-full w-full overflow-y-auto bg-[#050609] overscroll-contain pointer-events-auto scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                    style={{ WebkitOverflowScrolling: "touch" }}
-                  >
-                    <div className="relative w-full min-h-[101%]">
-                      <Image
-                        src={activeProject.image}
-                        alt={activeProject.title}
-                        width={1600}
-                        height={3000}
-                        className="w-full h-auto object-cover object-top opacity-90"
-                        priority
-                      />
-                      <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* VISUAL OVERLAYS — NO LONGER BLOCK WHEEL */}
-                  <div className="absolute inset-0 z-20 pointer-events-none">
-                    {/* Scanline */}
+                {/* Changed to flex-col to separate Image from HUD */}
+                <div className="relative flex flex-col w-full overflow-hidden rounded-lg border border-white/10 bg-black shadow-2xl isolate">
+                  
+                  {/* --- TOP: THE SCREEN (Image) --- */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden">
+                    
+                    {/* SCROLLABLE CONTAINER */}
                     <div
-                      ref={scanlineRef}
-                      className="absolute left-0 right-0 h-[20%] bg-gradient-to-b from-transparent via-[#ff8a3c]/10 to-transparent pointer-events-none"
-                    />
-                    {/* Top light gradient */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.05),transparent_60%)] pointer-events-none" />
-
-                    {/* Scroll Hint */}
-                    <div
-                      className={`absolute bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 transition-all duration-500 pointer-events-none ${
-                        hasScrolled
-                          ? "opacity-0 translate-y-4"
-                          : "opacity-100 translate-y-0"
-                      }`}
+                      ref={scrollContainerRef}
+                      onScroll={handleScroll}
+                      onWheel={(e) => e.stopPropagation()}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      onTouchMove={(e) => e.stopPropagation()}
+                      className="absolute inset-0 z-30 h-full w-full overflow-y-auto bg-[#050609] overscroll-y-contain pointer-events-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                      style={{ WebkitOverflowScrolling: "touch" }}
                     >
-                      <span
-                        style={{ fontFamily: "var(--font-goldman)" }}
-                        className="text-[10px] font-bold uppercase tracking-widest text-[#ff8a3c] bg-black/80 px-3 py-1 rounded-full border border-[#ff8a3c]/30 shadow-lg"
-                      >
-                        Scroll to Explore
-                      </span>
-                      <div className="rounded-full bg-[#ff8a3c]/20 p-2 border border-[#ff8a3c]/30 animate-bounce">
-                        <svg
-                          className="h-5 w-5 text-[#ff8a3c]"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                          />
-                        </svg>
+                      <div className="relative w-full min-h-[101%]">
+                        <Image
+                          src={activeProject.image}
+                          alt={activeProject.title}
+                          width={1600}
+                          height={3000}
+                          className="w-full h-auto object-cover object-top opacity-90"
+                          priority
+                        />
+                        <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none" />
                       </div>
                     </div>
+
+                    {/* VISUAL OVERLAYS (Z-20, Non-blocking) */}
+                    <div className="absolute inset-0 z-20 pointer-events-none">
+                      {/* Scanline */}
+                      <div
+                        ref={scanlineRef}
+                        className="absolute left-0 right-0 h-[20%] bg-gradient-to-b from-transparent via-[#ff8a3c]/10 to-transparent pointer-events-none"
+                      />
+                      {/* Top light gradient */}
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.05),transparent_60%)] pointer-events-none" />
+
+                      {/* Scroll Hint */}
+                      <div
+                        className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 transition-all duration-500 pointer-events-none ${
+                          hasScrolled
+                            ? "opacity-0 translate-y-4"
+                            : "opacity-100 translate-y-0"
+                        }`}
+                      >
+                        <span
+                          style={{ fontFamily: "var(--font-goldman)" }}
+                          className="text-[10px] font-bold uppercase tracking-widest text-[#ff8a3c] bg-black/80 px-3 py-1 rounded-full border border-[#ff8a3c]/30 shadow-lg"
+                        >
+                          Scroll to Explore
+                        </span>
+                        <div className="rounded-full bg-[#ff8a3c]/20 p-2 border border-[#ff8a3c]/30 animate-bounce">
+                          <svg
+                            className="h-5 w-5 text-[#ff8a3c]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* === ACTIVE CORNER INDICATORS (ACTUAL CORNERS) === */}
+                    {/* Top Left */}
+                    <div className="absolute top-0 left-0 h-6 w-6 border-l-2 border-t-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
+                    {/* Top Right */}
+                    <div className="absolute top-0 right-0 h-6 w-6 border-r-2 border-t-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
+                    {/* Bottom Right */}
+                    <div className="absolute bottom-0 right-0 h-6 w-6 border-r-2 border-b-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
+                    {/* Bottom Left */}
+                    <div className="absolute bottom-0 left-0 h-6 w-6 border-l-2 border-b-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
                   </div>
 
-                  {/* HUD */}
-                  <div className="absolute bottom-0 left-0 right-0 z-40 flex items-center justify-between border-t border-white/10 bg-black/90 p-4 backdrop-blur-md pointer-events-auto">
+
+                  {/* --- BOTTOM: HUD / BEZEL (Separate from Image) --- */}
+                  {/* This is now a separate flex item, not absolute, so it doesn't cover the image */}
+                  <div className="relative z-40 flex items-center justify-between border-t border-white/10 bg-[#0a0a0a] p-4 backdrop-blur-md">
                     <div className="flex flex-col">
                       <span className="text-[10px] uppercase tracking-widest text-zinc-500">
                         Project Status
@@ -268,11 +299,11 @@ export default function ReferencesContent({
 
                     <Link
                       href={`/work/${activeProject.slug}`}
-                      className="group flex items-center gap-2 rounded-sm bg-[#ff8a3c] px-4 py-2 text-xs font-bold uppercase tracking-wider text-black transition-all hover:bg-white hover:text-black cursor-pointer"
+                      className="group/btn flex items-center gap-2 rounded-sm bg-[#ff8a3c] px-4 py-2 text-xs font-bold uppercase tracking-wider text-black transition-all hover:bg-white hover:text-black cursor-pointer"
                     >
                       View Case Study
                       <svg
-                        className="h-3 w-3 transition-transform group-hover:translate-x-1"
+                        className="h-3 w-3 transition-transform group-hover/btn:translate-x-1"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -286,28 +317,24 @@ export default function ReferencesContent({
                       </svg>
                     </Link>
                   </div>
-
-                  {/* Corner Decorations */}
-                  <div className="absolute top-2 left-2 h-4 w-4 border-l-2 border-t-2 border-[#ff8a3c]/50 pointer-events-none z-40" />
-                  <div className="absolute top-2 right-2 h-4 w-4 border-r-2 border-t-2 border-[#ff8a3c]/50 pointer-events-none z-40" />
                 </div>
 
                 {/* ======================================= */}
-                {/* 2. MOBILE SATELLITE (Bottom Right)     */}
+                {/* 2. MOBILE SATELLITE (Bottom Right)      */}
                 {/* ======================================= */}
                 <div
                   className="absolute -bottom-8 -right-8 z-50 w-[140px] overflow-hidden rounded-xl border-4 border-[#1a1c23] bg-black shadow-[0_0_40px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-105 hover:z-[60]"
                   style={{ aspectRatio: "9/19" }}
                 >
-                  {/* Mobile Scroll Container — now on top */}
+                  {/* Mobile Scroll Container */}
                   <div
                     ref={mobileScrollRef}
-                    className="absolute inset-0 z-30 h-full w-full overflow-y-auto bg-[#050609] pointer-events-auto scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="absolute inset-0 z-30 h-full w-full overflow-y-auto bg-[#050609] overscroll-y-contain pointer-events-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   >
                     <div className="relative w-full min-h-[101%]">
                       <Image
-                        src={activeProject.image}
-                        alt={activeProject.title}
+                        src={activeProject.mobileImage || activeProject.image}
+                        alt={`${activeProject.title} Mobile View`}
                         width={800}
                         height={2000}
                         className="w-full h-auto object-cover object-top opacity-90"

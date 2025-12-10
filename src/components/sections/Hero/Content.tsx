@@ -119,14 +119,26 @@ export default function HeroContent({
     >
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
+        {/* Mobile Video: Visible up to lg (1024px), then hidden */}
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="h-full w-full object-cover opacity-40"
+          className="block h-full w-full object-cover opacity-40 lg:hidden"
         >
-          <source src="/video/hero.mp4" type="video/mp4" />
+          <source src={mobileVideo} type="video/mp4" />
+        </video>
+
+        {/* Desktop Video: Hidden on mobile, visible on lg (1024px) and up */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="hidden h-full w-full object-cover opacity-40 lg:block"
+        >
+          <source src={desktopVideo} type="video/mp4" />
         </video>
       </div>
 

@@ -40,12 +40,12 @@ export default function SmoothScrollProvider({
 
     // 🖥️ Desktop → enable smoother
     const smoother = ScrollSmoother.create({
-      wrapper: wrapperRef.current,
-      content: contentRef.current,
-      smooth: 0.6,
-      effects: true,
-      normalizeScroll: true,
-    });
+  wrapper: wrapperRef.current,
+  content: contentRef.current,
+  smooth: 0.6,
+  effects: true,
+  normalizeScroll: false,
+});
 
     return () => {
       smoother.kill();

@@ -1,100 +1,122 @@
 {
-  "nav": {
-    "home": "Home",
-    "services": "Services",
-    "work": "Work",
-    "contact": "Contact"
-  },
   "hero": {
-    "title": "We build fast websites that convert.",
-    "subtitle": "Modern Next.js + Tailwind stack, SEO-ready and measurable.",
-    "ctaPrimary": "Get a quote",
-    "ctaSecondary": "See work",
-    "scroll": "Scroll down"
+    "eyebrow": "Digital Studio from Oulu",
+    "titleStart": "Websites that look",
+    "titleAccent": "stunning",
+    "titleEnd": "and feel fast.",
+    "subtitle": "We design and implement custom websites that load lightning fast and support your business growth.",
+    "primaryCta": "Contact Us",
+    "secondaryCta": "View Work",
+    "metricsLabel": "Performance & Tech",
+    "metricsSubtitle": "We focus on Core Web Vitals from the start.",
+    "metricsFootnote": "Sample figures from real projects – we measure every site before handover."
   },
+
+  "aboutUs": {
+    "eyebrow": "Who We Are",
+    "title": "Two brothers building modern websites",
+    "subtitle": "Digipaja is an Oulu-based studio run by two brothers, focused on fast and sustainable websites.",
+    "techTitle": "Tech & Quality",
+    "techBody": "We build sites with React, Next.js, Sanity, and Vercel – purely on a modern stack.",
+    "bizTitle": "Business & Growth",
+    "bizBody": "We help local businesses with visibility, branding, and web reliability.",
+    "note": "Content updates in real-time via Sanity."
+  },
+
   "services": {
-    "title": "Services",
-    "subtitle": "Something?",
-    "items": {
-      "web": {
-        "title": "Websites",
-        "desc": "Fast, accessible, SEO-optimized sites."
+    "eyebrow": "What We Do",
+    "title": "Web Solutions & Services",
+    "subtitle": "We build high-performance websites for companies, freelancers, and individuals who want to stand out online.",
+    "items": [
+      {
+        "title": "Custom Websites",
+        "body": "We design and implement completely unique sites. Whether it's a corporate website or a personal portfolio, we create a solution that matches your vision."
       },
-      "shop": {
-        "title": "E-commerce",
-        "desc": "Revenue-driving stores (Shopify/Saleor/Stripe)."
+      {
+        "title": "Technical Implementation",
+        "body": "We build sites on a modern tech stack (Next.js, React, Sanity) – guaranteeing lightning-fast load times and easy maintenance."
       },
-      "care": {
-        "title": "Care & Support",
-        "desc": "Updates, analytics, and conversion tracking."
+      {
+        "title": "Search Engine Optimization",
+        "body": "We optimize structure, content, and performance so your site succeeds on Google and reaches the right audience."
       }
-    }
+    ]
   },
-  "work": { "title": "Recent work", "cta": "View more" },
-  "footer": { "copyright": "© {year} Digipaja. All rights reserved." },
-  "cta": { "contact": "Get a quote" },
-  "contact": {
-    "title": "Get in Touch",
-    "desc": "Fill out the form and we'll get back to you soon. You can also email us directly at contact@digipaja.fi.",
-    "name": "Name",
-    "email": "Email",
-    "message": "Message",
-    "submit": "Send"
+
+  "references": {
+    "eyebrow": "Selected Projects",
+    "title": "Our Work",
+    "subtitle": "Explore our latest work. We build digital experiences that deliver results."
   },
-  "estimator": {
-    "title": "Website Estimator",
-    "badges": {
-      "type": "{type}",
-      "pages": "{count} pages",
-      "deadline": "{deadline}"
-    },
-    "fields": {
-      "type": "Type",
-      "pages": "Pages",
-      "features": "Features",
-      "deadline": "Deadline"
-    },
-    "options": {
-      "type": {
-        "business": "Business",
-        "portfolio": "Portfolio",
-        "ecommerce": "E-commerce",
-        "booking": "Booking system",
-        "custom": "Custom"
+
+  "process": {
+    "eyebrow": "Our Process",
+    "title": "From Concept to Launch",
+    "subtitle": "A clear and straightforward workflow ensures the project stays on schedule and the result meets your exact expectations.",
+    "steps": [
+      {
+        "title": "Discovery & Kickoff",
+        "description": "It all starts with a conversation. Together we define the site goals, target audience, and required features."
       },
-      "features": {
-        "blog": "Blog",
-        "gallery": "Gallery",
-        "contact": "Contact form",
-        "checkout": "Checkout",
-        "booking": "Booking",
-        "multilingual": "Multilingual",
-        "seo": "SEO setup",
-        "cms": "CMS"
+      {
+        "title": "Planning & Design",
+        "description": "We create the visual identity and structure. At this stage, you will see exactly how the final result will look."
       },
-      "deadline": {
-        "normal": "Normal",
-        "fast": "Fast",
-        "rush": "Rush"
+      {
+        "title": "Technical Development",
+        "description": "We build the site using Next.js and Sanity. We code everything by hand to ensure top-tier performance."
+      },
+      {
+        "title": "Launch & Training",
+        "description": "Once ready, we optimize SEO settings, launch the site, and guide you on how to manage your content."
       }
-    },
-    "helper": {
-      "pagesHint": "First page included, additional pages €40 each",
-      "featuresTip": "Tip: choose only what you truly need — you can always add more later.",
-      "deadlineHint": "Normal = 1x, Fast = 1.2x, Rush = 1.5x"
-    },
-    "breakdown": {
-      "see": "See price breakdown",
-      "base": "Base ({type})",
-      "extraPages": "Extra pages ({count})",
-      "features": "Features {list}",
-      "none": "(none)",
-      "multiplier": "Deadline multiplier"
-    },
-    "total": {
-      "label": "Estimated total",
-      "approxNote": "(approximate — final price depends on project details)"
-    },
-    "cta": "Get a quote"
+    ]
+  },
+  "whyUs": {
+    "eyebrow": "Why Digipaja?",
+    "title": "While others mass produce, we forge.",
+    "subtitle": "We don't assemble sites on a conveyor belt. We forge them one by one, specifically for you.",
+    "cards": [
+      {
+        "title": "Tailored, Not Factory Made",
+        "description": "A mass-produced site is like a cheap knife: looks good until you need it. We make decisions for every nut, bolt, and animation based on your needs.",
+        "icon": "forge"
+      },
+      {
+        "title": "High-Performance Speed",
+        "description": "WordPress is a delivery van. Next.js is a sports car. Google rewards speed, and so do your customers. That's why we only build fast.",
+        "icon": "speed"
+      },
+      {
+        "title": "Enterprise Technology",
+        "description": "Netflix, TikTok, Nike. They use the same tech (React/Next.js) as we do. Not because it's trendy, but because it works—now and in 2030.",
+        "icon": "tech"
+      },
+      {
+        "title": "Real People. Really Here.",
+        "description": "No offshore teams. No robots. You get us—two brothers from Oulu. We care about the result because our name is on it.",
+        "icon": "local"
+      },
+      {
+        "title": "Security & Stability",
+        "description": "Plugins are risks. Typical WP sites have dozens. Our sites have zero bloat. Simple equals reliable.",
+        "icon": "shield"
+      },
+      {
+        "title": "Unique Identity",
+        "description": "Do you want a website or an identity? We don't just configure themes; we design an experience that makes competitors ask: 'Who are these guys?'",
+        "icon": "fingerprint"
+      },
+      {
+        "title": "Launch, Not Just Handover",
+        "description": "Publishing isn't the end; it's the start. We test speed, mobile, SEO, and accessibility. When we launch, your business is ready.",
+        "icon": "rocket"
+      },
+      {
+        "title": "Why Digipaja Wins?",
+        "description": "This isn't a website. It's a competitive advantage. You're not buying code; you're buying a sales machine and a worry-free future.",
+        "icon": "trophy"
+      }
+    ]
   }
 }

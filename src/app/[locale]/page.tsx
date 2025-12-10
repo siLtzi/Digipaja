@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import AboutUs from "@/components/sections/AboutUs";
 import Services from "@/components/sections/Services";
-// 1. Import the new component
 import References from "@/components/sections/References"; 
+import Process from "@/components/sections/Process";
+import WhyUs from "@/components/sections/WhyUs";
 
 // --- DYNAMIC METADATA GENERATION ---
 export async function generateMetadata({
@@ -70,10 +71,9 @@ export default async function HomePage({
         <Hero locale={locale} />
         <AboutUs locale={locale} />
         <Services locale={locale} />
-        
-        {/* 2. Add it here, after Services */}
         <References locale={locale} />
-        
+        <Process locale={locale} />    
+        <WhyUs locale={locale} />
       </div>
     </main>
   );

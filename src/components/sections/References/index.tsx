@@ -12,13 +12,14 @@ type MessagesFile = {
   };
 };
 
-// 2. DEFINE FALLBACK DATA (This stays in code, not JSON)
+// 2. DEFINE FALLBACK DATA
 const FALLBACK_PROJECTS: ReferenceProject[] = [
   {
     title: "Nordic Health App",
     category: "Web Application",
     description: "A comprehensive health tracking platform built for the Nordic market.",
     image: "/image/project1.jpg", 
+    mobileImage: "/image/project1.jpg", // <--- ADDED (Fallback uses desktop image)
     slug: "nordic-health",
     tags: ["Next.js", "TypeScript", "Tailwind"],
   },
@@ -27,6 +28,7 @@ const FALLBACK_PROJECTS: ReferenceProject[] = [
     category: "Corporate Website",
     description: "Modern corporate identity and high-performance website.",
     image: "/image/project2.jpg", 
+    mobileImage: "/image/project2.jpg", // <--- ADDED
     slug: "oulu-tech",
     tags: ["React", "Sanity", "GSAP"],
   },
@@ -35,6 +37,7 @@ const FALLBACK_PROJECTS: ReferenceProject[] = [
     category: "SaaS Platform",
     description: "Logistics management system optimized for harsh environments.",
     image: "/image/project3.jpg",
+    mobileImage: "/image/project3.jpg", // <--- ADDED
     slug: "arctic-logistics",
     tags: ["Next.js", "Node.js"],
   }
@@ -61,11 +64,16 @@ export default async function References({ locale }: { locale: "fi" | "en" }) {
         category: p.category || "Case Study",
         description: isFi ? p.description_fi : p.description_en || "",
         image: p.image || "/image/project-placeholder.jpg",
+        
+        // ⬇️ UPDATED: Map the mobile image. 
+        // Logic: Try mobileImage -> Try desktop image -> Fallback placeholder
+        mobileImage: p.mobileImage || p.image || "/image/project-placeholder.jpg", 
+        
         tags: p.technologies || [],
       }))
     : FALLBACK_PROJECTS;
 
-  // 6. DETERMINE TEXT: SANITY OVERRIDES -> JSON FALLBACK
+  // 6. DETERMINE TEXT
   const eyebrow = isFi
     ? settings?.eyebrow_fi || m.eyebrow
     : settings?.eyebrow_en || m.eyebrow;
