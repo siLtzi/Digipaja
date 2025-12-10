@@ -5,7 +5,6 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
   experimental: {},
-  reactCompiler: true,
 
   // ⬇️ ADD THIS BLOCK
   images: {
