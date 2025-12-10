@@ -1,4 +1,4 @@
-export function TechGrid() {
+export default function TechGrid() {
   return (
     <div className="absolute inset-0 pointer-events-none select-none">
       {/* 1. Base Dark Background */}

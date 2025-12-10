@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import Navbar from "@/components/layout/Navbar";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import Navbar from "@/components/layout/Navbar"; // <--- 1. Import Navbar
 
 export default async function LocaleLayout({
   children,
@@ -17,12 +17,13 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <div className="min-h-screen bg-black text-zinc-50">
-        {/* 1. Navbar OUTSIDE SmoothScrollProvider → truly fixed */}
+        
+        {/* 2. Place Navbar here, outside the smooth scroll wrapper */}
         <Navbar locale={locale} />
 
-        {/* 2. Only the scrollable content is smoothed */}
+        {/* 3. Only the scrollable content is smoothed */}
         <SmoothScrollProvider>
-          {/* Padding-top so content doesn't hide behind fixed navbar */}
+          {/* Padding-top handled in HeroContent.tsx or here if needed */}
           <main>
             {children}
           </main>

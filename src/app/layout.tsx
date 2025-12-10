@@ -1,43 +1,23 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Poppins } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
 
-const clashDisplay = localFont({
+const goldman = localFont({
   src: [
     {
-      path: "../../public/fonts/ClashDisplay/ClashDisplay-Regular.otf",
+      path: "../../public/fonts/ClashDisplay/Goldman-Regular.woff2",
       weight: "400",
+      style: "normal",
     },
     {
-      path: "../../public/fonts/ClashDisplay/ClashDisplay-Semibold.otf",
-      weight: "600",
-    },
-    {
-      path: "../../public/fonts/ClashDisplay/ClashDisplay-Bold.otf",
+      path: "../../public/fonts/ClashDisplay/Goldman-Bold.woff2",
       weight: "700",
+      style: "normal",
     },
   ],
-  variable: "--font-clash-display",
-});
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
-});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-goldman",
 });
 
 export const metadata: Metadata = {
@@ -48,12 +28,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+    <html lang="fi" suppressHydrationWarning className="scroll-smooth">
       <body
         className={`
-          ${geistSans.variable} ${geistMono.variable}
-          ${poppins.variable} ${clashDisplay.variable}
-          antialiased bg-zinc-950 text-zinc-50
+          ${goldman.variable}
+          antialiased bg-[#08090C] text-zinc-50
         `}
       >
         {children}

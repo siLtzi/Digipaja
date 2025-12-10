@@ -1,15 +1,62 @@
-import Hero from "@/components/sections/Hero/index";
-import Brothers from "@/components/sections/Brothers/index";
-import BrothersReveal from "@/components/sections/Brothers/Content";
-import WhyUs from "@/components/sections/WhyUs/index";
-import Process from "@/components/sections/Process/index";
-import Services from "@/components/sections/Services/index";
-import Work from "@/components/Work/index";
-import Pricing from "@/components/sections/Pricing/index";
-import Contact from "@/components/sections/Contact/index"
-import Footer from "@/components/layout/Footer";
-import { TechGrid } from "@/components/ui/TechGrid"; // 1. Import it
+import type { Metadata } from "next";
+import Hero from "@/components/sections/Hero";
+import AboutUs from "@/components/sections/AboutUs";
+import Services from "@/components/sections/Services";
+// 1. Import the new component
+import References from "@/components/sections/References"; 
 
+// --- DYNAMIC METADATA GENERATION ---
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: "fi" | "en" }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isFi = locale === "fi";
+
+  const title = isFi
+    ? "Modernit Verkkosivut & Web-kehitys – Digipaja"
+    : "Modern Websites & Web Development – Digipaja";
+
+  const description = isFi
+    ? "Digipaja rakentaa moderneja, nopeita ja SEO-optimoituja verkkosivuja yrityksille Next.js:llä, Reactilla ja Sanityllä."
+    : "Digipaja builds modern, fast, and SEO-optimized websites for businesses using Next.js, React, and Sanity.";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: locale,
+      url: "https://digipajaoulu.fi",
+      siteName: "Digipaja",
+    },
+    other: {
+      "script:ld+json": JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Service",
+        name: title,
+        description: description,
+        provider: {
+          "@type": "Organization",
+          name: "Digipaja",
+          url: "https://digipajaoulu.fi",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Oulu",
+            addressCountry: "FI",
+          },
+        },
+        serviceType: isFi ? "Verkkosivujen kehitys" : "Web Development",
+        areaServed: "Finland",
+      }),
+    },
+  };
+}
+
+// --- MAIN PAGE COMPONENT ---
 export default async function HomePage({
   params,
 }: {
@@ -18,31 +65,15 @@ export default async function HomePage({
   const { locale } = await params;
 
   return (
-    <main className="relative min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200">
-      
-      {/* 2. THE GLOBAL BACKGROUND LAYER */}
-      {/* fixed inset-0 makes it cover the whole screen and stay there */}
-      {/* -z-50 ensures it stays behind everything */}
-      <div className="fixed inset-0 z-[-50]">
-        <TechGrid />
-      </div>
-
-      {/* 3. YOUR SECTIONS */}
-      {/* We wrap them in a relative container so they sit ON TOP of the fixed grid */}
+    <main className="relative min-h-screen selection:bg-[#ff8a3c]/30 selection:text-[#ff8a3c]">
       <div className="relative z-10">
         <Hero locale={locale} />
-        
-        <BrothersReveal>
-          <Brothers locale={locale} />
-        </BrothersReveal>
-        
+        <AboutUs locale={locale} />
         <Services locale={locale} />
-        <WhyUs locale={locale} />
-        <Process locale={locale} />
-        <Work locale={locale} />
-        <Pricing locale={locale} />
-        <Contact locale={locale} />
-        <Footer locale={locale} />
+        
+        {/* 2. Add it here, after Services */}
+        <References locale={locale} />
+        
       </div>
     </main>
   );

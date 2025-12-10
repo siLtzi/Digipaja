@@ -1,13 +1,21 @@
 import type { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
-// If you also use Sentry, see the note below about composing plugins.
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
-  experimental: {
+  experimental: {},
+  reactCompiler: true,
+
+  // ⬇️ ADD THIS BLOCK
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
+      },
+    ],
   },
-  reactCompiler: true
 };
 
 export default withNextIntl(nextConfig);

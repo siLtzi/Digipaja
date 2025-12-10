@@ -1,4 +1,13 @@
-import project from './project';
-import siteSettings from './siteSettings';
+import aboutUsSettings from "./aboutUsSettings";
+import heroSettings from "./heroSettings";
+import serviceSettings from "./serviceSettings";
+import referencesSettings from "./referencesSettings";
+import project from "./project";
 
-export const schemaTypes = [project, siteSettings];
+export const schemaTypes = [
+  heroSettings,
+  aboutUsSettings,
+  serviceSettings,
+  referencesSettings,
+  project,
+];

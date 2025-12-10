@@ -1,161 +1,51 @@
 {
   "hero": {
-    "badge": "Digipaja – kaksi veljestä, yksi tavoite: paremmat nettisivut.",
-    "title": "Modernit kotisivut, jotka näyttävät hyvältä ja tuntuvat nopeilta.",
-    "subtitle": "Suunnittelemme ja toteutamme räätälöityjä Next.js-sivustoja pienille ja keskisuurille yrityksille. Animaatiot, hakukoneet ja mittarit samalla kertaa kuntoon.",
-    "ctaPrimary": "Pyydä tarjous",
-    "ctaSecondary": "Katso esimerkkejä",
-    "techLine": "Next.js • Tailwind • Animaatiot • Monikielisyys • Sanity • Vercel"
+    "eyebrow": "Digitaalinen työpaja Oulusta",
+    "titleStart": "Kotisivut, jotka näyttävät",
+    "titleAccent": "hyvältä",
+    "titleEnd": "ja tuntuvat nopeilta.",
+    "subtitle": "Suunnittelemme ja toteutamme räätälöityjä sivustoja, jotka latautuvat salamannopeasti ja tukevat yrityksesi kasvua.",
+    "primaryCta": "Ota yhteyttä",
+    "secondaryCta": "Katso referenssit",
+    "metricsLabel": "Suorituskyky ja tekniikka",
+    "metricsSubtitle": "Keskitymme Core Web Vitalseihin alusta asti.",
+    "metricsFootnote": "Esimerkkiluvut todellisista projekteista – mittaamme jokaisen sivuston ennen luovutusta."
   },
 
-  "brothers": {
-    "eyebrow": "Keitä me olemme?",
-    "title": "Kaksi veljestä, yksi tavoite: paremmat nettisivut.",
-    "subtitle": "Digipaja syntyi siitä, että olimme kyllästyneet hitaisiin, rikkinäisiin ja sekaviin kotisivuihin. Halusimme tehdä sivuja, joista asiakkaat voivat olla oikeasti ylpeitä.",
-    "techTitle": "Tekninen velho",
-    "techBody": "Vastaan sivuston tekniikasta: Next.js, Tailwind, animaatiot, suorituskyky, hakukoneet ja integraatiot. Tavoite on yksinkertainen: sivu jonka koodi ei rajoita bisnestäsi.",
-    "bizTitle": "156cm",
-    "bizBody": "Omistan puolet yrityksestä.",
-    "note": "Lopputulos: inhimillinen kumppani, jolta saat sekä toimivan sivuston että apua sen ympärillä tehtäviin päätöksiin."
-  },
-
-  "whyUs": {
-    "eyebrow": "Kilpailuetu",
-    "title": "Huipputason suorituskyky. Nolla turhuutta.",
-    "subtitle": "Useimmat toimistot myyvät hallintoa ja hitaita WordPress-sivuja. Me rakennamme digitaalisia työkaluja, jotka on koodattu kasvua varten.",
-    "point1Title": "Suora yhteys",
-    "point1Body": "Ei rikkinäistä puhelinta. Puhut suoraan kehittäjille. Päätökset tehdään minuuteissa, ei viikkopalavereissa.",
-    "point2Title": "Moderni teknologia",
-    "point2Body": "Emme käytä valmissivupohjia. Koodaamme Next.js:llä ja Sanitylla varmistaaksemme täydelliset Google-tulokset.",
-    "point3Title": "Nopea toimitus",
-    "point3Body": "Isot toimistot vievät kuukausia. Me toimitamme viikoissa. Komponenttipohjainen arkkitehtuurimme mahdollistaa nopeuden laadusta tinkimättä.",
-    "point4Title": "Täysi omistajuus",
-    "point4Body": "Ei toimittajaloukkuja. Omistat koodin, sisällön ja tilit 100-prosenttisesti. Me rakennamme, sinä hallitset."
-  },
-
-  "process": {
-    "eyebrow": "Miten homma etenee?",
-    "title": "Selkeä prosessi alusta loppuun.",
-    "subtitle": "Pidämme projektit kevyinä ja läpinäkyvinä. Tiedät koko ajan, missä mennään ja mitä seuraavaksi tapahtuu.",
-
-    "step1Label": "1",
-    "step1Title": "Alkukartoitus & tavoite",
-    "step1Body": "Jutellaan yrityksestäsi, asiakkaistasi ja siitä, mitä sivuilla pitää oikeasti saada aikaan. Tämä voi olla etätapaaminen, puhelu tai kahvihetki.",
-
-    "step2Label": "2",
-    "step2Title": "Rakenne, sisältö & tyyli",
-    "step2Body": "Ehdotamme sivun rakennetta, sisältölohkoja ja visuaalista tyyliä. Autamme sanoittamaan palvelut selkeästi – ilman liikaa markkinajargonia.",
-
-    "step3Label": "3",
-    "step3Title": "Toteutus & testaus",
-    "step3Body": "Rakennamme sivun modernilla teknologialla (Next.js, Tailwind, analytiikka). Pidämme sinut kartalla ja voit kommentoida työtä pitkin matkaa.",
-
-    "step4Label": "4",
-    "step4Title": "Julkaisu & jatko",
-    "step4Body": "Julkaisun jälkeen huolehdimme, että kaikki toimii: lomakkeet, analytiikka, hakukoneet ja nopeus. Voimme jatkaa ylläpidolla tai opastaa sinut käyttämään sivua itse."
+  "aboutUs": {
+    "eyebrow": "Keitä me olemme",
+    "title": "Kaksi veljestä rakentamassa moderneja sivuja",
+    "subtitle": "Digipaja on Oulusta lähtöisin oleva kahden veljeksen studio, joka keskittyy nopeisiin ja kestäviin verkkosivuihin.",
+    "techTitle": "Tekniikka & Laatu",
+    "techBody": "Rakennamme sivut Reactilla, Next.js:llä, Sanityllä ja Vercelillä – puhtaasti modernilla stackilla.",
+    "bizTitle": "Yritykset & Kasvu",
+    "bizBody": "Autamme paikallisia yrityksiä näkyvyydessä, brändissä ja verkon luotettavuudessa.",
+    "note": "Sisältö päivittyy reaaliaikaisesti Sanityn kautta."
   },
 
   "services": {
-    "eyebrow": "Mitä me teemme?",
-    "title": "Tarvitset selkeät nettisivut – me hoidamme koko paketin.",
-    "subtitle": "Autamme sinua alusta loppuun: rakenteesta ja sisällöstä aina julkaisuun ja jatkokehitykseen.",
-
-    "service1Label": "Palvelu 1",
-    "service1Title": "Nettisivu",
-    "service1Body": "Räätälöidyt, nopeat ja modernit nettisivut yrityksellesi. Selkeä rakenne, responsiivinen toteutus ja hakukoneita varten optimoitu perusta.",
-
-    "service2Label": "Palvelu 2",
-    "service2Title": "Verkkokaupat",
-    "service2Body": "Emme odota valmiita tekstejä. Autamme jäsentämään palvelut, kirjoittamaan tekstit ja muotoilemaan viestit niin, että oikeat asiakkaat ymmärtävät ne.",
-
-    "service3Label": "Hakukoneoptimointi",
-    "service3Title": "Ylläpito & jatkokehitys",
-    "service3Body": "Voimme huolehtia sivuston päivityksistä, sisällön muutoksista ja pienistä kehitystöistä kuukausisopimuksella tai tuntiperusteisesti."
+    "eyebrow": "Mitä me teemme",
+    "title": "Verkkoratkaisut & Palvelut",
+    "subtitle": "Rakennamme suorituskykyisiä sivustoja yrityksille, freelancereille ja yksityishenkilöille, jotka haluavat erottua verkossa.",
+    "items": [
+      {
+        "title": "Räätälöidyt kotisivut",
+        "body": "Suunnittelemme ja toteutamme täysin uniikit sivustot. Olipa kyseessä yrityksen kotisivut tai henkilökohtainen portfolio, teemme visiotasi vastaavan ratkaisun."
+      },
+      {
+        "title": "Tekninen toteutus",
+        "body": "Rakennamme sivut modernilla teknologiastackilla (Next.js, React, Sanity) – tämä takaa salamannopean latausajan ja helpon ylläpidon."
+      },
+      {
+        "title": "Hakukoneoptimointi",
+        "body": "Optimoimme rakenteen, sisällön ja suorituskyvyn, jotta sivustosi menestyy Googlessa ja tavoittaa oikean yleisön."
+      }
+    ]
   },
 
-  "work": {
-    "eyebrow": "Viimeisimpiä projekteja",
-    "title": "Sivuja, joista asiakkaat voivat olla ylpeitä.",
-    "subtitle": "Tässä muutamia esimerkkejä siitä, millaisia sivuja olemme toteuttaneet. Jokainen projekti on rakennettu yrityksen tarpeiden mukaan.",
-    "ctaLabel": "Katso lisää töitä"
-  },
-
-  "pricing": {
-    "eyebrow": "Hinnoittelu",
-    "title": "Selkeä hinnoittelu ilman yllätyksiä.",
-    "subtitle": "Jokainen projekti on erilainen, mutta suurin osa asiakkaista asettuu näihin kokonaisuuksiin. Saat aina kirjallisen tarjouksen ennen kuin aloitamme.",
-
-    "plan1Name": "Perussivusto",
-    "plan1Price": "alk. 1 200 €",
-    "plan1Body": "Yksinkertaiset, mutta viimeistellyt yrityksen kotisivut. Sopii esimerkiksi yhden palvelun yritykselle tai pienelle toimijalle.",
-    "plan1Includes": [
-      "1–3 sivua (etusivu + yhteystiedot + 1 lisäsivu)",
-      "Responsiivinen toteutus",
-      "Perus-hakukoneoptimointi",
-      "Yhteydenottolomake tai suorat yhteystiedot"
-    ],
-
-    "plan2Name": "Laajempi yrityssivusto",
-    "plan2Price": "alk. 2 400 €",
-    "plan2Body": "Laajempi sivusto useammalle palvelulle, tiimille tai referensseille. Sopii kasvavalle yritykselle.",
-    "plan2Includes": [
-      "Jopa 6–8 sivua",
-      "Räätälöity rakenne ja sisällön suunnittelu",
-      "Hakukoneystävällinen rakenne",
-      "Perusanalytiikka (esim. Google Analytics / Plausible)"
-    ],
-
-    "plan3Name": "Ylläpito & jatkokehitys",
-    "plan3Price": "alk. 80 €/kk",
-    "plan3Body": "Sopimus jatkuvasta kehityksestä ja sisällön päivityksistä. Pysymme rinnalla, kun sivusto ja yritys kehittyvät.",
-    "plan3Includes": [
-      "Sisällön päivitykset ja pienet muutokset",
-      "Tekniset päivitykset ja valvonta",
-      "Pieniä uusia osuuksia sivulle tarpeen mukaan",
-      "Tuki ja sparraus sähköpostilla"
-    ],
-
-    "note": "Nämä paketit ovat esimerkkejä. Jos et tunnista omaa tilannettasi näistä, kerro siitä meille – räätälöimme kokonaisuuden ja hinnan yrityksesi mukaan."
-  },
-
-  "contact": {
-    "eyebrow": "Ota yhteyttä",
-    "title": "Rakennetaan yhdessä seuraava projektisi",
-    "subtitle": "Kerro meille lyhyesti yrityksestäsi ja mitä tarvitset – palaamme pian selkeän suunnitelman ja hintahaarukan kanssa.",
-    "note": "Voimme sopia maksuttoman kartoituspuhelun, jossa käydään läpi nykytilanteesi ja tavoitteesi ilman sitoumuksia.",
-    "firstNameLabel": "Etunimi",
-    "lastNameLabel": "Sukunimi",
-    "emailLabel": "Sähköposti",
-    "phoneLabel": "Puhelin",
-    "messageLabel": "Viesti",
-    "submitLabel": "Lähetä viesti",
-    "helperText": "Vastaamme yleensä 1–2 arkipäivän kuluessa."
-  },
-  "footer": {
-    "companyName": "Digipaja",
-    "tagline": "Pienille ja keskisuurille yrityksille suunniteltuja verkkosivuja ja digiratkaisuja.",
-    "navigationTitle": "Navigaatio",
-    "contactTitle": "Yhteystiedot",
-    "heroLink": "Etusivu",
-    "whyUsLink": "Miksi Digipaja",
-    "processLink": "Miten etenemme",
-    "servicesLink": "Palvelut",
-    "workLink": "Referenssit",
-    "pricingLink": "Hinnoittelu",
-    "contactLink": "Yhteydenotto",
-    "rights": "Kaikki oikeudet pidätetään.",
-    "madeIn": "Tehty rakkaudella Oulussa."
-  },
-  "nav": {
-    "home": "Etusivu",
-    "whyUs": "Miksi Digipaja",
-    "process": "Miten etenemme",
-    "services": "Palvelut",
-    "work": "Referenssit",
-    "pricing": "Hinnoittelu",
-    "contact": "Yhteydenotto"
-  },
-  "cta": {
-    "primary": "Ota yhteyttä"
+  "references": {
+    "eyebrow": "Referenssit",
+    "title": "Valikoituja projekteja",
+    "subtitle": "Tutustu viimeisimpiin töihimme. Rakennamme digitaalisia kokemuksia, jotka tuottavat tulosta."
   }
 }
