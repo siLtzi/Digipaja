@@ -77,7 +77,7 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
   const desktopVideo =
     cms.heroDesktopVideo || "/video/hero.mp4";
   const mobileVideo = 
-    cms.heroMobileVideo || "/video/heromobile.mp4";
+    cms.heroMobileVideo || "/video/heromobile2.mp4";
 
   return (
     <HeroContent
