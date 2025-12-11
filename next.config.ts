@@ -6,7 +6,6 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig: NextConfig = {
   experimental: {},
 
-  // ⬇️ ADD THIS BLOCK
   images: {
     remotePatterns: [
       {
