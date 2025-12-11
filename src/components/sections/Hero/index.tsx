@@ -76,8 +76,8 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
   // Video sources (fallback to local file if Sanity is empty)
   const desktopVideo =
     cms.heroDesktopVideo || "/video/hero.mp4";
-  const mobileVideo =
-    cms.heroMobileVideo || cms.heroDesktopVideo || "/video/heromobile.mp4";
+  const mobileVideo = 
+    cms.heroMobileVideo || "/video/heromobile.mp4";
 
   return (
     <HeroContent
