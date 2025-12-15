@@ -35,7 +35,7 @@ export default function WhyUsContent({
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0">
             <Image 
-                src="/image/BGWhyUs.png" 
+                src="/image/BGWhyUs2.png" 
                 alt="Background" 
                 fill
                 className="object-cover object-center opacity-30 mix-blend-screen"

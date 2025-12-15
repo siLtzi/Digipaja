@@ -118,5 +118,20 @@
         "icon": "trophy"
       }
     ]
+  },
+  "contact": {
+    "eyebrow": "Get In Touch",
+    "title": "Start your project today.",
+    "subtitle": "Let's discuss your goals and how Digipaja can ensure fast and reliable web presence for your business.",
+    "contactTitle": "Phone & Email",
+    "contactSubtitle": "Send us an email or call directly. We're available during business hours.",
+    "ctaText": "Book Free Consultation",
+    "formTitle": "Project Inquiry",
+    "formSubtitle": "Fill out the form below and we'll get back to you within 24 hours.",
+    "formCta": "Send Inquiry",
+    "formNameLabel": "Name",
+    "formEmailLabel": "Email",
+    "formCompanyLabel": "Company (Optional)",
+    "formMessageLabel": "Message / Project Description"
   }
 }

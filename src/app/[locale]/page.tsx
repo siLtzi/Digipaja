@@ -5,6 +5,8 @@ import Services from "@/components/sections/Services";
 import References from "@/components/sections/References"; 
 import Process from "@/components/sections/Process";
 import WhyUs from "@/components/sections/WhyUs";
+import Pricing from "@/components/sections/Pricing"
+import Contact from "@/components/sections/Contact";
 
 // --- DYNAMIC METADATA GENERATION ---
 export async function generateMetadata({
@@ -74,6 +76,8 @@ export default async function HomePage({
         <References locale={locale} />
         <Process locale={locale} />    
         <WhyUs locale={locale} />
+        <Pricing locale={locale} />
+        <Contact locale={locale} />
       </div>
     </main>
   );

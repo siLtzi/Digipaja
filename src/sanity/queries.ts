@@ -94,3 +94,66 @@ export const whyUsSettingsQuery = groq`
     }
   }
 `;
+export const pricingSettingsQuery = `
+  *[_type == "pricingSettings"][0] {
+    "eyebrow_fi": eyebrow.fi,
+    "title_fi": title.fi,
+    "subtitle_fi": subtitle.fi,
+    "tiers_fi": tiers[] {
+      "name": name.fi,
+      "price": price.fi,
+      "description": description.fi,
+      "features": features.fi,
+      "cta": cta.fi,
+      highlight
+    },
+    "eyebrow_en": eyebrow.en,
+    "title_en": title.en,
+    "subtitle_en": subtitle.en,
+    "tiers_en": tiers[] {
+      "name": name.en,
+      "price": price.en,
+      "description": description.en,
+      "features": features.en,
+      "cta": cta.en,
+      highlight
+    }
+  }
+`;
+export const contactSettingsQuery = `
+  *[_type == "contactSettings"][0] {
+    // General Details
+    "email": general.email,
+    "phone": general.phone,
+
+    // Finnish Content 
+    "eyebrow_fi": finnishContent.eyebrow_fi,
+    "title_fi": finnishContent.title_fi,
+    "subtitle_fi": finnishContent.subtitle_fi,
+    "contactTitle_fi": finnishContent.contactTitle_fi,
+    "contactSubtitle_fi": finnishContent.contactSubtitle_fi,
+    "ctaText_fi": finnishContent.ctaText_fi,
+    "formTitle_fi": finnishContent.formTitle_fi,
+    "formSubtitle_fi": finnishContent.formSubtitle_fi,
+    "formCta_fi": finnishContent.formCta_fi,
+    "formNameLabel_fi": finnishContent.formNameLabel_fi,
+    "formEmailLabel_fi": finnishContent.formEmailLabel_fi,
+    "formCompanyLabel_fi": finnishContent.formCompanyLabel_fi,
+    "formMessageLabel_fi": finnishContent.formMessageLabel_fi,
+
+    // English Content 
+    "eyebrow_en": englishContent.eyebrow_en,
+    "title_en": englishContent.title_en,
+    "subtitle_en": englishContent.subtitle_en,
+    "contactTitle_en": englishContent.contactTitle_en,
+    "contactSubtitle_en": englishContent.contactSubtitle_en,
+    "ctaText_en": englishContent.ctaText_en,
+    "formTitle_en": englishContent.formTitle_en,
+    "formSubtitle_en": englishContent.formSubtitle_en,
+    "formCta_en": englishContent.formCta_en,
+    "formNameLabel_en": englishContent.formNameLabel_en,
+    "formEmailLabel_en": englishContent.formEmailLabel_en,
+    "formCompanyLabel_en": englishContent.formCompanyLabel_en,
+    "formMessageLabel_en": englishContent.formMessageLabel_en,
+  }
+`;

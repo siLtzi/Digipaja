@@ -16,11 +16,11 @@ type HeroProps = {
   subtitle: string;
   primaryCta: string;
   secondaryCta: string;
-  metricsLabel: string;
-  metricsSubtitle: string;
-  metricsFootnote: string;
   desktopVideo: string;
   mobileVideo: string;
+  metricsLabel?: string;
+  metricsSubtitle?: string;
+  metricsFootnote?: string;
 };
 
 const STACK_ICONS = [
@@ -40,70 +40,29 @@ export default function HeroContent({
   subtitle,
   primaryCta,
   secondaryCta,
-  metricsLabel,
-  metricsSubtitle,
-  metricsFootnote,
   desktopVideo,
   mobileVideo,
 }: HeroProps) {
-  const [activeTech, setActiveTech] = useState<string | null>(null);
-  
   // Refs for animation targets
   const containerRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLParagraphElement>(null);
-  const scoreRef = useRef<HTMLSpanElement>(null); // For the 98/100
-  const lcpRef = useRef<HTMLParagraphElement>(null); // For the 0.7s
-
+  
   // === 1. MAIN ENTRANCE ANIMATION ===
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    // A. Text & Button Entrance (Staggered)
+    // A. Text & Button Entrance
     tl.fromTo(".animate-in", 
       { y: 30, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }
     );
 
-    // B. Tech Card Slide-in (From right)
+    // B. Tech Card Slide-in
     tl.fromTo(".hero-card",
       { x: 30, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, ease: "back.out(1.2)" },
+      { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
       "-=0.6"
     );
-
-    // C. Number Counters
-    tl.from(scoreRef.current, {
-      textContent: 0,
-      duration: 2,
-      ease: "power1.out",
-      snap: { textContent: 1 },
-      stagger: 1,
-    }, "-=0.8");
-
-    tl.from(lcpRef.current, {
-      textContent: 0,
-      duration: 1.5,
-      ease: "power1.out",
-      snap: { textContent: 0.1 },
-    }, "-=2");
-
   }, { scope: containerRef });
-
-  // === 2. HOVER LABEL ANIMATION ===
-  useEffect(() => {
-    const el = labelRef.current;
-    if (!el) return;
-
-    gsap.killTweensOf(el);
-
-    if (activeTech) {
-      const tl = gsap.timeline();
-      tl.set(el, { y: 5, opacity: 0 })
-        .to(el, { duration: 0.3, y: 0, opacity: 1, ease: "back.out(2)", overwrite: true });
-    } else {
-      gsap.to(el, { duration: 0.3, y: 0, opacity: 1, ease: "power2.out", overwrite: true });
-    }
-  }, [activeTech]);
 
   const scrollTo = (id: string) => {
     const el = document.querySelector<HTMLElement>(`#${id}`);
@@ -119,7 +78,6 @@ export default function HeroContent({
     >
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
-        {/* Mobile Video: Visible up to lg (1024px), then hidden */}
         <video
           autoPlay
           muted
@@ -130,7 +88,6 @@ export default function HeroContent({
           <source src={mobileVideo} type="video/mp4" />
         </video>
 
-        {/* Desktop Video: Hidden on mobile, visible on lg (1024px) and up */}
         <video
           autoPlay
           muted
@@ -194,35 +151,21 @@ export default function HeroContent({
 
           {/* CTAs */}
           <div className="animate-in flex flex-wrap items-center gap-5 pt-4 opacity-0">
-            {/* === TECH BRACKET BUTTON (UPDATED) === */}
             <button
               type="button"
               onClick={() => scrollTo("contact")}
               style={{ fontFamily: "var(--font-goldman)" }}
-              // Updated: Reduced hover shadow to 20px / 0.2 opacity. Added cursor-pointer.
               className="group relative isolate flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] cursor-pointer"
             >
-              {/* Corner 1: Top Left */}
               <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
-              
-              {/* Corner 2: Top Right */}
               <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
-
-              {/* Corner 3: Bottom Right */}
               <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
-
-              {/* Corner 4: Bottom Left */}
               <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
-
-              {/* Hover Fill Background - Reduced to opacity-10 to let borders show */}
               <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
-
-              {/* Button Content */}
               <span className="relative z-10">{primaryCta}</span>
               <svg className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </button>
 
-            {/* Secondary Button - Added cursor-pointer */}
             <button
               type="button"
               onClick={() => scrollTo("work")}
@@ -249,128 +192,67 @@ export default function HeroContent({
           </div>
         </div>
 
-        {/* --- RIGHT COLUMN: TECH CARD --- */}
-        <aside className="relative w-full max-w-md">
+        {/* --- RIGHT COLUMN: TECH GRID --- */}
+        <aside className="relative w-full max-w-[280px] lg:mt-0">
            
-           {/* Card Glow */}
-           <div 
-             className="hero-card absolute -inset-[2px] rounded-sm opacity-0"
-             style={{
-               background: "radial-gradient(circle at 50% 0%, rgba(255,138,60,0.5) 0%, transparent 60%)"
-             }}
-           />
-           
-           {/* Card Container */}
-           <div className="hero-card relative overflow-visible rounded-sm border border-white/10 bg-[#090b12] p-1 shadow-2xl opacity-0">
-             
-             {/* Tech Card Header */}
-             <div className="relative overflow-hidden rounded-sm bg-[#050609] p-6 border-b border-white/5">
-                <div className="mb-4 flex items-start justify-between">
-                    <div>
-                        <p style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-[0.2em] text-[#ff8a3c]">
-                            {metricsLabel}
-                        </p>
-                        <h3 className="mt-1 text-sm font-medium text-white">{metricsSubtitle}</h3>
-                    </div>
-                    <div className="rounded-sm border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-medium text-zinc-400">
-                        v1.0.4
-                    </div>
-                </div>
-                
-                <div className="flex items-center gap-4 text-[10px] text-zinc-500">
-                    <span className="flex items-center gap-1.5">
-                        <span className="h-1 w-1 rounded-full bg-[#4ade80]"></span>
-                        Operational
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                        <span className="h-1 w-1 rounded-full bg-[#ff8a3c]"></span>
-                        High Performance
-                    </span>
-                </div>
-             </div>
+           <div className="hero-card relative p-2 opacity-0">
+              <div className="relative z-10 mb-6 text-center">
+                  {/* Updated Text Color to Orange */}
+                  <h3 style={{ fontFamily: "var(--font-goldman)" }} className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#ff8a3c]">
+                      SYSTEM STACK
+                  </h3>
+              </div>
 
-             {/* Metrics Grid */}
-             <div className="grid grid-cols-2 gap-px bg-white/5 p-px">
-                {/* Cell 1: LCP */}
-                <div className="bg-[#0b0d14] p-5 transition-colors hover:bg-[#10121b]">
-                    <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-500">LCP</p>
-                    <p style={{ fontFamily: "var(--font-goldman)" }} className="mt-2 text-2xl text-white">
-                        <span ref={lcpRef}>0.7</span>s
-                    </p>
-                    <p className="mt-1 text-[10px] text-zinc-500">Tyypillinen lataus</p>
-                </div>
-
-                {/* Cell 2: Score */}
-                <div className="relative bg-[#0b0d14] p-5 transition-colors hover:bg-[#10121b]">
-                    <div className="absolute top-4 right-4 h-1.5 w-1.5 rounded-full bg-[#4ade80] shadow-[0_0_6px_#4ade80]" />
-                    <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Score</p>
-                    <p style={{ fontFamily: "var(--font-goldman)" }} className="mt-2 text-2xl text-[#ff8a3c]">
-                        <span ref={scoreRef}>98</span>/100
-                    </p>
-                    <p className="mt-1 text-[10px] text-zinc-500">Performance</p>
-                </div>
-
-                {/* Cell 3: POP-OUT STACK DISPLAY */}
-                <div className="bg-[#0b0d14] p-4 transition-colors hover:bg-[#10121b]">
-                    <p 
-                        ref={labelRef}
-                        className={`mb-3 text-[9px] uppercase tracking-[0.2em] transition-colors duration-200 ${
-                            activeTech ? "text-[#ff8a3c]" : "text-zinc-500"
-                        }`}
-                    >
-                        {activeTech || "Stack"}
-                    </p>
+             {/* Grid */}
+             <div className="relative z-10 grid grid-cols-2 gap-4">
+               {STACK_ICONS.map((tech) => (
+                 <div 
+                    key={tech.name}
+                    className="
+                      group/icon relative flex aspect-square w-full cursor-pointer items-center justify-center 
+                      bg-white/[0.03] rounded-sm p-1
+                      transition-all duration-300 ease-out
+                      hover:shadow-[0_0_20px_rgba(255,138,60,0.15)]
+                    "
+                 >
+                    {/* Inner Corners: Zinc-500 by default, Orange on Hover */}
+                    <span className="absolute left-0 top-0 h-2 w-2 border-l border-t border-zinc-500 rounded-tl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
+                    <span className="absolute right-0 top-0 h-2 w-2 border-r border-t border-zinc-500 rounded-tr-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
+                    <span className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-zinc-500 rounded-br-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
+                    <span className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-zinc-500 rounded-bl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
                     
-                    <div className="grid grid-cols-3 gap-2">
-                        {STACK_ICONS.map((tech) => (
-                            <div 
-                                key={tech.name} 
-                                onMouseEnter={() => setActiveTech(tech.name)}
-                                onMouseLeave={() => setActiveTech(null)}
-                                className={`
-                                    group relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm 
-                                    border border-white/5 bg-white/5 
-                                    transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]
-                                    hover:z-50 hover:scale-[1.4] hover:bg-[#090b12] hover:border-[#ff8a3c] 
-                                    hover:shadow-[0_10px_20px_rgba(0,0,0,0.5),0_0_15px_rgba(255,138,60,0.3)]
-                                `}
-                            >
-                                <div className="relative h-4 w-4 opacity-50 transition-all duration-300 group-hover:scale-110 group-hover:opacity-100">
-                                    <Image 
-                                        src={tech.src} 
-                                        alt={tech.name}
-                                        fill
-                                        className="object-contain"
-                                    />
-                                </div>
-                                <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:mb-3">
-                                   <div className="whitespace-nowrap rounded-sm border border-[#ff8a3c]/30 bg-[#090b12]/90 px-2 py-1 backdrop-blur-md">
-                                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8a3c] shadow-sm">
-                                        {tech.name}
-                                      </span>
-                                   </div>
-                                </div>
-                            </div>
-                        ))}
+                    {/* Hover Fill */}
+                    <span className="absolute inset-0 bg-[#ff8a3c]/0 transition-all duration-300 group-hover/icon:bg-[#ff8a3c]/5 rounded-sm" />
+
+                    {/* Tooltip */}
+                    <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-200 ease-out group-hover/icon:top-[-42px] group-hover/icon:opacity-100 z-20">
+                        <div className="whitespace-nowrap border border-[#ff8a3c] bg-[#090b12] px-3 py-1.5 shadow-[0_0_10px_rgba(255,138,60,0.2)] rounded-sm">
+                            <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-wider text-[#ff8a3c]">
+                                {tech.name}
+                            </span>
+                        </div>
+                         <div className="absolute left-1/2 -bottom-2 h-2 w-px -translate-x-1/2 bg-[#ff8a3c]"></div>
                     </div>
-                </div>
 
-                {/* Cell 4: Security */}
-                <div className="bg-[#0b0d14] p-5 transition-colors hover:bg-[#10121b]">
-                     <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Security</p>
-                     <div className="mt-4 flex items-center gap-2 text-[#4ade80]">
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-                        <span className="text-xs font-medium tracking-wide">Enterprise</span>
-                     </div>
-                </div>
-             </div>
-
-             <div className="bg-[#090b12] p-4 text-center">
-                 <p className="text-[10px] text-zinc-600">{metricsFootnote}</p>
+                    {/* Icon */}
+                    <div className="relative h-10 w-10 opacity-80 transition-all duration-300 ease-out group-hover/icon:opacity-100 grayscale brightness-200 contrast-125 group-hover/icon:grayscale-0 group-hover/icon:brightness-100 group-hover/icon:contrast-100 group-hover/icon:drop-shadow-[0_0_8px_rgba(255,138,60,0.8)]">
+                      <Image 
+                        src={tech.src} 
+                        alt={tech.name}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                 </div>
+               ))}
              </div>
              
-             <div className="absolute top-0 right-0 h-6 w-6 border-t border-r border-[#ff8a3c]/40 pointer-events-none" />
-             <div className="absolute bottom-0 left-0 h-6 w-6 border-b border-l border-[#ff8a3c]/40 pointer-events-none" />
+             {/* Outer HUD Corners: Updated to Orange */}
+             <div className="pointer-events-none absolute -top-2 -left-2 h-8 w-8 border-t border-l border-[#ff8a3c] rounded-tl-sm" />
+             <div className="pointer-events-none absolute -top-2 -right-2 h-8 w-8 border-t border-r border-[#ff8a3c] rounded-tr-sm" />
+             <div className="pointer-events-none absolute -bottom-2 -left-2 h-8 w-8 border-b border-l border-[#ff8a3c] rounded-bl-sm" />
+             <div className="pointer-events-none absolute -bottom-2 -right-2 h-8 w-8 border-b border-r border-[#ff8a3c] rounded-br-sm" />
+             
            </div>
         </aside>
 

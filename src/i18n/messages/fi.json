@@ -117,5 +117,72 @@
         "icon": "trophy"
       }
     ]
+  },
+  "pricing": {
+    "eyebrow": "Investointi",
+    "title": "Selkeä hinnoittelu.",
+    "subtitle": "Ei piilokuluja. Ei kuukausimaksuja lisäosista. Maksat kerran, omistat ikuisesti.",
+    "tiers": [
+      {
+        "name": "Kipinä",
+        "price": "1 800 €",
+        "description": "Täydellinen startti uusille yrityksille. Yhden sivun kokonaisuus, joka konvertoi kävijät asiakkaiksi.",
+        "cta": "Tilaa Kipinä",
+        "highlight": false,
+        "features": [
+          "One-Page Landing Page",
+          "Next.js & React -teknologia",
+          "Täysin räätälöity design",
+          "Google Lighthouse 100/100",
+          "Yhteydenottolomake",
+          "Perus SEO-optimointi"
+        ]
+      },
+      {
+        "name": "Ahjo",
+        "price": "3 400 €",
+        "description": "Kasvuyrityksen valinta. Monisivuinen sivusto, jossa on tilaa kasvaa ja helppo hallintapaneeli.",
+        "cta": "Takokaa meille Ahjo",
+        "highlight": true,
+        "features": [
+          "Kaikki Kipinä-ominaisuudet",
+          "3-6 alasivua (Etusivu, Palvelut...)",
+          "CMS (Helppo sisällönhallinta)",
+          "Blogi / Ajankohtaista -osio",
+          "Laajempi SEO-optimointi",
+          "Animoidut elementit"
+        ]
+      },
+      {
+        "name": "Valimo",
+        "price": "6 500 €",
+        "description": "Kun perus ei riitä. Verkkokaupat, web-sovellukset ja vaativat integraatiot.",
+        "cta": "Pyydä tarjous",
+        "highlight": false,
+        "features": [
+          "Kaikki Ahjo-ominaisuudet",
+          "Räätälöity Web-sovellus",
+          "Verkkokauppa-integraatio",
+          "Käyttäjätilit / Kirjautuminen",
+          "Rajapinnat (API) muihin järjestelmiin",
+          "Advanced Analytics"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "OTA YHTEYTTÄ",
+    "title": "Aloita projektisi tänään.",
+    "subtitle": "Keskustellaan tavoitteistasi ja siitä, kuinka Digipaja voi taata yrityksellesi nopean ja vakaan verkkoläsnäolon.",
+    "contactTitle": "Puhelin & Sähköposti",
+    "contactSubtitle": "Lähetä meille sähköpostia tai soita suoraan. Olemme tavoitettavissa arkisin.",
+    "ctaText": "Varaa Ilmainen Konsultaatio",
+    "formTitle": "PROJEKTIKYSELY",
+    "formSubtitle": "Täytä alla oleva lomake, niin palaamme asiaan 24 tunnin kuluessa.",
+    "formCta": "LÄHETÄ KYSYELY",
+    "formNameLabel": "NIMI",
+    "formEmailLabel": "SÄHKÖPOSTI",
+    "formCompanyLabel": "YRITYS (VALINNAINEN)",
+    "formMessageLabel": "VIESTI / PROJEKTIN KUVAUS"
   }
 }
