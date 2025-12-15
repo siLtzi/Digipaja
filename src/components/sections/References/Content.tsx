@@ -46,7 +46,6 @@ export default function ReferencesContent({
 
       const tl = gsap.timeline();
 
-      // Reset scroll position instantly when project changes
       if (scrollContainerRef.current) {
         scrollContainerRef.current.scrollTo({
           top: 0,
@@ -55,7 +54,6 @@ export default function ReferencesContent({
         setHasScrolled(false);
       }
 
-      // Reset mobile scroll too
       if (mobileScrollRef.current) {
         mobileScrollRef.current.scrollTo({
           top: 0,
@@ -63,7 +61,6 @@ export default function ReferencesContent({
         });
       }
 
-      // Scanline sweep animation
       tl.fromTo(
         scanlineRef.current,
         { top: "-10%", opacity: 0 },
@@ -126,79 +123,112 @@ export default function ReferencesContent({
 
         {/* Content Layout */}
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-          {/* LEFT: Project List */}
-          <div className="flex flex-col gap-2 lg:col-span-5">
+          {/* LEFT: Project List (Now includes Mobile Images) */}
+          <div className="flex flex-col gap-8 lg:gap-2 lg:col-span-5">
             {projects.map((project, index) => {
               const isActive = index === activeIndex;
               return (
-                <button
-                  key={project.slug}
-                  onClick={() => setActiveIndex(index)}
-                  onMouseEnter={() => setActiveIndex(index)}
-                  className={`
-                    group relative flex flex-col gap-2 overflow-hidden rounded-sm border p-6 text-left transition-all duration-300
-                    ${
-                      isActive
-                        ? "border-[#ff8a3c] bg-[#ff8a3c]/5"
-                        : "border-white/5 bg-transparent hover:border-white/20 hover:bg-white/[0.02]"
-                    }
-                  `}
-                >
-                  <div
-                    className={`absolute left-0 top-0 bottom-0 w-1 bg-[#ff8a3c] transition-transform duration-300 ${
-                      isActive ? "scale-y-100" : "scale-y-0"
-                    }`}
-                  />
-                  <div className="flex items-center justify-between w-full">
-                    <span
-                      style={{ fontFamily: "var(--font-goldman)" }}
-                      className={`text-xs uppercase tracking-widest ${
-                        isActive ? "text-[#ff8a3c]" : "text-zinc-500"
-                      }`}
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div className="flex gap-2">
-                      {project.tags.slice(0, 2).map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[9px] uppercase tracking-wider text-zinc-600 bg-white/5 px-1.5 py-0.5 rounded-sm"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                <div key={project.slug} className="group relative">
+                  {/* WRAPPER: Handles Desktop Logic (Button) and Mobile Logic (Link) implicitly */}
+                  <Link
+                    href={`/work/${project.slug}`}
+                    onClick={(e) => {
+                      // On Desktop: Just switch the view, don't navigate immediately (optional UX choice)
+                      // On Mobile: Navigate to the project
+                      if (window.innerWidth >= 1024) {
+                        e.preventDefault(); // Prevent navigation on desktop click if you just want to switch the view
+                        setActiveIndex(index);
+                      }
+                    }}
+                    onMouseEnter={() => setActiveIndex(index)}
+                    className={`
+                      flex flex-col gap-4 overflow-hidden rounded-sm border p-0 lg:p-6 text-left transition-all duration-300
+                      ${
+                        isActive
+                          ? "lg:border-[#ff8a3c] lg:bg-[#ff8a3c]/5"
+                          : "border-white/5 bg-transparent hover:border-white/20 hover:bg-white/[0.02]"
+                      }
+                      /* Mobile Specific Styles: No border/bg on the wrapper, we style the image instead */
+                      border-none bg-transparent lg:border-solid
+                    `}
+                  >
+                    
+                    {/* === MOBILE-ONLY IMAGE (Hidden on LG) === */}
+                    <div className="relative block lg:hidden w-full aspect-video overflow-hidden rounded-sm border border-white/10 bg-black/50">
+                        <Image 
+                            src={project.mobileImage || project.image} 
+                            alt={project.title}
+                            fill
+                            className="object-cover opacity-80 transition-opacity duration-500 group-hover:opacity-100"
+                        />
+                        {/* Mobile Overlay/Badge */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                        <div className="absolute bottom-3 right-3">
+                             <div className="flex items-center gap-2 rounded-full border border-[#ff8a3c]/30 bg-black/60 px-3 py-1 backdrop-blur-sm">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#ff8a3c]">View Case</span>
+                                <svg className="h-3 w-3 text-[#ff8a3c]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                             </div>
+                        </div>
                     </div>
-                  </div>
-                  <h3
-                    className={`mt-2 text-xl font-bold transition-colors ${
-                      isActive
-                        ? "text-white"
-                        : "text-zinc-400 group-hover:text-zinc-200"
-                    }`}
-                  >
-                    {project.title}
-                  </h3>
-                  <p
-                    className={`text-sm line-clamp-2 leading-relaxed transition-colors ${
-                      isActive ? "text-zinc-300" : "text-zinc-500"
-                    }`}
-                  >
-                    {project.description}
-                  </p>
-                </button>
+
+                    {/* === TEXT CONTENT === */}
+                    <div className="flex flex-col gap-2 px-1 lg:px-0">
+                        {/* Active Indicator Line (Desktop Only) */}
+                        <div
+                        className={`absolute left-0 top-0 bottom-0 w-1 bg-[#ff8a3c] transition-transform duration-300 hidden lg:block ${
+                            isActive ? "scale-y-100" : "scale-y-0"
+                        }`}
+                        />
+                        
+                        <div className="flex items-center justify-between w-full">
+                        <span
+                            style={{ fontFamily: "var(--font-goldman)" }}
+                            className={`text-xs uppercase tracking-widest ${
+                            isActive ? "text-[#ff8a3c]" : "text-zinc-500"
+                            }`}
+                        >
+                            {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <div className="flex gap-2">
+                            {project.tags.slice(0, 2).map((tag) => (
+                            <span
+                                key={tag}
+                                className="text-[9px] uppercase tracking-wider text-zinc-600 bg-white/5 px-1.5 py-0.5 rounded-sm"
+                            >
+                                {tag}
+                            </span>
+                            ))}
+                        </div>
+                        </div>
+                        <h3
+                        className={`mt-1 lg:mt-2 text-xl font-bold transition-colors ${
+                            isActive
+                            ? "text-white"
+                            : "text-zinc-400 group-hover:text-zinc-200"
+                        }`}
+                        >
+                        {project.title}
+                        </h3>
+                        <p
+                        className={`text-sm line-clamp-2 leading-relaxed transition-colors ${
+                            isActive ? "text-zinc-300" : "text-zinc-500"
+                        }`}
+                        >
+                        {project.description}
+                        </p>
+                    </div>
+                  </Link>
+                </div>
               );
             })}
           </div>
 
-          {/* RIGHT: INTERACTIVE MONITORS */}
+          {/* RIGHT: INTERACTIVE MONITORS (Desktop Only) */}
           <div className="hidden lg:col-span-7 lg:block">
             <div className="sticky top-32">
               <div ref={viewportRef} className="group relative w-full">
                 
-                {/* ======================================= */}
-                {/* 1. DESKTOP MONITOR WRAPPER              */}
-                {/* ======================================= */}
-                {/* Changed to flex-col to separate Image from HUD */}
+                {/* 1. DESKTOP MONITOR WRAPPER */}
                 <div className="relative flex flex-col w-full overflow-hidden rounded-lg border border-white/10 bg-black shadow-2xl isolate">
                   
                   {/* --- TOP: THE SCREEN (Image) --- */}
@@ -209,10 +239,7 @@ export default function ReferencesContent({
                       ref={scrollContainerRef}
                       onScroll={handleScroll}
                       onWheel={(e) => e.stopPropagation()}
-                      onTouchStart={(e) => e.stopPropagation()}
-                      onTouchMove={(e) => e.stopPropagation()}
                       className="absolute inset-0 z-30 h-full w-full overflow-y-auto bg-[#050609] overscroll-y-contain pointer-events-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                      style={{ WebkitOverflowScrolling: "touch" }}
                     >
                       <div className="relative w-full min-h-[101%]">
                         <Image
@@ -227,14 +254,12 @@ export default function ReferencesContent({
                       </div>
                     </div>
 
-                    {/* VISUAL OVERLAYS (Z-20, Non-blocking) */}
+                    {/* VISUAL OVERLAYS */}
                     <div className="absolute inset-0 z-20 pointer-events-none">
-                      {/* Scanline */}
                       <div
                         ref={scanlineRef}
                         className="absolute left-0 right-0 h-[20%] bg-gradient-to-b from-transparent via-[#ff8a3c]/10 to-transparent pointer-events-none"
                       />
-                      {/* Top light gradient */}
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.05),transparent_60%)] pointer-events-none" />
 
                       {/* Scroll Hint */}
@@ -251,38 +276,11 @@ export default function ReferencesContent({
                         >
                           Scroll to Explore
                         </span>
-                        <div className="rounded-full bg-[#ff8a3c]/20 p-2 border border-[#ff8a3c]/30 animate-bounce">
-                          <svg
-                            className="h-5 w-5 text-[#ff8a3c]"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                            />
-                          </svg>
-                        </div>
                       </div>
                     </div>
-
-                    {/* === ACTIVE CORNER INDICATORS (ACTUAL CORNERS) === */}
-                    {/* Top Left */}
-                    <div className="absolute top-0 left-0 h-6 w-6 border-l-2 border-t-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
-                    {/* Top Right */}
-                    <div className="absolute top-0 right-0 h-6 w-6 border-r-2 border-t-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
-                    {/* Bottom Right */}
-                    <div className="absolute bottom-0 right-0 h-6 w-6 border-r-2 border-b-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
-                    {/* Bottom Left */}
-                    <div className="absolute bottom-0 left-0 h-6 w-6 border-l-2 border-b-2 border-[#ff8a3c]/30 transition-colors duration-300 group-hover:border-[#ff8a3c] pointer-events-none z-50" />
                   </div>
 
-
-                  {/* --- BOTTOM: HUD / BEZEL (Separate from Image) --- */}
-                  {/* This is now a separate flex item, not absolute, so it doesn't cover the image */}
+                  {/* --- BOTTOM: HUD / BEZEL --- */}
                   <div className="relative z-40 flex items-center justify-between border-t border-white/10 bg-[#0a0a0a] p-4 backdrop-blur-md">
                     <div className="flex flex-col">
                       <span className="text-[10px] uppercase tracking-widest text-zinc-500">
@@ -319,14 +317,11 @@ export default function ReferencesContent({
                   </div>
                 </div>
 
-                {/* ======================================= */}
-                {/* 2. MOBILE SATELLITE (Bottom Right)      */}
-                {/* ======================================= */}
+                {/* 2. MOBILE SATELLITE (Desktop Visual Decor) */}
                 <div
                   className="absolute -bottom-8 -right-8 z-50 w-[140px] overflow-hidden rounded-xl border-4 border-[#1a1c23] bg-black shadow-[0_0_40px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-105 hover:z-[60]"
                   style={{ aspectRatio: "9/19" }}
                 >
-                  {/* Mobile Scroll Container */}
                   <div
                     ref={mobileScrollRef}
                     className="absolute inset-0 z-30 h-full w-full overflow-y-auto bg-[#050609] overscroll-y-contain pointer-events-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
@@ -341,15 +336,6 @@ export default function ReferencesContent({
                       />
                     </div>
                   </div>
-
-                  {/* Mobile Visuals — non-blocking */}
-                  <div className="absolute inset-0 z-20 pointer-events-none">
-                    <div className="absolute inset-0 border-[3px] border-white/5 rounded-lg">
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 h-3 w-16 bg-[#1a1c23] rounded-b-md" />
-                    </div>
-                  </div>
-
-                  {/* Mobile Label */}
                   <div className="absolute bottom-2 left-0 right-0 z-40 flex justify-center pointer-events-none">
                     <span className="text-[8px] font-bold text-white/50 uppercase tracking-widest bg-black/50 px-2 py-0.5 rounded backdrop-blur">
                       Mobile
@@ -357,11 +343,6 @@ export default function ReferencesContent({
                   </div>
                 </div>
 
-                {/* Tech Deco */}
-                <div className="mt-4 flex items-center justify-between text-[10px] text-zinc-600 uppercase tracking-widest">
-                  <span>Sys.Ref: {activeProject.slug.toUpperCase()}</span>
-                  <span>Lat: 65.0121° N</span>
-                </div>
               </div>
             </div>
           </div>

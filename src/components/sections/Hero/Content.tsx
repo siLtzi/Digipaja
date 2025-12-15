@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollSmoother } from "gsap/ScrollSmoother"; // Import this!
 
 // Register the plugin
-gsap.registerPlugin(useGSAP);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(useGSAP, ScrollSmoother);
+}
 
 type HeroProps = {
   eyebrow: string;
@@ -18,9 +21,6 @@ type HeroProps = {
   secondaryCta: string;
   desktopVideo: string;
   mobileVideo: string;
-  metricsLabel?: string;
-  metricsSubtitle?: string;
-  metricsFootnote?: string;
 };
 
 const STACK_ICONS = [
@@ -64,10 +64,19 @@ export default function HeroContent({
     );
   }, { scope: containerRef });
 
+  // 🔥 FIX: Use ScrollSmoother to prevent empty space bug
   const scrollTo = (id: string) => {
     const el = document.querySelector<HTMLElement>(`#${id}`);
     if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const smoother = ScrollSmoother.get();
+    if (smoother) {
+      // 1. GSAP Scroll (keeps layout synced)
+      smoother.scrollTo(el, true, "start");
+    } else {
+      // 2. Native Fallback (mobile)
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
@@ -168,7 +177,8 @@ export default function HeroContent({
 
             <button
               type="button"
-              onClick={() => scrollTo("work")}
+              // Updated to scroll to "references"
+              onClick={() => scrollTo("references")}
               style={{ fontFamily: "var(--font-goldman)" }}
               className="group flex items-center gap-2 rounded-sm border border-white/10 bg-white/5 px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-300 backdrop-blur-sm transition-all hover:border-[#ff8a3c]/50 hover:bg-white/10 hover:text-white cursor-pointer"
             >
@@ -207,47 +217,47 @@ export default function HeroContent({
              <div className="relative z-10 grid grid-cols-2 gap-4">
                {STACK_ICONS.map((tech) => (
                  <div 
-                    key={tech.name}
-                    className="
-                      group/icon relative flex aspect-square w-full cursor-pointer items-center justify-center 
-                      bg-white/[0.03] rounded-sm p-1
-                      transition-all duration-300 ease-out
-                      hover:shadow-[0_0_20px_rgba(255,138,60,0.15)]
-                    "
+                   key={tech.name}
+                   className="
+                     group/icon relative flex aspect-square w-full cursor-pointer items-center justify-center 
+                     bg-white/[0.03] rounded-sm p-1
+                     transition-all duration-300 ease-out
+                     hover:shadow-[0_0_20px_rgba(255,138,60,0.15)]
+                   "
                  >
-                    {/* Inner Corners: Zinc-500 by default, Orange on Hover */}
-                    <span className="absolute left-0 top-0 h-2 w-2 border-l border-t border-zinc-500 rounded-tl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                    <span className="absolute right-0 top-0 h-2 w-2 border-r border-t border-zinc-500 rounded-tr-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                    <span className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-zinc-500 rounded-br-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                    <span className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-zinc-500 rounded-bl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                    
-                    {/* Hover Fill */}
-                    <span className="absolute inset-0 bg-[#ff8a3c]/0 transition-all duration-300 group-hover/icon:bg-[#ff8a3c]/5 rounded-sm" />
+                   {/* Inner Corners */}
+                   <span className="absolute left-0 top-0 h-2 w-2 border-l border-t border-zinc-500 rounded-tl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
+                   <span className="absolute right-0 top-0 h-2 w-2 border-r border-t border-zinc-500 rounded-tr-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
+                   <span className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-zinc-500 rounded-br-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
+                   <span className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-zinc-500 rounded-bl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
+                   
+                   {/* Hover Fill */}
+                   <span className="absolute inset-0 bg-[#ff8a3c]/0 transition-all duration-300 group-hover/icon:bg-[#ff8a3c]/5 rounded-sm" />
 
-                    {/* Tooltip */}
-                    <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-200 ease-out group-hover/icon:top-[-42px] group-hover/icon:opacity-100 z-20">
-                        <div className="whitespace-nowrap border border-[#ff8a3c] bg-[#090b12] px-3 py-1.5 shadow-[0_0_10px_rgba(255,138,60,0.2)] rounded-sm">
-                            <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-wider text-[#ff8a3c]">
-                                {tech.name}
-                            </span>
-                        </div>
-                         <div className="absolute left-1/2 -bottom-2 h-2 w-px -translate-x-1/2 bg-[#ff8a3c]"></div>
-                    </div>
+                   {/* Tooltip */}
+                   <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-200 ease-out group-hover/icon:top-[-42px] group-hover/icon:opacity-100 z-20">
+                       <div className="whitespace-nowrap border border-[#ff8a3c] bg-[#090b12] px-3 py-1.5 shadow-[0_0_10px_rgba(255,138,60,0.2)] rounded-sm">
+                           <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-wider text-[#ff8a3c]">
+                               {tech.name}
+                           </span>
+                       </div>
+                        <div className="absolute left-1/2 -bottom-2 h-2 w-px -translate-x-1/2 bg-[#ff8a3c]"></div>
+                   </div>
 
-                    {/* Icon */}
-                    <div className="relative h-10 w-10 opacity-80 transition-all duration-300 ease-out group-hover/icon:opacity-100 grayscale brightness-200 contrast-125 group-hover/icon:grayscale-0 group-hover/icon:brightness-100 group-hover/icon:contrast-100 group-hover/icon:drop-shadow-[0_0_8px_rgba(255,138,60,0.8)]">
-                      <Image 
-                        src={tech.src} 
-                        alt={tech.name}
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
+                   {/* Icon */}
+                   <div className="relative h-10 w-10 opacity-80 transition-all duration-300 ease-out group-hover/icon:opacity-100 grayscale brightness-200 contrast-125 group-hover/icon:grayscale-0 group-hover/icon:brightness-100 group-hover/icon:contrast-100 group-hover/icon:drop-shadow-[0_0_8px_rgba(255,138,60,0.8)]">
+                     <Image 
+                       src={tech.src} 
+                       alt={tech.name}
+                       fill
+                       className="object-contain"
+                     />
+                   </div>
                  </div>
                ))}
              </div>
              
-             {/* Outer HUD Corners: Updated to Orange */}
+             {/* Outer HUD Corners */}
              <div className="pointer-events-none absolute -top-2 -left-2 h-8 w-8 border-t border-l border-[#ff8a3c] rounded-tl-sm" />
              <div className="pointer-events-none absolute -top-2 -right-2 h-8 w-8 border-t border-r border-[#ff8a3c] rounded-tr-sm" />
              <div className="pointer-events-none absolute -bottom-2 -left-2 h-8 w-8 border-b border-l border-[#ff8a3c] rounded-bl-sm" />

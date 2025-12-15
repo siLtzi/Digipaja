@@ -1,18 +1,15 @@
 import { sanityClient } from "@/sanity/config";
-import { contactSettingsQuery } from "@/sanity/queries";
+import { contactSettingsQuery } from "@/sanity/queries"; 
 import ContactContent from "./Content";
 
-// --- TYPE DEFINITIONS ---
-
-type MessagesShape = {
+// --- TYPES FOR MESSAGES FILE (local JSON) ---
+type ContactMessages = {
   eyebrow: string;
   title: string;
   subtitle: string;
-
   contactTitle: string;
   contactSubtitle: string;
   ctaText: string;
-
   formTitle: string;
   formSubtitle: string;
   formCta: string;
@@ -22,11 +19,16 @@ type MessagesShape = {
   formMessageLabel: string;
 };
 
-type SanitySettings = {
+type MessagesFile = {
+  contact: ContactMessages;
+};
+
+// --- TYPES FOR SANITY SETTINGS ---
+type ContactSettings = {
   email?: string | null;
   phone?: string | null;
-
-  // Finnish Fields
+  
+  // Finnish
   eyebrow_fi?: string | null;
   title_fi?: string | null;
   subtitle_fi?: string | null;
@@ -41,7 +43,7 @@ type SanitySettings = {
   formCompanyLabel_fi?: string | null;
   formMessageLabel_fi?: string | null;
 
-  // English Fields
+  // English
   eyebrow_en?: string | null;
   title_en?: string | null;
   subtitle_en?: string | null;
@@ -57,71 +59,76 @@ type SanitySettings = {
   formMessageLabel_en?: string | null;
 };
 
-// --- FALLBACKS ---
-
-const FALLBACK_MESSAGES_SHAPE: MessagesShape = {
-  eyebrow: "CONTACT",
-  title: "Get In Touch",
-  subtitle:
-    "Start your journey towards a faster, more effective online presence. We respond within 24 hours.",
-
-  contactTitle: "Phone & Email",
-  contactSubtitle: "Reach out directly or book a free consultation below.",
-  ctaText: "Book A Free Consultation",
-
-  formTitle: "Project Inquiry",
-  formSubtitle: "Tell us about your project and we'll be in touch soon.",
-  formCta: "SEND INQUIRY",
-  formNameLabel: "Name",
-  formEmailLabel: "Email",
-  formCompanyLabel: "Company",
-  formMessageLabel: "Message / Project Description",
-};
-
-const FALLBACK_CONTACT_DETAILS = {
-  email: "info@example.com",
-  phone: "+358 40 123 4567",
-};
-
 export default async function Contact({ locale }: { locale: "fi" | "en" }) {
-  // 1) Local JSON (fallback)
-  const messages = (await import(`@/i18n/messages/${locale}.json`)).default as {
-    contact?: Partial<MessagesShape>;
-  };
+  // 1. Load Local JSON
+  const messages = (await import(`@/i18n/messages/${locale}.json`))
+    .default as MessagesFile;
 
-  const m: MessagesShape = { ...FALLBACK_MESSAGES_SHAPE, ...(messages.contact ?? {}) };
+  const m = messages.contact;
 
-  // 2) CMS
+  // 2. Fetch CMS Data
   const cms =
-    (await sanityClient.fetch<SanitySettings | null>(contactSettingsQuery)) ?? {};
+    (await sanityClient.fetch<ContactSettings | null>(contactSettingsQuery)) ?? {};
 
-  // 3) Localized field helper (CMS first, then JSON)
-  const getLocalizedField = (field: keyof MessagesShape): string => {
-    const cmsKey = `${field}_${locale}` as keyof SanitySettings;
-    const fromCms = cms[cmsKey];
-    return (fromCms as string | null | undefined) || m[field];
-  };
+  const isFi = locale === "fi";
 
-  const props = {
-    eyebrow: getLocalizedField("eyebrow"),
-    title: getLocalizedField("title"),
-    subtitle: getLocalizedField("subtitle"),
+  // 3. Map Data (Prefer CMS -> Fallback to JSON)
+  const eyebrow = isFi 
+    ? cms.eyebrow_fi || m.eyebrow 
+    : cms.eyebrow_en || m.eyebrow;
 
-    contactTitle: getLocalizedField("contactTitle"),
-    contactSubtitle: getLocalizedField("contactSubtitle"),
-    ctaText: getLocalizedField("ctaText"),
+  const title = isFi 
+    ? cms.title_fi || m.title 
+    : cms.title_en || m.title;
 
-    email: cms.email || FALLBACK_CONTACT_DETAILS.email,
-    phone: cms.phone || FALLBACK_CONTACT_DETAILS.phone,
+  const subtitle = isFi 
+    ? cms.subtitle_fi || m.subtitle 
+    : cms.subtitle_en || m.subtitle;
 
-    formTitle: getLocalizedField("formTitle"),
-    formSubtitle: getLocalizedField("formSubtitle"),
-    formCta: getLocalizedField("formCta"),
-    formNameLabel: getLocalizedField("formNameLabel"),
-    formEmailLabel: getLocalizedField("formEmailLabel"),
-    formCompanyLabel: getLocalizedField("formCompanyLabel"),
-    formMessageLabel: getLocalizedField("formMessageLabel"),
-  };
+  // Contact Info Column
+  const contactTitle = isFi 
+    ? cms.contactTitle_fi || m.contactTitle 
+    : cms.contactTitle_en || m.contactTitle;
 
-  return <ContactContent {...props} />;
+  const contactSubtitle = isFi 
+    ? cms.contactSubtitle_fi || m.contactSubtitle 
+    : cms.contactSubtitle_en || m.contactSubtitle;
+
+  const ctaText = isFi 
+    ? cms.ctaText_fi || m.ctaText 
+    : cms.ctaText_en || m.ctaText;
+
+  // Form Labels & Text
+  const formTitle = isFi ? cms.formTitle_fi || m.formTitle : cms.formTitle_en || m.formTitle;
+  const formSubtitle = isFi ? cms.formSubtitle_fi || m.formSubtitle : cms.formSubtitle_en || m.formSubtitle;
+  const formCta = isFi ? cms.formCta_fi || m.formCta : cms.formCta_en || m.formCta;
+  
+  const formNameLabel = isFi ? cms.formNameLabel_fi || m.formNameLabel : cms.formNameLabel_en || m.formNameLabel;
+  const formEmailLabel = isFi ? cms.formEmailLabel_fi || m.formEmailLabel : cms.formEmailLabel_en || m.formEmailLabel;
+  const formCompanyLabel = isFi ? cms.formCompanyLabel_fi || m.formCompanyLabel : cms.formCompanyLabel_en || m.formCompanyLabel;
+  const formMessageLabel = isFi ? cms.formMessageLabel_fi || m.formMessageLabel : cms.formMessageLabel_en || m.formMessageLabel;
+
+  // Non-localized fallbacks (hardcoded if CMS is empty)
+  const email = cms.email || "info@digipajaoulu.fi";
+  const phone = cms.phone || "+358 40 123 4567";
+
+  return (
+    <ContactContent
+      eyebrow={eyebrow}
+      title={title}
+      subtitle={subtitle}
+      contactTitle={contactTitle}
+      contactSubtitle={contactSubtitle}
+      email={email}
+      phone={phone}
+      ctaText={ctaText}
+      formNameLabel={formNameLabel}
+      formEmailLabel={formEmailLabel}
+      formCompanyLabel={formCompanyLabel}
+      formMessageLabel={formMessageLabel}
+      formTitle={formTitle}
+      formSubtitle={formSubtitle}
+      formCta={formCta}
+    />
+  );
 }
