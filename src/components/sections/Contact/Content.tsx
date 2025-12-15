@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
@@ -36,14 +37,29 @@ export default function ContactContent(props: ContactProps) {
         <div className="absolute top-0 h-px w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent opacity-80" />
       </div>
 
-      {/* === BACKGROUND DECOR === */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-         <div className="absolute left-0 bottom-0 h-[500px] w-[500px] translate-y-1/2 -translate-x-1/2 rounded-full bg-[#ff8a3c]/5 blur-[100px]" />
-         <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#ff8a3c1a_1px,transparent_1px),linear-gradient(to_bottom,#ff8a3c1a_1px,transparent_1px)] bg-[size:48px_48px] opacity-10" />
-         <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_0%,#050609_100%)]" />
+      {/* === BACKGROUND IMAGE & DECOR === */}
+      <div className="absolute inset-0 z-0 pointer-events-none select-none">
+         {/* 1. The Image - Made Sharper */}
+         {/* Removed mix-blend-screen and adjusted opacity for a clearer, non-hazy look */}
+         <div className="absolute inset-0 z-0 opacity-30"> 
+            <Image
+              src="/image/BG4.webp"
+              alt="Contact Background"
+              fill
+              className="object-cover object-center"
+              quality={100} // Increased quality
+              priority
+            />
+         </div>
+
+         {/* 2. Gradient Overlay (Kept for text readability, but reduced slightly) */}
+         <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#050609] via-[#050609]/60 to-[#050609]/20" />
+         
+         {/* 3. Grid Pattern Only (Removed the orange glow blob) */}
+         <div className="absolute inset-0 z-20 bg-[linear-gradient(to_right,#ff8a3c1a_1px,transparent_1px),linear-gradient(to_bottom,#ff8a3c1a_1px,transparent_1px)] bg-[size:48px_48px] opacity-10" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
+      <div className="relative z-20 mx-auto max-w-7xl px-6">
         <Suspense fallback={<div className="min-h-[600px]" />}>
           <ContactInner {...props} />
         </Suspense>
@@ -74,7 +90,7 @@ function ContactInner({
   const searchParams = useSearchParams();
   const initialPackage = searchParams.get("package") || "";
 
-  // Scroll logic if you are keeping it on the same page
+  // Scroll logic
   useEffect(() => {
     if (initialPackage && containerRef.current) {
       setTimeout(() => {
@@ -137,7 +153,6 @@ function ContactInner({
                     <ContactDetail link={`mailto:${email}`} label="Email" value={email} />
                     <ContactDetail link={`tel:${phone}`} label="Puhelin" value={phone} />
                 </div>
-                {/* Side CTA removed since we have the main form here */}
             </div>
         </div>
     </div>
@@ -202,14 +217,13 @@ function ContactForm({
                     <FormInput label={formCompanyLabel} type="text" placeholder="Yritys Oy" />
                 </div>
                 
-                {/* ROW 2: Email & Phone (NEW) */}
+                {/* ROW 2: Email & Phone */}
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                     <FormInput label={formEmailLabel} type="email" placeholder="matti@esimerkki.fi" />
-                    {/* New Phone Field */}
                     <FormInput label="Puhelinnumero (Valinnainen)" type="tel" placeholder="+358 40..." />
                 </div>
 
-                {/* ROW 3: Preferred Method (NEW) */}
+                {/* ROW 3: Preferred Method */}
                 <FormSelect 
                     label="Toivottu yhteydenottotapa"
                     options={["Sähköposti", "Puhelinsoitto", "WhatsApp"]}

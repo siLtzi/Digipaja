@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 export default async function LocaleLayout({
   children,
@@ -22,6 +23,7 @@ export default async function LocaleLayout({
           <main>
             {children}
           </main>
+          <Footer locale={locale} />
         </SmoothScrollProvider>
       </div>
     </NextIntlClientProvider>
