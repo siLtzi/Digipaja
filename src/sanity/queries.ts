@@ -40,7 +40,17 @@ export const servicesSettingsQuery = groq`
     subtitle_fi,
     services_fi[]{
       title,
-      body
+      body,
+      "slug": slug.current // <--- CRITICAL: Needed for the link to work
+    },
+    // Same for English if you use it
+    eyebrow_en,
+    title_en,
+    subtitle_en,
+    services_en[]{
+      title,
+      body,
+      "slug": slug.current
     }
   }
 `;

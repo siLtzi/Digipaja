@@ -31,6 +31,18 @@ export default defineType({
           fields: [
             { name: "title", type: "string", title: "Title" },
             { name: "body", type: "text", title: "Description" },
+            
+            defineField({
+              name: "slug",
+              title: "Slug (Link to Detail Page)",
+              type: "slug",
+              options: {
+                // This function grabs the 'title' from THIS specific item
+                source: (doc, options) => (options.parent as any)?.title,
+                maxLength: 96,
+              },
+              validation: (rule) => rule.required(),
+            }),
           ],
         }),
       ],

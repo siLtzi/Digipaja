@@ -29,16 +29,25 @@
     "subtitle": "We build high-performance websites for companies, freelancers, and individuals who want to stand out online.",
     "items": [
       {
+        "slug": "custom-websites",
         "title": "Custom Websites",
-        "body": "We design and implement completely unique sites. Whether it's a corporate website or a personal portfolio, we create a solution that matches your vision."
+        "body": "We don't use pre-made templates or heavy page builders. We design and implement completely unique sites that match your vision perfectly.",
+        "description": "Most websites are built on top of generic templates. It's like buying a suit off the rack—it does the job, but it never fits perfectly and never sets you apart. At Digipaja, we tailor websites like bespoke suits. We avoid heavy page builders that bloat code. Instead, we build our interfaces with modern tools (Next.js & React), guaranteeing lightning-fast speeds and the clean technical structure that Google rewards.",
+        "features": []
       },
       {
+        "slug": "technical-implementation",
         "title": "Technical Implementation",
-        "body": "We build sites on a modern tech stack (Next.js, React, Sanity) – guaranteeing lightning-fast load times and easy maintenance."
+        "body": "We build sites on a modern tech stack (Next.js, React, Sanity) – guaranteeing lightning-fast load times and easy maintenance.",
+        "description": "We use the same technology stack as the world's leading tech companies (Netflix, Nike, TikTok). This isn't just about following trends; it's about security, scalability, and performance. A modern stack ensures your site remains fast and secure for years to come, without the constant need for plugin updates that plague older platforms.",
+        "features": []
       },
       {
+        "slug": "search-engine-optimization",
         "title": "Search Engine Optimization",
-        "body": "We optimize structure, content, and performance so your site succeeds on Google and reaches the right audience."
+        "body": "We optimize structure, content, and performance so your site succeeds on Google and reaches the right audience.",
+        "description": "Google loves fast websites. Before we even write a word of content, we ensure the technical foundation is perfect. We optimize Core Web Vitals, structure your data with Schema.org markup, and ensure search engines can crawl every inch of your site. This technical SEO foundation gives your content the best possible chance to rank.",
+        "features": []
       }
     ]
   },

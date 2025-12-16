@@ -26,19 +26,47 @@
   "services": {
     "eyebrow": "Mitä me teemme",
     "title": "Verkkoratkaisut & Palvelut",
-    "subtitle": "Rakennamme suorituskykyisiä sivustoja yrityksille, freelancereille ja yksityishenkilöille, jotka haluavat erottua verkossa.",
+    "subtitle": "Rakennamme suorituskykyisiä sivustoja yrityksille...",
     "items": [
       {
+        "slug": "raataloidyt-kotisivut",
         "title": "Räätälöidyt kotisivut",
-        "body": "Suunnittelemme ja toteutamme täysin uniikit sivustot. Olipa kyseessä yrityksen kotisivut tai henkilökohtainen portfolio, teemme visiotasi vastaavan ratkaisun."
+        "body": "Suunnittelemme ja toteutamme täysin uniikit sivustot. Olipa kyseessä yrityksen kotisivut tai henkilökohtainen portfolio, teemme visiotasi vastaavan ratkaisun.",
+        "description": "Useimmat verkkosivut rakennetaan valmiiden teemojen päälle. Se on kuin ostaisi puvun marketista – se ajaa asiansa, mutta ei koskaan istu täydellisesti eikä erota sinua massasta. Me Digipajalla räätälöimme sivustot kuin mittatilauspuvut. Emme käytä raskaita sivurakentajia, jotka hidastavat sivustoa. Koodamme käyttöliittymän moderneilla työkaluilla (Next.js & React), mikä takaa salamannopean latausajan ja Googlen arvostaman puhtaan teknisen rakenteen.",
+        "features": [
+          "Täysin uniikki, brändin mukainen design",
+          "Koodattu käsin (ei raskaita teemoja)",
+          "Google Lighthouse -optimointi (90-100 pistettä)",
+          "Täysi mobiili- ja tablettioptimointi",
+          "Integraatiot (Lomakkeet, CRM, Analytics)",
+          "Helppo päivitettävyys Sanity CMS:llä"
+        ]
       },
       {
+        "slug": "tekninen-toteutus",
         "title": "Tekninen toteutus",
-        "body": "Rakennamme sivut modernilla teknologiastackilla (Next.js, React, Sanity) – tämä takaa salamannopean latausajan ja helpon ylläpidon."
+        "body": "Rakennamme sivut modernilla teknologiastackilla...",
+        "description": "Käytämme samaa teknologiaa kuin maailman suurimmat yritykset (Netflix, Nike, TikTok). Tämä ei ole vain trendikkyyttä, vaan kyse on tietoturvasta, skaalautuvuudesta ja suorituskyvystä.",
+        "features": [
+          "Next.js & React -teknologiat",
+          "Sanity Headless CMS",
+          "Vercel Global CDN -jakelu",
+          "Server-Side Rendering (SSR)",
+          "Modernit tietoturvastandardit"
+        ]
       },
       {
+        "slug": "hakukoneoptimointi",
         "title": "Hakukoneoptimointi",
-        "body": "Optimoimme rakenteen, sisällön ja suorituskyvyn, jotta sivustosi menestyy Googlessa ja tavoittaa oikean yleisön."
+        "body": "Optimoimme rakenteen, sisällön ja suorituskyvyn...",
+        "description": "Google rakastaa nopeita sivuja. Ennen kuin kirjoitamme sanaakaan sisältöä, varmistamme teknisen perustan olevan kunnossa.",
+        "features": [
+          "Core Web Vitals -optimointi",
+          "Tekninen SEO-auditointi",
+          "Schema.org rakenteinen data",
+          "Avainsanastrategia",
+          "Sivustokartat & Robots.txt konfiguraatio"
+        ]
       }
     ]
   },
@@ -121,7 +149,7 @@
   "pricing": {
     "eyebrow": "Investointi",
     "title": "Selkeä hinnoittelu.",
-    "subtitle": "Ei piilokuluja. Ei kuukausimaksuja lisäosista. Maksat kerran, omistat ikuisesti.",
+    "subtitle": "Ei piilokuluja. Ei pakollisia kuukausimaksuja. Maksat vain siitä, mitä sovitaan.",
     "tiers": [
       {
         "name": "Kipinä",
