@@ -1,5 +1,24 @@
 import { groq } from "next-sanity";
 
+export const servicesOverviewQuery = groq`
+  *[_type == "servicesOverview" && language == $locale][0]{
+    eyebrow,
+    title,
+    subtitle,
+    services[]{
+      slug,
+      title,
+      shortDescription,
+      longDescription,
+      icon,
+      features,
+      benefits,
+      "imageUrl": image.asset->url,
+      "galleryUrls": gallery[].asset->url
+    }
+  }
+`;
+
 export const heroSettingsQuery = groq`
 *[_type == "heroSettings"][0]{
   heroEyebrow_fi,
@@ -165,5 +184,35 @@ export const contactSettingsQuery = `
     "formEmailLabel_en": englishContent.formEmailLabel_en,
     "formCompanyLabel_en": englishContent.formCompanyLabel_en,
     "formMessageLabel_en": englishContent.formMessageLabel_en,
+  }
+`;
+export const serviceBySlugQuery = groq`
+  *[_type == "service" && slug.current == $slug && language == $locale][0]{
+    title,
+    "slug": slug.current,
+    language,
+    description,
+    body,
+    features,
+    "imageUrl": mainImage.asset->url,
+    "videoUrl": heroVideo.asset->url,
+    speechDeck{
+      ctaTitleHtml,
+      ctaBody,
+      beats[]{
+        _key,
+        title,
+        body,
+        anim,
+        iconName,
+        iconThemeHint,
+        "imageUrl": image.asset->url,
+        imageAlt,
+        lottiePath,
+        "lottieFileUrl": lottieFile.asset->url,
+        lottieLoop,
+        lottieSpeed
+      }
+    }
   }
 `;

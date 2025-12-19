@@ -42,27 +42,27 @@ export default function PricingContent({
       id="pricing"
       className="relative overflow-hidden bg-[#050609] py-24 lg:py-32 text-zinc-100"
     >
-      <div className="absolute top-0 left-0 right-0 z-30 flex justify-center">
-        <div className="h-px w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c]/50 to-transparent" />
-        <div className="absolute top-0 h-px w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent opacity-80" />
+      <div className="absolute top-0 left-0 right-0 z-30 flex justify-center overflow-hidden">
+        <div className="h-[2px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_rgba(255,138,60,0.8),0_0_40px_rgba(255,138,60,0.4)]" />
+        <div className="absolute top-0 h-[3px] w-1/2 max-w-2xl bg-gradient-to-r from-transparent via-white to-transparent blur-[2px] opacity-70" />
+        <div className="absolute top-0 h-[1px] w-full bg-gradient-to-r from-[#ff8a3c]/0 via-[#ff8a3c]/40 to-[#ff8a3c]/0" />
       </div>
 
-      {/* --- BACKGROUND FIX START --- */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* CHANGED: 
-            1. Increased size to h-[800px] w-[800px] for a wider spread.
-            2. Swapped 'bg-color + blur' for 'radial-gradient'.
-            3. Lowered opacity slightly for better blending.
-        */}
-        <div className="absolute right-0 top-0 h-[800px] w-[800px] -translate-y-1/2 translate-x-1/2 bg-[radial-gradient(circle_closest-side,rgba(255,138,60,0.15),transparent)] blur-3xl opacity-50" />
+      <div className="absolute inset-0 z-0 pointer-events-none select-none">
+        {/* Tech grid pattern */}
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_50%,#000_50%,transparent_100%)]" />
         
-        {/* Grid pattern */}
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#ff8a3c1a_1px,transparent_1px),linear-gradient(to_bottom,#ff8a3c1a_1px,transparent_1px)] bg-[size:48px_48px] opacity-10" />
+        {/* Spotlight gradient */}
+        <div
+          className="absolute left-1/2 top-1/2 h-[900px] w-[1400px] -translate-x-1/2 -translate-y-1/2"
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(255,138,60,0.10) 0%, rgba(255,138,60,0.03) 40%, transparent 70%)",
+          }}
+        />
         
-        {/* Vignette fade */}
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_0%,#050609_100%)]" />
+        {/* Right accent glow */}
+        <div className="absolute right-0 top-0 h-[800px] w-[800px] -translate-y-1/4 translate-x-1/3 bg-[radial-gradient(circle_closest-side,rgba(255,138,60,0.08),transparent)] blur-3xl" />
       </div>
-      {/* --- BACKGROUND FIX END --- */}
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         <div className="mb-20 flex flex-col items-center text-center">
@@ -73,9 +73,11 @@ export default function PricingContent({
             </span>
             <span
               style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
+              className="text-[11px] uppercase tracking-[0.2em] text-[#ff8a3c] flex items-center gap-2"
             >
-              [ {eyebrow} ]
+              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
+              {eyebrow}
+              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
             </span>
           </div>
           <h2
@@ -184,29 +186,32 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
       ref={cardRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`group relative flex flex-col justify-between rounded-sm p-6 sm:p-8 backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 ${
+      className={`group relative flex flex-col justify-between rounded-lg p-6 sm:p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 border ${
         isHighlight
-          ? "bg-[#ff8a3c]/5 shadow-[0_0_40px_rgba(255,138,60,0.08)]"
-          : "bg-[#0a0b10]/80 hover:bg-[#0f1115]"
+          ? "bg-gradient-to-b from-[#0a0a0a] to-[#050609] border-[#ff8a3c]/30 shadow-[0_0_40px_rgba(255,138,60,0.15)]"
+          : "bg-gradient-to-b from-[#0a0a0a]/80 to-[#050609]/60 border-white/5 hover:border-[#ff8a3c]/20 hover:bg-gradient-to-b hover:from-[#0f0f12] hover:to-[#0a0a0a]"
       }`}
     >
       <span
-        className={`absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 rounded-tl-sm transition-all duration-300 group-hover:h-full group-hover:w-full ${cornerColor}`}
+        className={`absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 transition-all duration-500 group-hover:h-8 group-hover:w-8 ${cornerColor}`}
       />
       <span
-        className={`absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 rounded-tr-sm transition-all duration-300 group-hover:h-full group-hover:w-full ${cornerColor}`}
+        className={`absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 transition-all duration-500 group-hover:h-8 group-hover:w-8 ${cornerColor}`}
       />
       <span
-        className={`absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 rounded-br-sm transition-all duration-300 group-hover:h-full group-hover:w-full ${cornerColor}`}
+        className={`absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 transition-all duration-500 group-hover:h-8 group-hover:w-8 ${cornerColor}`}
       />
       <span
-        className={`absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 rounded-bl-sm transition-all duration-300 group-hover:h-full group-hover:w-full ${cornerColor}`}
+        className={`absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 transition-all duration-500 group-hover:h-8 group-hover:w-8 ${cornerColor}`}
       />
       <div
-        className={`absolute inset-0 pointer-events-none bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${
+        className={`absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100 ${
           isHighlight ? "opacity-100" : ""
         }`}
       />
+      {isHighlight && (
+        <div className="absolute inset-0 pointer-events-none rounded-lg bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.05),transparent_60%)] opacity-60" />
+      )}
 
       <div className="relative z-10">
         <div className="mb-4 sm:mb-8 flex items-start justify-between">
@@ -245,13 +250,13 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
           </div>
         </div>
 
-        <div
-          className={`mb-4 sm:mb-8 h-px w-full transition-colors ${
+        <div className="mb-4 sm:mb-8 relative h-[1px] w-full">
+          <div className={`absolute inset-0 transition-all duration-500 ${
             isHighlight
-              ? "bg-gradient-to-r from-[#ff8a3c]/50 to-transparent"
-              : "bg-white/5 group-hover:bg-[#ff8a3c]/20"
-          }`}
-        />
+              ? "bg-gradient-to-r from-[#ff8a3c] via-[#ff8a3c]/50 to-transparent shadow-[0_0_8px_rgba(255,138,60,0.4)]"
+              : "bg-gradient-to-r from-white/10 to-transparent group-hover:from-[#ff8a3c]/30 group-hover:shadow-[0_0_6px_rgba(255,138,60,0.3)]"
+          }`} />
+        </div>
         <div className="mb-4 flex items-baseline gap-1">
           <span
             ref={priceRef}
@@ -299,10 +304,10 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
                 className="flex items-center gap-3 text-sm text-zinc-300"
               >
                 <div
-                  className={`h-1.5 w-1.5 rounded-[1px] shadow-[0_0_5px_currentColor] transition-colors flex-shrink-0 ${
+                  className={`h-1.5 w-1.5 rounded-sm transition-all duration-300 flex-shrink-0 ${
                     isHighlight
-                      ? "bg-[#ff8a3c] text-[#ff8a3c]"
-                      : "bg-zinc-700 text-zinc-700 group-hover:bg-[#ff8a3c] group-hover:text-[#ff8a3c]"
+                      ? "bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]"
+                      : "bg-zinc-700 shadow-[0_0_4px_rgba(113,113,122,0.5)] group-hover:bg-[#ff8a3c] group-hover:shadow-[0_0_8px_rgba(255,138,60,0.8)]"
                   }`}
                 />
                 <span className="leading-tight">{feature}</span>
@@ -317,10 +322,10 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
           ref={buttonRef}
           type="button"
           onClick={handleSelectPackage}
-          className={`group/btn relative flex w-full items-center justify-center overflow-hidden rounded-sm border px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer duration-300 ${
+          className={`group/btn relative flex w-full items-center justify-center overflow-hidden rounded-md border px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer duration-300 ${
             isHighlight
-              ? "border-[#ff8a3c] bg-[#ff8a3c] text-black"
-              : "border-zinc-800 bg-transparent text-zinc-400 hover:border-[#ff8a3c] hover:text-white"
+              ? "border-[#ff8a3c] bg-[#ff8a3c] text-black shadow-[0_0_20px_rgba(255,138,60,0.3)] hover:shadow-[0_0_30px_rgba(255,138,60,0.5)]"
+              : "border-[#ff8a3c]/20 bg-[#ff8a3c]/5 text-[#ff8a3c] hover:border-[#ff8a3c]/40 hover:bg-[#ff8a3c]/10 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
           }`}
         >
           {isHighlight && (

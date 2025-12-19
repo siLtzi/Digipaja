@@ -6,7 +6,8 @@ import project from "./project";
 import processSettings from "./processSettings";
 import { pricingSettings, pricingTier } from "./pricing"; 
 import contactSettings from "./contactSettings";
-import service from './service'
+import service from './service';
+import servicesOverview from './servicesOverview';
 
 export const schemaTypes = [
   heroSettings,
@@ -19,4 +20,5 @@ export const schemaTypes = [
   pricingTier,
   contactSettings,
   service,
+  servicesOverview,
 ];

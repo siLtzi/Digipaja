@@ -1,146 +1,298 @@
 {
   "hero": {
-    "eyebrow": "Digital Studio from Oulu",
+    "eyebrow": "Digital Workshop from Oulu",
     "titleStart": "Websites that look",
-    "titleAccent": "stunning",
+    "titleAccent": "great",
     "titleEnd": "and feel fast.",
-    "subtitle": "We design and implement custom websites that load lightning fast and support your business growth.",
-    "primaryCta": "Contact Us",
-    "secondaryCta": "View Work",
+    "subtitle": "We design and build tailored websites that load instantly and support your business growth.",
+    "primaryCta": "Get in Touch",
+    "secondaryCta": "View References",
     "metricsLabel": "Performance & Tech",
-    "metricsSubtitle": "We focus on Core Web Vitals from the start.",
-    "metricsFootnote": "Sample figures from real projects – we measure every site before handover."
+    "metricsSubtitle": "Core Web Vitals focused from day one.",
+    "metricsFootnote": "Real project figures – we measure every site before handover."
   },
-
   "aboutUs": {
     "eyebrow": "Who We Are",
-    "title": "Two brothers building modern websites",
-    "subtitle": "Digipaja is an Oulu-based studio run by two brothers, focused on fast and sustainable websites.",
+    "title": "Two Brothers Building Modern Web",
+    "subtitle": "Digipaja is a studio from Oulu run by two brothers, focusing on fast and sustainable websites.",
     "techTitle": "Tech & Quality",
-    "techBody": "We build sites with React, Next.js, Sanity, and Vercel – purely on a modern stack.",
+    "techBody": "Built with React, Next.js, Sanity, and Vercel – a pure modern stack.",
     "bizTitle": "Business & Growth",
-    "bizBody": "We help local businesses with visibility, branding, and web reliability.",
+    "bizBody": "Helping local businesses with visibility, branding, and online reliability.",
     "note": "Content updates in real-time via Sanity."
   },
-
   "services": {
     "eyebrow": "What We Do",
     "title": "Web Solutions & Services",
-    "subtitle": "We build high-performance websites for companies, freelancers, and individuals who want to stand out online.",
+    "subtitle": "Building high-performance sites for businesses...",
     "items": [
       {
-        "slug": "custom-websites",
+        "slug": "raataloidyt-kotisivut",
         "title": "Custom Websites",
-        "body": "We don't use pre-made templates or heavy page builders. We design and implement completely unique sites that match your vision perfectly.",
-        "description": "Most websites are built on top of generic templates. It's like buying a suit off the rack—it does the job, but it never fits perfectly and never sets you apart. At Digipaja, we tailor websites like bespoke suits. We avoid heavy page builders that bloat code. Instead, we build our interfaces with modern tools (Next.js & React), guaranteeing lightning-fast speeds and the clean technical structure that Google rewards.",
-        "features": []
+        "body": "We design and implement completely unique sites. Whether for a company or a portfolio, we build a solution that matches your vision.",
+        "description": "Most websites are built on ready-made themes. It's like buying a suit from a supermarket – it works, but it never fits perfectly. We tailor websites like bespoke suits. We don't use heavy builders that slow down the site. We code the UI with modern tools (Next.js & React), guaranteeing lightning-fast load times and clean technical structure.",
+        "features": [
+          "Completely unique, on-brand design",
+          "Hand-coded (no heavy themes)",
+          "Google Lighthouse optimization (90-100 score)",
+          "Full mobile & tablet optimization",
+          "Integrations (Forms, CRM, Analytics)",
+          "Easy updates with Sanity CMS"
+        ]
       },
       {
-        "slug": "technical-implementation",
+        "slug": "tekninen-toteutus",
         "title": "Technical Implementation",
-        "body": "We build sites on a modern tech stack (Next.js, React, Sanity) – guaranteeing lightning-fast load times and easy maintenance.",
-        "description": "We use the same technology stack as the world's leading tech companies (Netflix, Nike, TikTok). This isn't just about following trends; it's about security, scalability, and performance. A modern stack ensures your site remains fast and secure for years to come, without the constant need for plugin updates that plague older platforms.",
-        "features": []
+        "body": "Building sites with a modern tech stack...",
+        "description": "We use the same technology as the world's largest companies (Netflix, Nike, TikTok). It's not just a trend; it's about security, scalability, and performance.",
+        "features": [
+          "Next.js & React technologies",
+          "Sanity Headless CMS",
+          "Vercel Global CDN distribution",
+          "Server-Side Rendering (SSR)",
+          "Modern security standards"
+        ]
       },
       {
-        "slug": "search-engine-optimization",
-        "title": "Search Engine Optimization",
-        "body": "We optimize structure, content, and performance so your site succeeds on Google and reaches the right audience.",
-        "description": "Google loves fast websites. Before we even write a word of content, we ensure the technical foundation is perfect. We optimize Core Web Vitals, structure your data with Schema.org markup, and ensure search engines can crawl every inch of your site. This technical SEO foundation gives your content the best possible chance to rank.",
-        "features": []
+        "slug": "hakukoneoptimointi",
+        "title": "SEO",
+        "body": "Optimizing structure, content, and performance...",
+        "description": "Google loves fast sites. Before writing a word of content, we ensure the technical foundation is solid.",
+        "features": [
+          "Core Web Vitals optimization",
+          "Technical SEO audit",
+          "Schema.org structured data",
+          "Keyword strategy",
+          "Sitemaps & Robots.txt configuration"
+        ]
       }
     ]
   },
-
   "references": {
-    "eyebrow": "Selected Projects",
-    "title": "Our Work",
-    "subtitle": "Explore our latest work. We build digital experiences that deliver results."
+    "eyebrow": "References",
+    "title": "Selected Projects",
+    "subtitle": "Check out our latest work. We build digital experiences that deliver results."
   },
-
   "process": {
-    "eyebrow": "Our Process",
-    "title": "From Concept to Launch",
-    "subtitle": "A clear and straightforward workflow ensures the project stays on schedule and the result meets your exact expectations.",
+    "eyebrow": "Process",
+    "title": "From Idea to Finished Site",
+    "subtitle": "A clear process ensures the project stays on schedule and the result is exactly what was sought.",
     "steps": [
       {
-        "title": "Discovery & Kickoff",
-        "description": "It all starts with a conversation. Together we define the site goals, target audience, and required features."
+        "title": "Discovery & Start",
+        "description": "It all starts with a conversation. We define the site's goals, target audience, and required features together."
       },
       {
         "title": "Planning & Design",
-        "description": "We create the visual identity and structure. At this stage, you will see exactly how the final result will look."
+        "description": "We create the visual look and structure. At this stage, you'll see what the final result will look like."
       },
       {
         "title": "Technical Development",
-        "description": "We build the site using Next.js and Sanity. We code everything by hand to ensure top-tier performance."
+        "description": "We build the site with Next.js and Sanity. Everything is hand-coded to ensure top performance."
       },
       {
         "title": "Launch & Training",
-        "description": "Once ready, we optimize SEO settings, launch the site, and guide you on how to manage your content."
+        "description": "When ready, we optimize SEO settings, launch the site, and guide you on using the content management system."
       }
     ]
   },
   "whyUs": {
     "eyebrow": "Why Digipaja?",
-    "title": "While others mass produce, we forge.",
-    "subtitle": "We don't assemble sites on a conveyor belt. We forge them one by one, specifically for you.",
+    "title": "While others mass-produce, we forge.",
+    "subtitle": "We don't assemble sites on a conveyor belt. We forge them one by one, on your terms.",
     "cards": [
       {
         "title": "Tailored, Not Factory Made",
-        "description": "A mass-produced site is like a cheap knife: looks good until you need it. We make decisions for every nut, bolt, and animation based on your needs.",
+        "description": "A mass-produced site is like a cheap knife: looks good until you need it. We don't use ready themes. Every nut and bolt is chosen for your benefit.",
         "icon": "forge"
       },
       {
-        "title": "High-Performance Speed",
-        "description": "WordPress is a delivery van. Next.js is a sports car. Google rewards speed, and so do your customers. That's why we only build fast.",
+        "title": "Top Performance",
+        "description": "WordPress is a van full of boxes. Next.js is a sports car. Google and customers reward speed, so we don't build anything slow.",
         "icon": "speed"
       },
       {
         "title": "Enterprise Technology",
-        "description": "Netflix, TikTok, Nike. They use the same tech (React/Next.js) as we do. Not because it's trendy, but because it works—now and in 2030.",
+        "description": "Netflix, TikTok, Nike. They use the same tech (React/Next.js) as us. Not because it's trendy, but because it works – now and in 2030.",
         "icon": "tech"
       },
       {
-        "title": "Real People. Really Here.",
-        "description": "No offshore teams. No robots. You get us—two brothers from Oulu. We care about the result because our name is on it.",
+        "title": "Real People. Local.",
+        "description": "No offshore teams. No robots. You get us – two brothers from Oulu. People who care about the result because our name is on it.",
         "icon": "local"
       },
       {
         "title": "Security & Stability",
-        "description": "Plugins are risks. Typical WP sites have dozens. Our sites have zero bloat. Simple equals reliable.",
+        "description": "Plugins are risks. A typical WP site has dozens. Our sites have nothing unnecessary. Simple is reliable.",
         "icon": "shield"
       },
       {
         "title": "Unique Identity",
-        "description": "Do you want a website or an identity? We don't just configure themes; we design an experience that makes competitors ask: 'Who are these guys?'",
+        "description": "Stand out or blend in? We don't configure settings; we design an identity that makes competitors ask: 'Who are these guys?'",
         "icon": "fingerprint"
       },
       {
         "title": "Launch, Not Just Handover",
-        "description": "Publishing isn't the end; it's the start. We test speed, mobile, SEO, and accessibility. When we launch, your business is ready.",
+        "description": "When others wash their hands, we just start. We test speed, mobile, SEO, and accessibility. When launched, it's ready for business.",
         "icon": "rocket"
       },
       {
-        "title": "Why Digipaja Wins?",
-        "description": "This isn't a website. It's a competitive advantage. You're not buying code; you're buying a sales machine and a worry-free future.",
+        "title": "Why We Win",
+        "description": "This isn't a website. It's a competitive advantage. You're not buying code; you're buying a better sales machine.",
         "icon": "trophy"
       }
     ]
   },
+  "pricing": {
+    "eyebrow": "Investment",
+    "title": "Clear Pricing.",
+    "subtitle": "No hidden fees. No mandatory monthly payments. Pay only for what is agreed.",
+    "tiers": [
+      {
+        "name": "Spark",
+        "price": "1 800 €",
+        "description": "Perfect start for new businesses. A one-page solution that converts visitors into customers.",
+        "cta": "Order Spark",
+        "highlight": false,
+        "features": [
+          "One-Page Landing Page",
+          "Next.js & React technology",
+          "Fully custom design",
+          "Google Lighthouse 100/100",
+          "Contact Form",
+          "Basic SEO optimization"
+        ]
+      },
+      {
+        "name": "Forge",
+        "price": "3 400 €",
+        "description": "Choice for growth companies. Multi-page site with room to grow and easy management panel.",
+        "cta": "Forge for Us",
+        "highlight": true,
+        "features": [
+          "All Spark features",
+          "3-6 subpages (Home, Services...)",
+          "CMS (Easy content management)",
+          "Blog / News section",
+          "Extensive SEO optimization",
+          "Animated elements"
+        ]
+      },
+      {
+        "name": "Foundry",
+        "price": "6 500 €",
+        "description": "When basic isn't enough. E-commerce, web apps, and demanding integrations.",
+        "cta": "Request Quote",
+        "highlight": false,
+        "features": [
+          "All Forge features",
+          "Custom Web App",
+          "E-commerce integration",
+          "User accounts / Login",
+          "APIs to other systems",
+          "Advanced Analytics"
+        ]
+      }
+    ]
+  },
   "contact": {
-    "eyebrow": "Get In Touch",
+    "eyebrow": "GET IN TOUCH",
     "title": "Start your project today.",
-    "subtitle": "Let's discuss your goals and how Digipaja can ensure fast and reliable web presence for your business.",
+    "subtitle": "Let's discuss your goals and how Digipaja can ensure a fast and stable web presence for your company.",
     "contactTitle": "Phone & Email",
-    "contactSubtitle": "Send us an email or call directly. We're available during business hours.",
+    "contactSubtitle": "Email us or call directly. We are available on weekdays.",
     "ctaText": "Book Free Consultation",
-    "formTitle": "Project Inquiry",
-    "formSubtitle": "Fill out the form below and we'll get back to you within 24 hours.",
-    "formCta": "Send Inquiry",
-    "formNameLabel": "Name",
-    "formEmailLabel": "Email",
-    "formCompanyLabel": "Company (Optional)",
-    "formMessageLabel": "Message / Project Description"
+    "formTitle": "PROJECT INQUIRY",
+    "formSubtitle": "Fill out the form below, and we'll get back to you within 24 hours.",
+    "formCta": "SEND INQUIRY",
+    "formNameLabel": "NAME",
+    "formEmailLabel": "EMAIL",
+    "formCompanyLabel": "COMPANY (OPTIONAL)",
+    "formMessageLabel": "MESSAGE / PROJECT DESCRIPTION"
+  },
+  "speechDeck": {
+    "items": [
+      {
+        "id": "compromise",
+        "title": "Templates are a Compromise",
+        "body": "A supermarket suit works – but doesn't fit. A tailored site stands out and feels like your own.",
+        "anim": "fade-up",
+        "svgType": "Tailor"
+      },
+      {
+        "id": "brand",
+        "title": "Tailored = On Brand",
+        "body": "Visuals, structure, and tone are made so the customer instantly recognizes: this is you.",
+        "anim": "blur-reveal",
+        "svgType": "Fingerprint"
+      },
+      {
+        "id": "flow",
+        "title": "The Site Must Guide Forward",
+        "body": "Every section builds trust and leads to contact – no \"filler\" in between.",
+        "anim": "slide-left",
+        "svgType": "Arrow"
+      },
+      {
+        "id": "speed",
+        "title": "Light. Fast. Polished.",
+        "body": "The site feels fast from the first second. That feeling sells.",
+        "anim": "flash",
+        "svgType": "Speed"
+      },
+      {
+        "id": "structure",
+        "title": "No Blocks — Clear Structure",
+        "body": "No junk that slows down and breaks. We build a foundation that lasts.",
+        "anim": "typewriter",
+        "svgType": "Structure"
+      },
+      {
+        "id": "mobile",
+        "title": "Mobile First (Like Your Customers)",
+        "body": "Works perfectly on phone and looks good on all screens.",
+        "anim": "fade-up",
+        "svgType": "Mobile"
+      },
+      {
+        "id": "competition",
+        "title": "Competitors are Loading — You're There",
+        "body": "While their site is still spinning, yours has already told the core benefit.",
+        "anim": "slide-right",
+        "svgType": "Trophy"
+      },
+      {
+        "id": "roi",
+        "title": "A Tailored Site is a Sales Tool",
+        "body": "Not an expense, but an investment: better first impression, more inquiries.",
+        "anim": "scale-up",
+        "svgType": "Graph"
+      },
+      {
+        "id": "seo",
+        "title": "Visibility & Findability",
+        "body": "Google understands the structure. The customer understands the offer.",
+        "anim": "blur-reveal",
+        "svgType": "Search"
+      },
+      {
+        "id": "conversion",
+        "title": "Lower Bounce Rate, Better Conversion",
+        "body": "Clarity + speed + good story = the visitor doesn't escape.",
+        "anim": "fade-up",
+        "svgType": "Magnet"
+      },
+      {
+        "id": "feeling",
+        "title": "The Result Feels Better",
+        "body": "On the internet, that feeling is a competitive advantage – and the customer senses it instantly.",
+        "anim": "slow-fade",
+        "svgType": "Heart"
+      }
+    ],
+    "cta": {
+      "title": "Want a site that<br />does the work for you?",
+      "body": "Tell us what you sell – we build the path that makes buying easy."
+    }
   }
 }

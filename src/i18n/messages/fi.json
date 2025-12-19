@@ -212,5 +212,43 @@
     "formEmailLabel": "SÄHKÖPOSTI",
     "formCompanyLabel": "YRITYS (VALINNAINEN)",
     "formMessageLabel": "VIESTI / PROJEKTIN KUVAUS"
+  },
+  "speechDeck": {
+    "items": [
+      {
+        "id": "custom-vs-template",
+        "title": "Valmispohja on kompromissi",
+        "body": "Valmispohja toimii – mutta se näyttää samalta kuin muut. Räätälöity sivu istuu teidän brändiin ja tuntuu omalta heti ensisilmäyksellä.",
+        "svgType": "Tailor"
+      },
+      {
+        "id": "brand-clarity",
+        "title": "Räätälöity = brändi + selkeys",
+        "body": "Ulkoasu, rakenne ja sävy rakennetaan niin, että asiakas ymmärtää nopeasti: kuka te olette, mitä myytte ja miksi juuri teihin kannattaa luottaa.",
+        "svgType": "Fingerprint"
+      },
+      {
+        "id": "guided-flow",
+        "title": "Sivun tehtävä on ohjata eteenpäin",
+        "body": "Jokainen osio tekee yhden asian: lisää luottamusta ja vie kohti yhteydenottoa. Ei täytettä – vain tarina, joka etenee.",
+        "svgType": "Arrow"
+      },
+      {
+        "id": "performance-mobile",
+        "title": "Nopea ja mobiilissa vahva",
+        "body": "Sivu tuntuu nopealta heti ensi sekunneista ja toimii moitteettomasti puhelimella. Kun kokemus on sulava, kävijä ei karkaa.",
+        "svgType": "Speed"
+      },
+      {
+        "id": "sales-seo",
+        "title": "Myyntityökalu, jonka Google ymmärtää",
+        "body": "Räätälöity sivu ei ole kuluerä vaan investointi: selkeä rakenne, parempi löydettävyys ja enemmän yhteydenottoja – eli oikeaa tuottoa.",
+        "svgType": "Graph"
+      }
+    ],
+    "cta": {
+      "title": "Haluatko sivun, joka tekee työn puolestasi?",
+      "body": "Kerro mitä myyt – me rakennamme polun, joka tekee ostamisesta helppoa."
+    }
   }
 }

@@ -50,17 +50,10 @@ export default function HeroContent({
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    // A. Text & Button Entrance
+    // Text & Button Entrance (skip h1 for LCP)
     tl.fromTo(".animate-in", 
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }
-    );
-
-    // B. Tech Card Slide-in
-    tl.fromTo(".hero-card",
-      { x: 30, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, ease: "power2.out" },
-      "-=0.6"
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, stagger: 0.08 }
     );
   }, { scope: containerRef });
 
@@ -141,8 +134,11 @@ export default function HeroContent({
 
           {/* Title */}
           <h1
-            style={{ fontFamily: "var(--font-goldman)" }}
-            className="animate-in text-balance text-5xl font-bold leading-none text-white opacity-0 sm:text-6xl lg:text-[4.5rem]"
+            style={{ 
+              fontFamily: "var(--font-goldman)",
+              animation: "fadeInUpHero 0.6s ease-out"
+            }}
+            className="text-balance text-5xl font-bold leading-none text-white sm:text-6xl lg:text-[4.5rem]"
           >
             {titleStart}{" "}
             <span className="bg-gradient-to-r from-[#ffb347] via-[#ff8a3c] to-[#ff6b00] bg-clip-text text-transparent">
@@ -186,24 +182,52 @@ export default function HeroContent({
             </button>
           </div>
 
-          {/* Stats */}
-          <div className="animate-in flex flex-wrap items-center gap-x-8 gap-y-4 pt-6 text-[11px] text-zinc-500 opacity-0">
-            <div className="flex items-center gap-3">
-               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#15171f] font-bold text-[#ffb347] ring-1 ring-white/10">
-                 98
-               </div>
-               <span className="max-w-[120px] leading-tight">Lighthouse-pisteet tyypillisesti 95–100</span>
+          {/* Tech Stack */}
+          <div className="animate-in flex flex-wrap items-center gap-x-5 gap-y-5 pt-8 opacity-0">
+            <div className="flex items-center gap-4">
+              <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-[0.25em] text-[#ff8a3c]/70">Tech Stack</span>
+              <div className="h-5 w-px bg-gradient-to-b from-[#ff8a3c]/50 to-transparent" />
             </div>
-            <div className="h-8 w-px bg-white/10 hidden sm:block" />
+            {STACK_ICONS.map((tech, idx) => (
+              <div 
+                key={tech.name} 
+                className="group/tech relative"
+                style={{ animationDelay: `${idx * 0.1}s` }}
+              >
+                <div className="relative flex h-10 w-10 items-center justify-center rounded-md border border-white/5 bg-white/[0.02] p-1.5 backdrop-blur-sm transition-all duration-500 ease-out group-hover/tech:scale-110 group-hover/tech:border-[#ff8a3c]/30 group-hover/tech:bg-[#ff8a3c]/5 group-hover/tech:shadow-[0_0_20px_rgba(255,138,60,0.2)]">
+                  <div className="relative h-full w-full opacity-70 transition-all duration-500 ease-out grayscale-[0.3] brightness-110 group-hover/tech:opacity-100 group-hover/tech:grayscale-0 group-hover/tech:brightness-100 group-hover/tech:drop-shadow-[0_0_12px_rgba(255,138,60,0.8)] group-hover/tech:scale-110">
+                    <Image 
+                      src={tech.src} 
+                      alt={tech.name}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  {/* Corner accent */}
+                  <div className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-[#ff8a3c] opacity-0 transition-all duration-300 group-hover/tech:opacity-100 shadow-[0_0_6px_rgba(255,138,60,0.8)]" />
+                </div>
+                {/* Tooltip */}
+                <div className="pointer-events-none absolute -top-11 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300 ease-out group-hover/tech:-top-12 group-hover/tech:opacity-100 z-20">
+                  <div className="relative whitespace-nowrap border border-[#ff8a3c]/40 bg-[#090b12]/95 px-3 py-1.5 shadow-[0_0_15px_rgba(255,138,60,0.3)] rounded backdrop-blur-md">
+                    <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-wider text-[#ff8a3c]">
+                      {tech.name}
+                    </span>
+                    {/* Arrow */}
+                    <div className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 border-b border-r border-[#ff8a3c]/40 bg-[#090b12]/95" />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div className="h-6 w-px bg-gradient-to-b from-white/10 to-transparent hidden sm:block" />
             <div className="flex items-center gap-3">
-               <div className="h-1.5 w-1.5 rounded-full bg-[#4ade80] shadow-[0_0_8px_#4ade80]" />
-               <span className="max-w-[140px] leading-tight">Valmiit sivut 2–4 viikossa pienille yrityksille</span>
+               <div className="h-2 w-2 rounded-full bg-[#4ade80] shadow-[0_0_10px_#4ade80] animate-pulse" />
+               <span className="max-w-[160px] leading-tight text-[11px] text-zinc-400">Valmiit sivut 2–4 viikossa pienille yrityksille</span>
             </div>
           </div>
         </div>
 
-        {/* --- RIGHT COLUMN: TECH GRID --- */}
-        <aside className="relative w-full max-w-[280px] lg:mt-0">
+        {/* --- RIGHT COLUMN: REMOVED TECH GRID --- */}
+        <aside className="relative w-full max-w-[280px] lg:mt-0 hidden">
            
            <div className="hero-card relative p-2 opacity-0">
               <div className="relative z-10 mb-6 text-center">

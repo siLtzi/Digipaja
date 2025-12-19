@@ -40,7 +40,7 @@ export default async function Services({ locale }: { locale: "fi" | "en" }) {
   const title = isFi ? cms.title_fi || m.title : m.title;
   const subtitle = isFi ? cms.subtitle_fi || m.subtitle : m.subtitle;
 
-  const services = isFi ? cms.services_fi || m.items : m.items;
+  const services = (isFi ? (cms.services_fi ?? m.items) : m.items) ?? [];
 
   return (
     <ServicesContent
