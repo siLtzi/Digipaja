@@ -1,6 +1,8 @@
 import { sanityClient } from "@/sanity/config";
 import { contactSettingsQuery } from "@/sanity/queries"; 
-import ContactContent from "./Content";
+import dynamic from "next/dynamic";
+
+const ContactContent = dynamic(() => import("./Content"));
 
 // --- TYPES FOR MESSAGES FILE (local JSON) ---
 type ContactMessages = {

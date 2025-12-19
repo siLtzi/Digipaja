@@ -116,30 +116,35 @@ function ContactInner({
       tl.from(eyebrow, {
         opacity: 0,
         y: 20,
-        duration: 0.6,
+        duration: 0.4,
         ease: "power3.out",
       })
       .from(title, {
         opacity: 0,
         y: 30,
-        duration: 0.7,
+        duration: 0.5,
         ease: "power3.out",
-      }, "-=0.4")
+      }, "-=0.3")
       .from(subtitle, {
         opacity: 0,
         y: 20,
-        duration: 0.6,
+        duration: 0.4,
         ease: "power2.out",
-      }, "-=0.5");
+      }, "-=0.3");
     }
 
-    tl.from([formRef.current, detailsRef.current], {
+    tl.from(formRef.current, {
+      x: -50,
       opacity: 0,
-      y: 40,
-      duration: 0.8,
-      stagger: 0.2,
+      duration: 0.4,
       ease: "power3.out",
-    }, "-=0.3");
+    }, "-=0.2")
+    .from(detailsRef.current, {
+      x: 50,
+      opacity: 0,
+      duration: 0.4,
+      ease: "power3.out",
+    }, "<0.1");
 
   }, []);
 

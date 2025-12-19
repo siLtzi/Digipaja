@@ -1,7 +1,10 @@
 // src/components/sections/References/index.tsx
 import { sanityClient } from "@/sanity/config";
 import { referencesQuery } from "@/sanity/queries";
-import ReferencesContent, { ReferenceProject } from "./Content";
+import type { ReferenceProject } from "./Content";
+import dynamic from "next/dynamic";
+
+const ReferencesContent = dynamic(() => import("./Content"));
 
 // 1. DEFINE TYPE FOR YOUR JSON FILE
 type MessagesFile = {

@@ -131,9 +131,9 @@ export default function ServicesContent({
         trigger: root,
         scroller,
         start: "top top",
-        end: () => `+=${window.innerHeight * panels.length * 1.5}`,
+        end: () => `+=${window.innerHeight * panels.length * 1.2}`,
         pin: true,
-        scrub: 1, // smoother than 0
+        scrub: 0.5, // smoother than 0
         invalidateOnRefresh: true,
         onUpdate: (self) => applyState(self.progress),
         onRefreshInit: () => {

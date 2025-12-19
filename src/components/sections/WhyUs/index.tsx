@@ -1,6 +1,8 @@
 import { sanityClient } from "@/sanity/config";
 import { whyUsSettingsQuery } from "@/sanity/queries";
-import WhyUsContent from "./Content";
+import dynamic from "next/dynamic";
+
+const WhyUsContent = dynamic(() => import("./Content"));
 
 type Card = {
   title_fi: string;

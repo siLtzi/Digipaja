@@ -1,6 +1,8 @@
 import { sanityClient } from "@/sanity/config";
 import { servicesSettingsQuery } from "@/sanity/queries";
-import ServicesContent from "./Content";
+import dynamic from "next/dynamic";
+
+const ServicesContent = dynamic(() => import("./Content"));
 
 type Service = {
   title: string;

@@ -1,6 +1,8 @@
 import { sanityClient } from "@/sanity/config";
 import { pricingSettingsQuery } from "@/sanity/queries";
-import PricingContent from "./Content";
+import dynamic from "next/dynamic";
+
+const PricingContent = dynamic(() => import("./Content"));
 
 type PricingTier = {
   name: string;

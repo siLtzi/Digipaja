@@ -1,6 +1,8 @@
 import { sanityClient } from "@/sanity/config";
 import { processSettingsQuery } from "@/sanity/queries";
-import ProcessContent from "./Content";
+import dynamic from "next/dynamic";
+
+const ProcessContent = dynamic(() => import("./Content"));
 
 type ProcessStep = {
   title_fi: string;

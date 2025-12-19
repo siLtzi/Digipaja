@@ -1,6 +1,8 @@
 import { sanityClient } from "@/sanity/config";
 import { aboutUsSettingsQuery } from "@/sanity/queries";
-import AboutUsContent from "./Content";
+import dynamic from "next/dynamic";
+
+const AboutUsContent = dynamic(() => import("./Content"));
 
 // --- TYPES FOR MESSAGES FILE ---
 type AboutUsMessages = {
