@@ -131,7 +131,7 @@ export default function ServicesContent({
         trigger: root,
         scroller,
         start: "top top",
-        end: () => `+=${window.innerHeight * panels.length * 1.2}`,
+        end: () => `+=${window.innerHeight * panels.length * 0.75}`,
         pin: true,
         scrub: 0.5, // smoother than 0
         invalidateOnRefresh: true,
