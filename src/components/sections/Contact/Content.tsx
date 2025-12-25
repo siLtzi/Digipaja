@@ -4,12 +4,6 @@ import { useEffect, useRef, forwardRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type ContactProps = {
   eyebrow: string;
@@ -90,73 +84,13 @@ function ContactInner({
   formCta,
 }: ContactProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const formRef = useRef<HTMLElement>(null);
-  const detailsRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const initialPackage = searchParams.get("package") || "";
-
-  useGSAP(() => {
-    if (!containerRef.current) return;
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 80%",
-        end: "top 20%",
-        toggleActions: "play none none none",
-      },
-    });
-
-    if (headerRef.current) {
-      const eyebrow = headerRef.current.querySelector(".eyebrow");
-      const title = headerRef.current.querySelector("h2");
-      const subtitle = headerRef.current.querySelector("p");
-
-      tl.from(eyebrow, {
-        opacity: 0,
-        y: 20,
-        duration: 0.4,
-        ease: "power3.out",
-      })
-      .from(title, {
-        opacity: 0,
-        y: 30,
-        duration: 0.5,
-        ease: "power3.out",
-      }, "-=0.3")
-      .from(subtitle, {
-        opacity: 0,
-        y: 20,
-        duration: 0.4,
-        ease: "power2.out",
-      }, "-=0.3");
-    }
-
-    tl.from(formRef.current, {
-      x: -50,
-      opacity: 0,
-      duration: 0.4,
-      ease: "power3.out",
-    }, "-=0.2")
-    .from(detailsRef.current, {
-      x: 50,
-      opacity: 0,
-      duration: 0.4,
-      ease: "power3.out",
-    }, "<0.1");
-
-  }, []);
 
   useEffect(() => {
     if (initialPackage && containerRef.current) {
       setTimeout(() => {
-        const smoother = ScrollSmoother.get();
-        if (smoother) {
-          smoother.scrollTo(containerRef.current, true, "center");
-        } else {
-          containerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
+        containerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 100);
     }
   }, [initialPackage]);
@@ -164,16 +98,17 @@ function ContactInner({
   return (
     <div ref={containerRef} className="w-full">
         
-        <div ref={headerRef} className="mb-20 flex flex-col items-center text-center">
+        <div className="mb-20 flex flex-col items-center text-center">
           <div className="eyebrow inline-flex items-center gap-3 mb-6">
             <span className="flex h-2 w-2 items-center justify-center">
               <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
             </span>
-            <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[11px] uppercase tracking-[0.2em] text-[#ff8a3c] flex items-center gap-2">
-              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
-              {eyebrow}
-              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
+            <span
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
+            >
+              [ {eyebrow} ]
             </span>
           </div>
           <h2 className="max-w-3xl text-balance text-4xl font-bold leading-none sm:text-5xl lg:text-[4rem]" style={{ fontFamily: "var(--font-goldman)" }}>
@@ -187,7 +122,6 @@ function ContactInner({
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_0.9fr] items-start">
             
             <ContactForm 
-                ref={formRef}
                 initialPackage={initialPackage}
                 formTitle={formTitle}
                 formSubtitle={formSubtitle}
@@ -198,7 +132,7 @@ function ContactInner({
                 formMessageLabel={formMessageLabel}
             />
             
-            <div ref={detailsRef} className="space-y-10 lg:pt-6">
+            <div className="space-y-10 lg:pt-6">
                 <div className="relative group overflow-hidden rounded-lg border border-[#ff8a3c]/20 bg-[#0a0a0a]/60 p-8 backdrop-blur-sm transition-all duration-500 hover:border-[#ff8a3c]/40 hover:bg-[#0f0f12]/80">
                   <div className="absolute top-0 left-0 h-4 w-4 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-6 group-hover:w-6" />
                   <div className="absolute bottom-0 right-0 h-4 w-4 border-r-2 border-b-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-6 group-hover:w-6" />
@@ -259,16 +193,7 @@ function ContactInner({
   );
 }
 
-const ContactForm = forwardRef<HTMLElement, {
-    initialPackage: string;
-    formTitle: string;
-    formSubtitle: string;
-    formCta: string;
-    formNameLabel: string;
-    formEmailLabel: string;
-    formCompanyLabel: string;
-    formMessageLabel: string;
-}>(function ContactForm({ 
+function ContactForm({ 
     initialPackage,
     formTitle, 
     formSubtitle, 
@@ -277,9 +202,18 @@ const ContactForm = forwardRef<HTMLElement, {
     formEmailLabel,
     formCompanyLabel,
     formMessageLabel,
-}, ref) {
+}: {
+    initialPackage: string;
+    formTitle: string;
+    formSubtitle: string;
+    formCta: string;
+    formNameLabel: string;
+    formEmailLabel: string;
+    formCompanyLabel: string;
+    formMessageLabel: string;
+}) {
     return (
-        <article ref={ref} className="group relative isolate flex flex-col justify-between rounded-lg border border-[#ff8a3c]/20 bg-[#0a0b10]/90 p-8 shadow-2xl backdrop-blur-sm transition-all duration-500 hover:border-[#ff8a3c]/40 hover:shadow-[0_0_60px_-10px_rgba(255,138,60,0.2)]">
+        <article className="group relative isolate flex flex-col justify-between rounded-lg border border-[#ff8a3c]/20 bg-[#0a0b10]/90 p-8 shadow-2xl backdrop-blur-sm transition-all duration-500 hover:border-[#ff8a3c]/40 hover:shadow-[0_0_60px_-10px_rgba(255,138,60,0.2)]">
             <div className="absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
             
             <header className="mb-8 space-y-3">
@@ -360,7 +294,7 @@ const ContactForm = forwardRef<HTMLElement, {
             <div className="absolute top-0 left-0 h-4 w-4 border-t-2 border-l-2 border-[#ff8a3c]/30 transition-all duration-500 group-hover:h-6 group-hover:w-6 group-hover:border-[#ff8a3c]/60" />
         </article>
     )
-});
+}
 
 function FormInput({ label, type, placeholder }: { label: string, type: string, placeholder: string }) {
     return (

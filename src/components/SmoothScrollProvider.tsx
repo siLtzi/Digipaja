@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useLayoutEffect, useRef } from "react";
+import { ReactNode, useLayoutEffect, useRef, useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -30,6 +30,9 @@ export default function SmoothScrollProvider({
 
     ScrollSmoother.get()?.kill();
 
+    // Force scroll to top on route change to prevent starting midway
+    window.scrollTo(0, 0);
+
     if (!wrapperRef.current || !contentRef.current) return;
 
     if (isMobile) {
@@ -44,6 +47,11 @@ export default function SmoothScrollProvider({
       effects: true,
       normalizeScroll: false,
     });
+
+    // Ensure we start at the top
+    if (!window.location.hash) {
+      smoother.scrollTop(0);
+    }
 
     // 🔥 FIX: ResizeObserver forces refresh if content height changes (e.g. form appearing)
     const resizeObserver = new ResizeObserver(() => {
@@ -63,6 +71,30 @@ export default function SmoothScrollProvider({
     const timer = setTimeout(() => ScrollTrigger.refresh(), 100);
     return () => clearTimeout(timer);
   }, [searchParams]);
+
+  // Handle hash navigation
+  useEffect(() => {
+    if (window.location.hash) {
+      const hash = window.location.hash;
+      
+      // Use a timeout to ensure everything is loaded and calculated
+      const t = setTimeout(() => {
+        const smoother = ScrollSmoother.get();
+        if (smoother) {
+          // Force a refresh to ensure accurate positions
+          ScrollTrigger.refresh();
+          
+          // Try to find the element
+          const target = document.querySelector(hash);
+          if (target) {
+            smoother.scrollTo(target, true, "top 120px");
+          }
+        }
+      }, 1000); // 1 second delay to be safe
+      
+      return () => clearTimeout(t);
+    }
+  }, [pathname, searchParams]);
 
   return (
     <div id="smooth-wrapper" ref={wrapperRef}>

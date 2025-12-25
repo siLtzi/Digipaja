@@ -142,13 +142,16 @@ export default function WhyUsContent({
         {/* === HEADER === */}
         <div className="mb-20 flex flex-col items-center text-center">
           {/* Eyebrow */}
-          <div className="reveal-text mb-6 inline-flex items-center gap-3 rounded-full border border-[#ff8a3c]/20 bg-[#ff8a3c]/5 px-4 py-1.5 backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff8a3c] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff8a3c]"></span>
+          <div className="reveal-text mb-6 inline-flex items-center gap-3">
+            <span className="flex h-2 w-2 items-center justify-center">
+              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
             </span>
-            <span className="text-[11px] uppercase tracking-[0.2em] text-[#ffcc80]">
-              {eyebrow}
+            <span
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
+            >
+              [ {eyebrow} ]
             </span>
           </div>
 

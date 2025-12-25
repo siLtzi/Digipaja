@@ -186,16 +186,16 @@ export default function ProcessContent({
           {/* === LEFT: STICKY HEADER === */}
           <div className="lg:col-span-5">
             <div className="sticky top-32 space-y-8">
-              <div className="process-eyebrow inline-flex items-center gap-3 rounded-full border border-[#ff8a3c]/20 bg-[#ff8a3c]/5 px-4 py-2 backdrop-blur-md">
+              <div className="process-eyebrow inline-flex items-center gap-3">
                 <span className="flex h-2 w-2 items-center justify-center">
                   <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
                 </span>
                 <span
                   style={{ fontFamily: "var(--font-goldman)" }}
-                  className="text-[11px] uppercase tracking-[0.2em] text-[#ffcc80]"
+                  className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
                 >
-                  {eyebrow}
+                  [ {eyebrow} ]
                 </span>
               </div>
 

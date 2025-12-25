@@ -5,6 +5,7 @@ export const servicesOverviewQuery = groq`
     eyebrow,
     title,
     subtitle,
+    "heroVideo": heroVideo.asset->url,
     services[]{
       slug,
       title,

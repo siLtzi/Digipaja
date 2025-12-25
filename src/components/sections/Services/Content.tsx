@@ -197,11 +197,9 @@ export default function ServicesContent({
             </span>
             <span
               style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-[11px] uppercase tracking-[0.2em] text-[#ff8a3c] flex items-center gap-2"
+              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
             >
-              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
-              {eyebrow}
-              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
+              [ {eyebrow} ]
             </span>
           </div>
 
@@ -268,7 +266,7 @@ export default function ServicesContent({
 
                   {it.slug ? (
                     <Link
-                      href={`/${locale}/services#${it.slug}`}
+                      href={`/${locale}/services`}
                       style={{ fontFamily: "var(--font-goldman)" }}
                       className="hidden shrink-0 lg:inline-flex items-center gap-2 border border-[#ff8a3c]/20 px-5 py-2.5 rounded-sm bg-[#ff8a3c]/5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#ff8a3c] hover:bg-[#ff8a3c]/10 hover:border-[#ff8a3c]/40 hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] transition-all duration-300 group/btn relative overflow-hidden"
                     >

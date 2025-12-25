@@ -73,11 +73,9 @@ export default function PricingContent({
             </span>
             <span
               style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-[11px] uppercase tracking-[0.2em] text-[#ff8a3c] flex items-center gap-2"
+              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
             >
-              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
-              {eyebrow}
-              <span className="h-[1px] w-3 bg-[#ff8a3c]" />
+              [ {eyebrow} ]
             </span>
           </div>
           <h2

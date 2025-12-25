@@ -76,7 +76,7 @@ export default function HeroContent({
     <section
       id="hero"
       ref={containerRef} // Scope for GSAP
-      className="relative min-h-[100vh] overflow-hidden bg-[#050609]"
+      className="relative h-[100svh] flex flex-col justify-center overflow-hidden bg-[#050609]"
     >
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
@@ -110,26 +110,23 @@ export default function HeroContent({
       />
 
       {/* === CONTENT LAYER === */}
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-16 px-6 pb-20 pt-32 lg:flex-row lg:items-center lg:justify-between lg:pb-32 lg:pt-40">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 pt-24 lg:flex-row lg:items-center lg:justify-between">
         
         {/* --- LEFT COLUMN: COPY --- */}
-        <div className="max-w-2xl space-y-10">
+        <div className="max-w-2xl space-y-8">
           
           {/* Eyebrow */}
-          <div className="animate-in inline-flex items-center gap-4 opacity-0">
-            <div className="inline-flex items-center rounded-full border border-white/10 bg-[#090b12]/80 px-4 py-1.5 backdrop-blur-md shadow-lg">
-              <span className="relative flex h-2 w-2 mr-3">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ff8a3c]"></span>
-              </span>
-              <span
-                style={{ fontFamily: "var(--font-goldman)" }}
-                className="text-[10px] uppercase tracking-[0.2em] text-zinc-300"
-              >
-                {eyebrow}
-              </span>
-            </div>
-            <div className="h-[2px] w-12 rounded-full bg-gradient-to-r from-[#ff8a3c] to-transparent opacity-50" />
+          <div className="animate-in inline-flex items-center gap-3 opacity-0">
+            <span className="flex h-2 w-2 items-center justify-center">
+              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
+            </span>
+            <span
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
+            >
+              [ {eyebrow} ]
+            </span>
           </div>
 
           {/* Title */}
@@ -194,8 +191,8 @@ export default function HeroContent({
                 className="group/tech relative"
                 style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className="relative flex h-10 w-10 items-center justify-center rounded-md border border-white/5 bg-white/[0.02] p-1.5 backdrop-blur-sm transition-all duration-500 ease-out group-hover/tech:scale-110 group-hover/tech:border-[#ff8a3c]/30 group-hover/tech:bg-[#ff8a3c]/5 group-hover/tech:shadow-[0_0_20px_rgba(255,138,60,0.2)]">
-                  <div className="relative h-full w-full opacity-70 transition-all duration-500 ease-out grayscale-[0.3] brightness-110 group-hover/tech:opacity-100 group-hover/tech:grayscale-0 group-hover/tech:brightness-100 group-hover/tech:drop-shadow-[0_0_12px_rgba(255,138,60,0.8)] group-hover/tech:scale-110">
+                <div className="relative flex h-12 w-12 items-center justify-center rounded-sm border border-white/5 bg-white/[0.02] p-2 backdrop-blur-sm transition-all duration-500 ease-out group-hover/tech:-translate-y-2 group-hover/tech:border-[#ff8a3c]/50 group-hover/tech:bg-[#ff8a3c]/10 group-hover/tech:shadow-[0_0_30px_rgba(255,138,60,0.3)]">
+                  <div className="relative h-full w-full opacity-60 transition-all duration-500 ease-out grayscale group-hover/tech:opacity-100 group-hover/tech:grayscale-0 group-hover/tech:scale-110">
                     <Image 
                       src={tech.src} 
                       alt={tech.name}
@@ -203,13 +200,15 @@ export default function HeroContent({
                       className="object-contain"
                     />
                   </div>
-                  {/* Corner accent */}
-                  <div className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-[#ff8a3c] opacity-0 transition-all duration-300 group-hover/tech:opacity-100 shadow-[0_0_6px_rgba(255,138,60,0.8)]" />
+                  
+                  {/* Glow effect behind */}
+                  <div className="absolute inset-0 -z-10 rounded-sm bg-[#ff8a3c] opacity-0 blur-xl transition-opacity duration-500 group-hover/tech:opacity-20" />
                 </div>
+                
                 {/* Tooltip */}
-                <div className="pointer-events-none absolute -top-11 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300 ease-out group-hover/tech:-top-12 group-hover/tech:opacity-100 z-20">
+                <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300 ease-out group-hover/tech:-top-14 group-hover/tech:opacity-100 z-20">
                   <div className="relative whitespace-nowrap border border-[#ff8a3c]/40 bg-[#090b12]/95 px-3 py-1.5 shadow-[0_0_15px_rgba(255,138,60,0.3)] rounded backdrop-blur-md">
-                    <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-wider text-[#ff8a3c]">
+                    <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-wider text-[#ff8a3c]">
                       {tech.name}
                     </span>
                     {/* Arrow */}

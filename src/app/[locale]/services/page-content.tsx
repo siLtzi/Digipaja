@@ -28,6 +28,7 @@ type ServicesOverviewProps = {
   eyebrow: string;
   title: string;
   subtitle: string;
+  heroVideo?: string;
   services: Service[];
   locale: string;
 };
@@ -97,7 +98,6 @@ function ScrollingImage({ src, alt }: { src: string; alt: string }) {
         className="object-cover"
         priority
       />
-      {/* Code overlay effect (optional) */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/10 pointer-events-none" />
     </div>
   );
@@ -156,7 +156,6 @@ function ServiceGallery({ images, title }: { images: string[]; title: string }) 
             className="object-cover object-top"
             priority={index === 0}
           />
-          {/* Gradient overlay for better text readability if needed, or just style */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>
       ))}
@@ -184,6 +183,7 @@ export default function ServicesOverviewContent({
   eyebrow,
   title,
   subtitle,
+  heroVideo,
   services,
   locale,
 }: ServicesOverviewProps) {
@@ -254,6 +254,8 @@ export default function ServicesOverviewContent({
 
     // Service cards with parallax and reveals
     const cards = containerRef.current.querySelectorAll(".service-card");
+    const mm = gsap.matchMedia();
+
     cards.forEach((card, index) => {
       const isEven = index % 2 === 0;
       
@@ -275,50 +277,68 @@ export default function ServicesOverviewContent({
       // Parallax on content and image
       const contentDiv = card.querySelector(".service-content");
       const imageDiv = card.querySelector(".service-image");
+      const imageInner = imageDiv?.querySelector(".service-image-inner");
       
-      if (contentDiv) {
-        gsap.to(contentDiv, {
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.5,
-          },
-          y: isEven ? -30 : 30,
-          ease: "none",
-        });
-      }
+      // DESKTOP: Complex parallax and side slides
+      mm.add("(min-width: 1024px)", () => {
+        if (contentDiv) {
+          gsap.to(contentDiv, {
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.5,
+            },
+            y: isEven ? -30 : 30,
+            ease: "none",
+          });
+        }
 
-      // Image slide in from left or right
-      if (imageDiv) {
-        const imageInner = imageDiv.querySelector(".service-image-inner");
-        
-        // Initial slide-in animation
-        gsap.from(imageInner || imageDiv, {
-          scrollTrigger: {
-            trigger: card,
-            start: "top 75%",
-            toggleActions: "play none none reverse",
-          },
-          x: isEven ? 100 : -100,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        });
+        if (imageDiv) {
+          // Initial slide-in animation
+          gsap.from(imageInner || imageDiv, {
+            scrollTrigger: {
+              trigger: card,
+              start: "top 75%",
+              toggleActions: "play none none reverse",
+            },
+            x: isEven ? 100 : -100,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+          });
 
-        // Parallax scroll effect
-        gsap.to(imageDiv, {
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 2,
-          },
-          y: isEven ? 30 : -30,
-          scale: 1.1,
-          ease: "none",
-        });
-      }
+          // Parallax scroll effect
+          gsap.to(imageDiv, {
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 2,
+            },
+            y: isEven ? 30 : -30,
+            scale: 1.1,
+            ease: "none",
+          });
+        }
+      });
+
+      // MOBILE: Simple fade up, no overlap-causing parallax
+      mm.add("(max-width: 1023px)", () => {
+        if (imageDiv) {
+          gsap.from(imageInner || imageDiv, {
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power2.out",
+          });
+        }
+      });
 
       // Icon animation
       const icon = card.querySelector(".service-icon");
@@ -352,7 +372,7 @@ export default function ServicesOverviewContent({
           rotateY: isEven ? 90 : -90,
           stagger: 0.015,
           duration: 0.6,
-          delay: 0.2, // Slight delay to let icon start first
+          delay: 0.2,
           ease: "power2.out",
         });
       }
@@ -471,7 +491,7 @@ export default function ServicesOverviewContent({
     <>
       <div ref={containerRef}>
       {/* Hero Section */}
-      <section className="hero-section relative overflow-hidden bg-[#050609] pt-32 pb-20 lg:pt-40 lg:pb-28 text-zinc-100">
+      <section className="hero-section relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-[#050609] pt-32 pb-20 lg:pt-40 lg:pb-28 text-zinc-100">
         {/* Multi-layer laser separator */}
         <div className="absolute top-0 left-0 right-0 z-30 flex justify-center overflow-hidden">
           <div className="h-0.5 w-3/4 max-w-4xl bg-linear-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_rgba(255,138,60,0.8),0_0_40px_rgba(255,138,60,0.4)]" />
@@ -481,15 +501,32 @@ export default function ServicesOverviewContent({
 
         {/* Tech grid background */}
         <div className="hero-bg absolute inset-0 z-0 pointer-events-none select-none">
-          <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_70%_60%_at_50%_0%,#000_60%,transparent_100%)]" />
-          
-          {/* Spotlight gradient */}
-          <div
-            className="absolute left-1/2 top-1/2 h-[900px] w-[1400px] -translate-x-1/2 -translate-y-1/2"
-            style={{
-              background: "radial-gradient(ellipse at center, rgba(255,138,60,0.12) 0%, rgba(255,138,60,0.04) 40%, transparent 70%)",
-            }}
-          />
+          {heroVideo ? (
+            <div className="absolute inset-0 z-0">
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="h-full w-full object-cover opacity-40"
+              >
+                <source src={heroVideo} type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-b from-[#050609]/80 via-[#050609]/50 to-[#050609]" />
+            </div>
+          ) : (
+            <>
+              <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_70%_60%_at_50%_0%,#000_60%,transparent_100%)]" />
+              
+              {/* Spotlight gradient */}
+              <div
+                className="absolute left-1/2 top-1/2 h-[900px] w-[1400px] -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  background: "radial-gradient(ellipse at center, rgba(255,138,60,0.12) 0%, rgba(255,138,60,0.04) 40%, transparent 70%)",
+                }}
+              />
+            </>
+          )}
         </div>
 
         <div ref={headerRef} className="relative z-10 mx-auto max-w-7xl px-6">
@@ -528,36 +565,64 @@ export default function ServicesOverviewContent({
             </p>
           </div>
         </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 z-20 -translate-x-1/2">
+          <button 
+            onClick={() => {
+              const el = document.getElementById('services-grid');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group p-2 cursor-pointer"
+            aria-label="Scroll down"
+          >
+            <svg 
+              className="h-10 w-10 text-zinc-500/50 transition-colors duration-300 group-hover:text-[#ff8a3c] animate-bounce" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
       </section>
 
       {/* Services Grid */}
-      <section className="relative overflow-hidden bg-[#0a0a0a] py-24 lg:py-32 text-zinc-100">
+      <section id="services-grid" className="relative overflow-hidden bg-[#0a0a0a] py-24 lg:py-32 text-zinc-100">
+        {/* Top Separator: Glowing Line */}
+        <div className="absolute top-0 left-0 right-0 z-20 flex justify-center">
+          <div className="h-[1px] w-full max-w-6xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent opacity-50 shadow-[0_0_20px_rgba(255,138,60,0.5)]" />
+          <div className="absolute top-0 h-[1px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-sm" />
+        </div>
+
         <div className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-size-[32px_32px] opacity-30" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-6">
-          <div className="space-y-16">{services.map((service, index) => (
-              <div
-                key={service.slug}
-                id={service.slug}
-                className={`service-card grid grid-cols-1 gap-12 lg:grid-cols-2 items-center ${
-                  index % 2 === 1 ? "lg:grid-flow-dense" : ""
-                }`}
-              >
+          <div className="flex flex-col gap-24 lg:gap-32">
+            {services.map((service, index) => (
+              <div key={service.slug} className="relative">
+                {/* Separator between items */}
+                {index > 0 && (
+                  <div className="absolute -top-12 lg:-top-16 left-0 right-0 flex items-center justify-center gap-4 opacity-50">
+                    <div className="h-px w-full max-w-xs bg-gradient-to-r from-transparent via-[#ff8a3c]/30 to-transparent" />
+                    <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#ff8a3c]/50 shadow-[0_0_10px_rgba(255,138,60,0.5)]" />
+                    <div className="h-px w-full max-w-xs bg-gradient-to-r from-transparent via-[#ff8a3c]/30 to-transparent" />
+                  </div>
+                )}
+
+                <div
+                  id={service.slug}
+                  className={`service-card grid grid-cols-1 gap-12 lg:grid-cols-2 items-center ${
+                    index % 2 === 1 ? "lg:grid-flow-dense" : ""
+                  }`}
+                >
                 {/* Content */}
                 <div className={`service-content ${index % 2 === 1 ? "lg:col-start-2" : ""}`}>
                   {/* Title with Icon */}
                   <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                    {/* Icon */}
-                    <div className="service-icon shrink-0 inline-flex h-24 w-24 items-center justify-center text-[#ff8a3c] transition-all duration-500 hover:scale-110">
-                      <div className="h-full w-full">
-                        <div className="h-full w-full">
-                          {service.icon && iconComponents[service.icon] ? iconComponents[service.icon] : iconComponents.code}
-                        </div>
-                      </div>
-                    </div>
-
                     {/* Title */}
                     <h2
                       className="text-3xl font-bold leading-none text-white sm:text-4xl lg:text-5xl"
@@ -658,6 +723,7 @@ export default function ServicesOverviewContent({
                   </div>
                 </div>
               </div>
+              </div>
             ))}
           </div>
         </div>
@@ -665,6 +731,12 @@ export default function ServicesOverviewContent({
 
       {/* CTA Section */}
       <section className="cta-section relative overflow-hidden bg-[#050609] py-20 lg:py-24 text-zinc-100">
+        {/* Top Separator: Glowing Line */}
+        <div className="absolute top-0 left-0 right-0 z-20 flex justify-center">
+          <div className="h-[1px] w-full max-w-6xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent opacity-50 shadow-[0_0_20px_rgba(255,138,60,0.5)]" />
+          <div className="absolute top-0 h-[1px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-sm" />
+        </div>
+
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,rgba(255,138,60,0.08),transparent_70%)]" />
         
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">

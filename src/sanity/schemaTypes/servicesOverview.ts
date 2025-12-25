@@ -34,6 +34,15 @@ export default defineType({
       type: "text",
     },
     {
+      name: "heroVideo",
+      title: "Hero Video",
+      type: "file",
+      options: {
+        accept: "video/mp4,video/webm",
+      },
+      description: "Background video for the hero section",
+    },
+    {
       name: "services",
       title: "Service Items",
       type: "array",

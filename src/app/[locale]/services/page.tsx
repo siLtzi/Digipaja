@@ -23,6 +23,7 @@ type ServicesOverviewData = {
   eyebrow: string;
   title: string;
   subtitle: string;
+  heroVideo?: string;
   services: ServiceData[];
 };
 
@@ -169,6 +170,7 @@ export default async function ServicesPage({ params }: Props) {
       eyebrow={(data?.eyebrow || fallbackData.eyebrow)}
       title={(data?.title || fallbackData.title)}
       subtitle={(data?.subtitle || fallbackData.subtitle)}
+      heroVideo={data?.heroVideo}
       services={(data?.services || fallbackData.services)}
       locale={locale}
     />
