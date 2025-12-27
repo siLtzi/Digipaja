@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import {
   DIGIPAJA_LOGO_VIEWBOX,
   DOT,
@@ -13,143 +12,74 @@ import {
   type LetterPaths,
 } from "@/components/dLogoPaths";
 
-// Register GSAP plugins
-gsap.registerPlugin(useGSAP, MotionPathPlugin);
+gsap.registerPlugin(useGSAP);
 
 export default function LogoMark() {
   const containerRef = useRef<SVGSVGElement>(null);
   const iconRef = useRef<SVGGElement>(null);
 
-  const hoverTl = useRef<gsap.core.Timeline | null>(null);
-
   // ================================
   //      ENTRANCE ANIMATION
   // ================================
   useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
     // Container set
     tl.set(containerRef.current, { autoAlpha: 1 });
 
-    // 1. Icon: Spin & Scale In
+    // 1. Fade in icon
     tl.fromTo(
       iconRef.current,
-      { scale: 0, rotation: -180, opacity: 0 },
-      { scale: 1, rotation: 0, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }
+      { opacity: 0, x: -10 },
+      { opacity: 1, x: 0, duration: 0.5 }
     );
 
-    // 2. Dot: Pop in with delay
+    // 2. Dot: Simple pop
     tl.fromTo(
       ".logo-dot",
       { scale: 0 },
-      { scale: 1, duration: 0.4, ease: "elastic.out(1, 0.5)" },
-      "-=0.4"
-    );
-
-    // 3. Wordmark: Staggered "Typewriter" style slam
-    tl.fromTo(
-      ".logo-part-wordmark path",
-      { y: -20, opacity: 0, scale: 0.5 },
-      { 
-        y: 0, 
-        opacity: 1, 
-        scale: 1, 
-        stagger: 0.04, 
-        duration: 0.5, 
-        ease: "back.out(2)" 
-      },
-      "-=0.6"
-    );
-
-    // 4. Oulu: Slide up smoothly
-    tl.fromTo(
-      ".logo-part-oulu path",
-      { y: 10, opacity: 0 },
-      { y: 0, opacity: 1, stagger: 0.02, duration: 0.5 },
+      { scale: 1, duration: 0.3, ease: "back.out(2)" },
       "-=0.3"
+    );
+
+    // 3. Wordmark: Fade in together
+    tl.fromTo(
+      ".logo-part-wordmark",
+      { opacity: 0, x: -5 },
+      { opacity: 1, x: 0, duration: 0.4 },
+      "-=0.2"
+    );
+
+    // 4. Oulu: Fade in
+    tl.fromTo(
+      ".logo-part-oulu",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.3 },
+      "-=0.2"
     );
   }, { scope: containerRef });
 
   // ================================
-  //     HOVER: ENERGIZED WAVE
+  //     HOVER: Simple glow effect
   // ================================
   const handleMouseEnter = () => {
-    if (hoverTl.current) {
-      hoverTl.current.kill();
-    }
-
-    const tl = gsap.timeline();
-    hoverTl.current = tl;
-
-    // 1. Icon: Energetic Pulse
-    tl.to(iconRef.current, {
-      scale: 1.1,
-      rotation: 5,
-      duration: 0.2,
-      ease: "back.out(2)",
-    })
-    .to(iconRef.current, {
-      scale: 1,
-      rotation: 0,
-      duration: 0.4,
-      ease: "elastic.out(1, 0.3)",
-    });
-
-    // 2. Dot: Flash & Jump
-    tl.to(".logo-dot", {
-      y: -5,
-      scale: 1.3,
-      fill: "#ffffff", // Flash white
-      duration: 0.15,
+    gsap.to(iconRef.current, {
+      scale: 1.05,
+      duration: 0.25,
       ease: "power2.out",
-    }, 0)
-    .to(".logo-dot", {
-      y: 0,
-      scale: 1,
-      fill: "url(#digipaja-gradient)", // Return to gradient (handled by CSS/SVG fill usually, but explicit here helps)
-      duration: 0.3,
-      ease: "bounce.out",
-    }, 0.15);
-
-    // 3. Wordmark: The "Mexican Wave"
-    tl.to(".logo-part-wordmark path", {
-      y: -3,
-      scale: 1.1,
-      duration: 0.15,
-      stagger: {
-        each: 0.03,
-        yoyo: true,
-        repeat: 1,
-      },
-      ease: "sine.inOut",
-    }, 0.05);
-
-    // 4. Oulu: Subtle tracking
-    tl.to(".logo-part-oulu path", {
-      x: 2,
-      opacity: 0.8,
-      stagger: 0.02,
-      duration: 0.2,
-      yoyo: true,
-      repeat: 1,
-    }, 0.1);
+    });
+    gsap.to(".logo-dot", {
+      scale: 1.2,
+      duration: 0.25,
+      ease: "power2.out",
+    });
   };
 
   const handleMouseLeave = () => {
-    // Let the hover animation finish naturally or just ensure we reset if interrupted mid-way
-    // But usually, for a "wave", it's better to let it play out or do a quick reset.
-    // We'll do a safe reset check.
-    
-    gsap.to([iconRef.current, ".logo-dot", ".logo-part-wordmark path", ".logo-part-oulu path"], {
-      x: 0,
-      y: 0,
+    gsap.to([iconRef.current, ".logo-dot"], {
       scale: 1,
-      rotation: 0,
-      opacity: 1, // Ensure opacity is back to 1
-      fill: "", // Clear explicit fill overrides to fallback to SVG attrs
-      duration: 0.4,
+      duration: 0.3,
       ease: "power2.out",
-      overwrite: "auto"
     });
   };
 

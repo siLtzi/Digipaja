@@ -17,17 +17,13 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <div className="min-h-screen bg-black text-zinc-50 overflow-x-hidden relative">
-        {/* Navbar is fixed (or sticky) → reserve space */}
+        {/* Navbar is fixed → floats over content, no padding needed */}
         <Navbar locale={locale} />
 
-        {/* If Navbar is fixed, you NEED padding-top here.
-            Adjust pt-20 to match your navbar height. */}
-        <div className="pt-20">
-          <SmoothScrollProvider>
-            <main>{children}</main>
-            <Footer locale={locale} />
-          </SmoothScrollProvider>
-        </div>
+        <SmoothScrollProvider>
+          <main>{children}</main>
+          <Footer locale={locale} />
+        </SmoothScrollProvider>
       </div>
     </NextIntlClientProvider>
   );

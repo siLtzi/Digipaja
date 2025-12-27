@@ -30,6 +30,16 @@ type ServicesProps = {
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+// Throttle helper for resize calculations
+let rafId: number | null = null;
+const throttleRAF = (fn: () => void) => {
+  if (rafId) return;
+  rafId = requestAnimationFrame(() => {
+    fn();
+    rafId = null;
+  });
+};
+
 export default function ServicesContent({
   eyebrow,
   title,
@@ -79,16 +89,17 @@ export default function ServicesContent({
         const MAX_H = Math.max(420, window.innerHeight - HEADER_H);
 
         panels.forEach((p, i) => {
+          // Use CSS classes for GPU layers instead of willChange
+          p.style.position = "absolute";
+          p.style.left = "0";
+          p.style.right = "0";
+          p.style.top = "0";
+          p.style.zIndex = String(services.length + 10 - i);
+          // Set initial transform and height
           gsap.set(p, {
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 0,
             y: 0,
             height: i === 0 ? MAX_H : COLLAPSED,
-            zIndex: services.length + 10 - i,
-            willChange: "transform, height",
-            transform: "translate3d(0,0,0)",
+            force3D: true, // Hardware acceleration without permanent willChange
           });
         });
 
@@ -97,34 +108,49 @@ export default function ServicesContent({
 
       let MAX_H = initLayout();
 
-      const setY = panels.map((p) => gsap.quickSetter(p, "y", "px"));
-      const setH = panels.map((p) => gsap.quickSetter(p, "height", "px"));
+      // Use quickTo for smoother animations with built-in interpolation
+      const tweenY = panels.map((p) => gsap.quickTo(p, "y", { duration: 0.15, ease: "none" }));
+      const tweenH = panels.map((p) => gsap.quickTo(p, "height", { duration: 0.15, ease: "none" }));
+
+      // Cache last progress to skip redundant updates
+      let lastProgress = -1;
+      let cachedMaxH = MAX_H;
 
       const applyState = (progress: number) => {
+        // Skip if progress hasn't changed meaningfully
+        if (Math.abs(progress - lastProgress) < 0.001) return;
+        lastProgress = progress;
+
         const n = panels.length;
         const t = progress * (n - 1);
         const active = clamp(Math.floor(t), 0, n - 1);
         const frac = t - active;
 
-        // keep MAX_H fresh if viewport/header changes
-        MAX_H = Math.max(420, window.innerHeight - (HEADER_H || 180));
-
         const heights = new Array(n).fill(COLLAPSED);
 
-        if (n === 1) heights[0] = MAX_H;
+        if (n === 1) heights[0] = cachedMaxH;
         else {
-          heights[active] = lerp(MAX_H, COLLAPSED, frac);
+          heights[active] = lerp(cachedMaxH, COLLAPSED, frac);
           if (active + 1 < n)
-            heights[active + 1] = lerp(COLLAPSED, MAX_H, frac);
+            heights[active + 1] = lerp(COLLAPSED, cachedMaxH, frac);
         }
 
         let y = 0;
         for (let i = 0; i < n; i++) {
-          setY[i](y);
-          setH[i](heights[i]);
+          tweenY[i](y);
+          tweenH[i](heights[i]);
           y += heights[i] - OVERLAP + GAP;
         }
       };
+
+      // Update cachedMaxH only on resize, not every frame
+      const handleResize = () => {
+        throttleRAF(() => {
+          HEADER_H = measureHeader();
+          cachedMaxH = Math.max(420, window.innerHeight - HEADER_H);
+        });
+      };
+      window.addEventListener("resize", handleResize, { passive: true });
 
       // Pin the ROOT section
       const st = ScrollTrigger.create({
@@ -133,12 +159,14 @@ export default function ServicesContent({
         start: "top top",
         end: () => `+=${window.innerHeight * panels.length * 0.75}`,
         pin: true,
-        scrub: 0.5, // smoother than 0
+        scrub: 0.8, // slightly higher for smoother feel
         invalidateOnRefresh: true,
+        fastScrollEnd: true, // Performance optimization
         onUpdate: (self) => applyState(self.progress),
         onRefreshInit: () => {
           // when ScrollTrigger refreshes (fonts/layout), re-measure + re-init
           MAX_H = initLayout();
+          cachedMaxH = MAX_H;
         },
         onRefresh: (self) => {
           applyState(self.progress);
@@ -149,6 +177,7 @@ export default function ServicesContent({
       ScrollTrigger.refresh();
 
       return () => {
+        window.removeEventListener("resize", handleResize);
         st.kill();
       };
     },
@@ -231,7 +260,7 @@ export default function ServicesContent({
             <div
               key={it.slug ?? `${it.title}-${idx}`}
               data-panel
-              className="group overflow-hidden border-t-2 border-[#ff8a3c]/20 shadow-2xl bg-gradient-to-b from-[#0a0a0a] to-[#050609] backdrop-blur-sm"
+              className="group overflow-hidden border-t-2 border-[#ff8a3c]/20 shadow-2xl bg-gradient-to-b from-[#0a0a0a] to-[#050609]"
             >
               {/* Orange spotlight glow */}
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_50%)] opacity-80" />

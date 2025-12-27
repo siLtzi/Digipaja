@@ -54,12 +54,18 @@ export default function SmoothScrollProvider({
     }
 
     // 🔥 FIX: ResizeObserver forces refresh if content height changes (e.g. form appearing)
+    // Debounce to prevent excessive refreshes during animations
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
     const resizeObserver = new ResizeObserver(() => {
-      ScrollTrigger.refresh();
+      if (resizeTimeout) clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 200); // debounce 200ms
     });
     resizeObserver.observe(contentRef.current);
 
     return () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout);
       resizeObserver.disconnect();
       smoother.kill();
       ScrollTrigger.getAll().forEach((st) => st.kill());

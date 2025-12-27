@@ -58,8 +58,14 @@ body {
   content: ""; position: absolute; inset: 0;
   background: var(--border-color);
   background-size: 300% 300%;
-  animation: move-bg7234 4s ease infinite;
+  background-position: 31% 0%;
   z-index: -2;
+  transition: background-position 0.3s ease;
+}
+
+/* Only animate on hover for better performance */
+.cyber-btn:where(:hover, :focus)::before {
+  animation: move-bg7234 4s ease infinite;
 }
 
 @keyframes move-bg7234 {

@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import {
   HammerStrike,
   type HammerStrikeHandle,
 } from "./HammerStrike";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrambleTextPlugin, ScrollSmoother);
+  gsap.registerPlugin(ScrollSmoother);
 }
 
 type PricingTier = {
@@ -148,19 +147,27 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
 
   const handleMouseEnter = contextSafe(() => {
     if (priceRef.current) {
-      // @ts-ignore
-      if (gsap.plugins.scrambleText) {
-        gsap.to(priceRef.current, {
-          duration: 0.5,
-          scrambleText: { text: originalPrice, chars: "0123456789" },
-        });
-      }
+      gsap.to(priceRef.current, {
+        textShadow: "0 0 20px rgba(255,138,60,0.8), 0 0 40px rgba(255,138,60,0.4)",
+        scale: 1.05,
+        duration: 0.3,
+        ease: "power2.out",
+      });
     }
 
     strikeRef.current?.show();
   });
 
   const handleMouseLeave = contextSafe(() => {
+    if (priceRef.current) {
+      gsap.to(priceRef.current, {
+        textShadow: "0 0 0px rgba(255,138,60,0)",
+        scale: 1,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    }
+
     strikeRef.current?.hide();
   });
 
