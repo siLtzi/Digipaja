@@ -38,8 +38,8 @@ export default function WhyUsContent({
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          // TRIGGER POINT: Starts when the top of the section is 75% down the screen
-          start: "top 75%", 
+          // TRIGGER POINT: Starts when the top of the section is 95% down the screen
+          start: "top 95%", 
           // REMOVED "scrub" to prevent cards from getting stuck halfway
           toggleActions: "play none none reverse",
         },
@@ -47,28 +47,34 @@ export default function WhyUsContent({
 
       // 1. LASER HORIZON (Fast Expansion)
       tl.fromTo(
-        ".laser-line",
+        ".laser-beam:nth-child(1)",
         { scaleX: 0, opacity: 0 },
-        {
-          scaleX: 1,
-          opacity: 1,
-          duration: 0.8,
-          ease: "power4.out",
-        }
+        { scaleX: 1, opacity: 0.4, duration: 0.3, ease: "power4.out" }
+      )
+      .fromTo(
+        ".laser-beam:nth-child(2)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.3, ease: "power4.out" },
+        "-=0.25"
+      )
+      .fromTo(
+        ".laser-beam:nth-child(3)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 0.9, duration: 0.3, ease: "power4.out" },
+        "-=0.25"
       )
         // 2. TEXT REVEAL (Snappy)
         .fromTo(
           ".reveal-text",
-          { y: 30, opacity: 0, filter: "blur(8px)" },
+          { y: 30, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            filter: "blur(0px)",
-            stagger: 0.05,
-            duration: 0.5,
+            stagger: 0.03,
+            duration: 0.25,
             ease: "power2.out",
           },
-          "-=0.6"
+          "-=0.2"
         )
         // 3. CARDS SEQUENCE (Strict Left->Right, Top->Bottom)
         .fromTo(
@@ -85,10 +91,10 @@ export default function WhyUsContent({
             opacity: 1,
             rotationX: 0, // Snaps flat
             scale: 1,
-            duration: 0.1,
-            // STAGGER: 0.1s delay between each card. 
+            duration: 0.08,
+            // STAGGER: 0.05s delay between each card. 
             // GSAP uses DOM order, so this naturally does Row 1 (L->R) then Row 2.
-            stagger: 0.1, 
+            stagger: 0.05, 
             ease: "back.out(1.5)", // The "Mechanical Snap" feel
             clearProps: "transform, opacity, filter", // Clean up after animation to prevent blurriness
           },
@@ -104,14 +110,11 @@ export default function WhyUsContent({
       id="why-us"
       className="relative overflow-hidden bg-[#050609] py-24 lg:py-32"
     >
-      {/* === TOP SEPARATOR (Burning Laser) === */}
-      <div className="absolute top-0 left-0 right-0 z-30 flex flex-col items-center justify-center">
-        {/* Layer 1: Haze */}
-        <div className="laser-line h-[4px] w-full max-w-6xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-40 will-change-transform" />
-        {/* Layer 2: Main Beam */}
-        <div className="laser-line absolute top-0 h-[2px] w-3/4 max-w-5xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] will-change-transform" />
-        {/* Layer 3: Core */}
-        <div className="laser-line absolute top-0 h-[1px] w-2/3 max-w-3xl bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent opacity-90 mix-blend-screen will-change-transform" />
+      {/* === TOP SEPARATOR: LASER HORIZON === */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
+        <div className="laser-beam h-[4px] w-full max-w-5xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[2px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[1px] w-2/3 max-w-3xl bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
       {/* === BACKGROUND LAYERS === */}

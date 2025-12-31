@@ -12,6 +12,13 @@ type MessagesFile = {
     eyebrow: string;
     title: string;
     subtitle: string;
+    viewCase: string;
+    viewCaseStudy: string;
+    scrollToExplore: string;
+    projectStatus: string;
+    online: string;
+    mobile: string;
+    visitWebsite: string;
   };
 };
 
@@ -22,27 +29,30 @@ const FALLBACK_PROJECTS: ReferenceProject[] = [
     category: "Web Application",
     description: "A comprehensive health tracking platform built for the Nordic market.",
     image: "/image/project1.jpg", 
-    mobileImage: "/image/project1.jpg", // <--- ADDED (Fallback uses desktop image)
+    mobileImage: "/image/project1.jpg",
     slug: "nordic-health",
     tags: ["Next.js", "TypeScript", "Tailwind"],
+    liveUrl: "https://nordic-health.fi",
   },
   {
     title: "Oulu Tech Hub",
     category: "Corporate Website",
     description: "Modern corporate identity and high-performance website.",
     image: "/image/project2.jpg", 
-    mobileImage: "/image/project2.jpg", // <--- ADDED
+    mobileImage: "/image/project2.jpg",
     slug: "oulu-tech",
     tags: ["React", "Sanity", "GSAP"],
+    liveUrl: "https://oulu-tech.fi",
   },
   {
     title: "Arctic Logistics",
     category: "SaaS Platform",
     description: "Logistics management system optimized for harsh environments.",
     image: "/image/project3.jpg",
-    mobileImage: "/image/project3.jpg", // <--- ADDED
+    mobileImage: "/image/project3.jpg",
     slug: "arctic-logistics",
     tags: ["Next.js", "Node.js"],
+    liveUrl: "https://arctic-logistics.fi",
   }
 ];
 
@@ -67,12 +77,9 @@ export default async function References({ locale }: { locale: "fi" | "en" }) {
         category: p.category || "Case Study",
         description: isFi ? p.description_fi : p.description_en || "",
         image: p.image || "/image/project-placeholder.jpg",
-        
-        // ⬇️ UPDATED: Map the mobile image. 
-        // Logic: Try mobileImage -> Try desktop image -> Fallback placeholder
         mobileImage: p.mobileImage || p.image || "/image/project-placeholder.jpg", 
-        
         tags: p.technologies || [],
+        liveUrl: p.liveUrl || null,
       }))
     : FALLBACK_PROJECTS;
 
@@ -95,6 +102,15 @@ export default async function References({ locale }: { locale: "fi" | "en" }) {
       title={title}
       subtitle={subtitle}
       projects={projects}
+      translations={{
+        viewCase: m.viewCase,
+        viewCaseStudy: m.viewCaseStudy,
+        scrollToExplore: m.scrollToExplore,
+        projectStatus: m.projectStatus,
+        online: m.online,
+        mobile: m.mobile,
+        visitWebsite: m.visitWebsite,
+      }}
     />
   );
 }

@@ -1,4 +1,4 @@
-import { defineType } from "sanity";
+import { defineType, defineField } from "sanity";
 
 export default defineType({
   name: "servicesOverview",
@@ -111,11 +111,69 @@ export default defineType({
               },
             },
             {
+              name: "video",
+              title: "Service Video",
+              type: "file",
+              options: {
+                accept: "video/mp4,video/webm",
+              },
+              description: "Video to display instead of image. If provided, takes priority over image.",
+            },
+            {
               name: "gallery",
               title: "Service Gallery",
               type: "array",
-              of: [{ type: "image", options: { hotspot: true } }],
-              description: "Multiple images for slideshow/animation. If provided, overrides single image.",
+              of: [
+                {
+                  type: "object",
+                  name: "galleryItem",
+                  title: "Gallery Item",
+                  fields: [
+                    defineField({
+                      name: "type",
+                      title: "Media Type",
+                      type: "string",
+                      options: {
+                        list: [
+                          { title: "Image", value: "image" },
+                          { title: "Video", value: "video" },
+                        ],
+                        layout: "radio",
+                      },
+                      initialValue: "image",
+                    }),
+                    defineField({
+                      name: "image",
+                      title: "Image",
+                      type: "image",
+                      options: { hotspot: true },
+                      hidden: ({ parent }) => parent?.type === "video",
+                    }),
+                    defineField({
+                      name: "video",
+                      title: "Video",
+                      type: "file",
+                      options: {
+                        accept: "video/mp4,video/webm",
+                      },
+                      hidden: ({ parent }) => parent?.type !== "video",
+                    }),
+                  ],
+                  preview: {
+                    select: {
+                      type: "type",
+                      media: "image",
+                    },
+                    prepare({ type, media }) {
+                      return {
+                        title: type === "video" ? "Video" : "Image",
+                        media: type !== "video" ? media : undefined,
+                      };
+                    },
+                  },
+                },
+              ],
+              description: "Multiple images/videos for slideshow. If provided, overrides single image/video.",
             },
           ],
         },

@@ -51,6 +51,13 @@ export default defineType({
       description: "Upload a screenshot taken at mobile width (e.g. iPhone 14 size). If left empty, Desktop image will be used.",
     }),
     defineField({
+      name: "liveUrl",
+      title: "Live Website URL",
+      type: "url",
+      description: "The URL to the live website (e.g. https://example.com). This will be displayed in the browser preview.",
+      validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
+    }),
+    defineField({
       name: "technologies",
       title: "Tech Stack",
       type: "array",

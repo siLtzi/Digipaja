@@ -43,8 +43,8 @@ export default function SmoothScrollProvider({
     const smoother = ScrollSmoother.create({
       wrapper: wrapperRef.current,
       content: contentRef.current,
-      smooth: 0.6,
-      effects: true,
+      smooth: 0.8, // Slightly higher for smoother feel
+      effects: false, // Disable data-speed effects - major performance gain
       normalizeScroll: false,
     });
 
@@ -60,7 +60,7 @@ export default function SmoothScrollProvider({
       if (resizeTimeout) clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 200); // debounce 200ms
+      }, 300); // debounce 300ms
     });
     resizeObserver.observe(contentRef.current);
 

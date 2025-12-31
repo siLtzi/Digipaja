@@ -12,6 +12,12 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText);
 }
 
+type GalleryItem = {
+  type: "image" | "video";
+  imageUrl?: string;
+  videoUrl?: string;
+};
+
 type Service = {
   slug: string;
   title: string;
@@ -21,7 +27,8 @@ type Service = {
   features?: string[];
   benefits?: string[];
   imageUrl?: string;
-  galleryUrls?: string[];
+  videoUrl?: string;
+  gallery?: GalleryItem[];
 };
 
 type ServicesOverviewProps = {
@@ -103,36 +110,36 @@ function ScrollingImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-function ServiceGallery({ images, title }: { images: string[]; title: string }) {
+function ServiceGallery({ items, title }: { items: GalleryItem[]; title: string }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (items.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setCurrentIndex((prev) => (prev + 1) % items.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [items.length]);
 
   useGSAP(() => {
     if (!containerRef.current) return;
     
-    // Animate the incoming image
-    const currentImage = containerRef.current.querySelector(`[data-index="${currentIndex}"]`);
-    if (currentImage) {
+    // Animate the incoming item
+    const currentItem = containerRef.current.querySelector(`[data-index="${currentIndex}"]`);
+    if (currentItem) {
       // Reset z-index for all
-      const allImages = containerRef.current.querySelectorAll('[data-index]');
-      allImages.forEach((img) => {
-        if (img !== currentImage) {
-          gsap.set(img, { zIndex: 0 });
+      const allItems = containerRef.current.querySelectorAll('[data-index]');
+      allItems.forEach((item) => {
+        if (item !== currentItem) {
+          gsap.set(item, { zIndex: 0 });
         }
       });
       
-      gsap.set(currentImage, { zIndex: 10, opacity: 0, scale: 1.1 });
-      gsap.to(currentImage, { 
+      gsap.set(currentItem, { zIndex: 10, opacity: 0, scale: 1.1 });
+      gsap.to(currentItem, { 
         opacity: 1, 
         scale: 1, 
         duration: 1.2, 
@@ -143,34 +150,45 @@ function ServiceGallery({ images, title }: { images: string[]; title: string }) 
 
   return (
     <div ref={containerRef} className="relative aspect-video w-full overflow-hidden rounded bg-black">
-      {images.map((src, index) => (
+      {items.map((item, index) => (
         <div 
-          key={src}
+          key={index}
           data-index={index}
           className="absolute inset-0"
         >
-          <Image
-            src={src}
-            alt={`${title} - Image ${index + 1}`}
-            fill
-            className="object-cover object-top"
-            priority={index === 0}
-          />
+          {item.type === "video" && item.videoUrl ? (
+            <video
+              src={item.videoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="h-full w-full object-cover object-top"
+            />
+          ) : item.imageUrl ? (
+            <Image
+              src={item.imageUrl}
+              alt={`${title} - Item ${index + 1}`}
+              fill
+              className="object-cover object-top"
+              priority={index === 0}
+            />
+          ) : null}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </div>
       ))}
       
       {/* Indicators */}
-      {images.length > 1 && (
+      {items.length > 1 && (
         <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
-          {images.map((_, index) => (
+          {items.map((item, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
               className={`h-1 rounded-full transition-all duration-300 ${
                 index === currentIndex ? "w-8 bg-[#ff8a3c]" : "w-2 bg-white/30 hover:bg-white/60"
               }`}
-              aria-label={`Go to image ${index + 1}`}
+              aria-label={`Go to ${item.type === "video" ? "video" : "image"} ${index + 1}`}
             />
           ))}
         </div>
@@ -698,8 +716,19 @@ export default function ServicesOverviewContent({
                       </span>
                     </div>
 
-                    {service.galleryUrls && service.galleryUrls.length > 0 ? (
-                      <ServiceGallery images={service.galleryUrls} title={service.title} />
+                    {service.gallery && service.gallery.length > 0 ? (
+                      <ServiceGallery items={service.gallery} title={service.title} />
+                    ) : service.videoUrl ? (
+                      <div className="relative aspect-video overflow-hidden rounded bg-black">
+                        <video
+                          src={service.videoUrl}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
                     ) : service.imageUrl ? (
                       service.icon === "technical" ? (
                         <ScrollingImage src={service.imageUrl} alt={service.title} />

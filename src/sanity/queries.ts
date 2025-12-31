@@ -15,7 +15,12 @@ export const servicesOverviewQuery = groq`
       features,
       benefits,
       "imageUrl": image.asset->url,
-      "galleryUrls": gallery[].asset->url
+      "videoUrl": video.asset->url,
+      "gallery": gallery[]{
+        type,
+        "imageUrl": image.asset->url,
+        "videoUrl": video.asset->url
+      }
     }
   }
 `;
@@ -87,7 +92,8 @@ export const referencesQuery = groq`{
     description_fi,
     description_en,
     "image": mainImage.asset->url,
-    "mobileImage": mobileImage.asset->url, // <--- ADD THIS LINE
+    "mobileImage": mobileImage.asset->url,
+    liveUrl,
     technologies
   }
 }`;

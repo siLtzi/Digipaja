@@ -74,7 +74,14 @@
   "references": {
     "eyebrow": "Referenssit",
     "title": "Valikoituja projekteja",
-    "subtitle": "Tutustu viimeisimpiin töihimme. Rakennamme digitaalisia kokemuksia, jotka tuottavat tulosta."
+    "subtitle": "Tutustu viimeisimpiin töihimme. Rakennamme digitaalisia kokemuksia, jotka tuottavat tulosta.",
+    "viewCase": "Katso projekti",
+    "viewCaseStudy": "Lisää tietoa",
+    "scrollToExplore": "Vieritä alas",
+    "projectStatus": "Projektin tila",
+    "online": "ONLINE",
+    "mobile": "Mobiili",
+    "visitWebsite": "Avaa sivusto"
   },
   "process": {
     "eyebrow": "Prosessi",

@@ -49,27 +49,45 @@ export default function ProcessContent({
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top 80%",
+          start: "top 95%",
           toggleActions: "play none none reverse",
         },
       });
 
+      // Laser beam animation
       tl.fromTo(
+        ".laser-beam:nth-child(1)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 0.4, duration: 0.3, ease: "expo.out" }
+      )
+      .fromTo(
+        ".laser-beam:nth-child(2)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.3, ease: "expo.out" },
+        "-=0.25"
+      )
+      .fromTo(
+        ".laser-beam:nth-child(3)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 0.9, duration: 0.3, ease: "expo.out" },
+        "-=0.25"
+      )
+      .fromTo(
         ".process-eyebrow",
         { y: 20, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }
+        { y: 0, opacity: 1, scale: 1, duration: 0.25, ease: "power3.out" }
       )
       .fromTo(
         ".process-title",
-        { y: 30, opacity: 0, filter: "blur(8px)" },
-        { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.6, ease: "power3.out" },
-        "-=0.3"
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" },
+        "-=0.15"
       )
       .fromTo(
         ".process-subtitle",
         { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
-        "-=0.4"
+        { y: 0, opacity: 1, duration: 0.25, ease: "power2.out" },
+        "-=0.2"
       );
 
       // 1. LINE FILL ANIMATION - Smoother
@@ -111,9 +129,9 @@ export default function ProcessContent({
             });
             // Card activates
             gsap.to(card, {
-              borderColor: "rgba(255,138,60,0.3)",
-              backgroundColor: "rgba(15,15,18,0.8)",
-              duration: 0.6,
+              borderColor: "rgba(255,138,60,0.2)",
+              scale: 1.02,
+              duration: 0.4,
               ease: "power2.out"
             });
             // Text fully visible
@@ -145,8 +163,8 @@ export default function ProcessContent({
             // Reset card
             gsap.to(card, {
               borderColor: "rgba(255,255,255,0.05)",
-              backgroundColor: "rgba(10,10,10,0.5)",
-              duration: 0.4,
+              scale: 1,
+              duration: 0.3,
             });
             // Dim text
             gsap.to(text, { opacity: 0.4, x: 0, duration: 0.4 });
@@ -175,6 +193,13 @@ export default function ProcessContent({
       id="process"
       className="relative overflow-hidden bg-[#050609] py-24 lg:py-32"
     >
+      {/* === TOP SEPARATOR: LASER HORIZON === */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
+        <div className="laser-beam h-[4px] w-full max-w-5xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[2px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[1px] w-2/3 max-w-3xl bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
+      </div>
+
       {/* Background Decor */}
       <div className="absolute inset-0 z-0 pointer-events-none">
          <div className="absolute right-0 top-0 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/2 rounded-full bg-[#ff8a3c]/5 blur-[100px]" />
@@ -244,14 +269,19 @@ export default function ProcessContent({
                     </div>
 
                     {/* Card Container with hover effect */}
-                    <div className="step-card relative rounded-lg border border-white/5 bg-[#0a0a0a]/50 p-6 sm:p-8 backdrop-blur-sm transition-all duration-700 hover:border-[#ff8a3c]/20 hover:bg-[#0f0f12]/80 hover:shadow-[0_0_30px_-10px_rgba(255,138,60,0.2)] hover:-translate-y-1">
+                    <div className="step-card relative rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent p-6 sm:p-8 transition-all duration-300 hover:border-[#ff8a3c]/20 hover:scale-[1.02]">
                       
-                      {/* Hover gradient overlay */}
-                      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#ff8a3c]/5 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100 pointer-events-none" />
+                      {/* Hover glow effect */}
+                      <div className="absolute inset-0 rounded-lg bg-[radial-gradient(circle_at_center,rgba(255,138,60,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                       
-                      {/* Corner accents */}
-                      <div className="absolute top-0 left-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c]/0 transition-all duration-500 group-hover:border-[#ff8a3c]/50 rounded-tl" />
-                      <div className="absolute bottom-0 right-0 h-3 w-3 border-r-2 border-b-2 border-[#ff8a3c]/0 transition-all duration-500 group-hover:border-[#ff8a3c]/50 rounded-br" />
+                      {/* Top border glow */}
+                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      
+                      {/* Corner accent - matching Services style */}
+                      <div className="absolute bottom-0 right-0 w-12 h-12 overflow-hidden pointer-events-none">
+                        <div className="absolute bottom-0 right-0 w-[1px] h-6 bg-gradient-to-t from-[#ff8a3c]/40 to-transparent transition-all duration-300 group-hover:h-10 group-hover:from-[#ff8a3c]/60" />
+                        <div className="absolute bottom-0 right-0 w-6 h-[1px] bg-gradient-to-l from-[#ff8a3c]/40 to-transparent transition-all duration-300 group-hover:w-10 group-hover:from-[#ff8a3c]/60" />
+                      </div>
                       
                       <div className="step-text relative opacity-40 transition-all duration-500">
                         

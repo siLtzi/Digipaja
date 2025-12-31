@@ -71,7 +71,14 @@
   "references": {
     "eyebrow": "References",
     "title": "Selected Projects",
-    "subtitle": "Check out our latest work. We build digital experiences that deliver results."
+    "subtitle": "Check out our latest work. We build digital experiences that deliver results.",
+    "viewCase": "View Case",
+    "viewCaseStudy": "View Case Study",
+    "scrollToExplore": "Scroll to Explore",
+    "projectStatus": "Project Status",
+    "online": "ONLINE",
+    "mobile": "Mobile",
+    "visitWebsite": "Visit Website"
   },
   "process": {
     "eyebrow": "Process",

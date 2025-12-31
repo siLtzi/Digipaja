@@ -4,6 +4,13 @@ import { useEffect, useRef, forwardRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 type ContactProps = {
   eyebrow: string;
@@ -24,15 +31,52 @@ type ContactProps = {
 };
 
 export default function ContactContent(props: ContactProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 95%",
+          toggleActions: "play none none reverse",
+        },
+      });
+
+      tl.fromTo(
+        ".laser-beam:nth-child(1)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 0.4, duration: 0.3, ease: "expo.out" }
+      )
+      .fromTo(
+        ".laser-beam:nth-child(2)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.3, ease: "expo.out" },
+        "-=0.25"
+      )
+      .fromTo(
+        ".laser-beam:nth-child(3)",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 0.9, duration: 0.3, ease: "expo.out" },
+        "-=0.25"
+      );
+    },
+    { scope: sectionRef }
+  );
+
   return (
     <section
+      ref={sectionRef}
       id="contact"
       className="relative overflow-hidden bg-[#050609] py-24 lg:py-32 text-zinc-100"
     >
-      <div className="absolute top-0 left-0 right-0 z-30 flex justify-center overflow-hidden">
-        <div className="h-[2px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_rgba(255,138,60,0.8),0_0_40px_rgba(255,138,60,0.4)]" />
-        <div className="absolute top-0 h-[3px] w-1/2 max-w-2xl bg-gradient-to-r from-transparent via-white to-transparent blur-[2px] opacity-70" />
-        <div className="absolute top-0 h-[1px] w-full bg-gradient-to-r from-[#ff8a3c]/0 via-[#ff8a3c]/40 to-[#ff8a3c]/0" />
+      {/* === TOP SEPARATOR: LASER HORIZON === */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
+        <div className="laser-beam h-[4px] w-full max-w-5xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[2px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[1px] w-2/3 max-w-3xl bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
