@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -10,12 +11,21 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+type GalleryItem = {
+  type: "image" | "video";
+  imageUrl?: string;
+  videoUrl?: string;
+};
+
 type Service = {
   title: string;
   body: string;
   slug?: string;
   description?: string;
   features?: string[];
+  imageUrl?: string;
+  videoUrl?: string;
+  gallery?: GalleryItem[];
 };
 
 type ServicesProps = {
@@ -207,103 +217,12 @@ export default function ServicesContent({
         {/* Services Grid */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
           {services.map((service, idx) => (
-            <div
+            <ServiceCard 
               key={service.slug ?? `${service.title}-${idx}`}
-              data-service-card={idx}
-              className="group relative rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent p-6 lg:p-8 cursor-pointer transition-all duration-300 hover:border-[#ff8a3c]/20 hover:scale-[1.02]"
-            >
-              {/* Hover glow effect - CSS transition instead of GSAP */}
-              <div
-                className="absolute inset-0 rounded-lg bg-[radial-gradient(circle_at_center,rgba(255,138,60,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-              />
-
-              {/* Top border */}
-              <div
-                className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              />
-
-              {/* Content */}
-              <div className="relative z-10">
-                {/* Number & Title Row */}
-                <div className="flex items-start gap-3 sm:gap-4 mb-4">
-                  <span
-                    data-card-number
-                    data-number
-                    style={{ fontFamily: "var(--font-goldman)" }}
-                    className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ff8a3c]/15 leading-none select-none transition-colors duration-300 shrink-0"
-                  >
-                    {String(idx + 1).padStart(2, "0")}
-                  </span>
-                  <div className="flex-1 pt-2 min-w-0">
-                    <h3
-                      style={{ fontFamily: "var(--font-goldman)" }}
-                      className="text-base sm:text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300"
-                    >
-                      {service.title.split(' ').map((word, i, arr) => (
-                        <span key={i}>
-                          {word}
-                          {i < arr.length - 1 && (
-                            <><span className="hidden sm:inline"> </span><br className="sm:hidden" /></>
-                          )}
-                        </span>
-                      ))}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-sm lg:text-base text-zinc-400 leading-relaxed mb-6">
-                  {service.body}
-                </p>
-
-                {/* Features (if any) */}
-                {service.features && service.features.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {service.features.slice(0, 4).map((feature, i) => (
-                      <span
-                        key={`${feature}-${i}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium text-zinc-300 bg-white/5 rounded-full border border-white/5"
-                      >
-                        <span className="w-1 h-1 rounded-full bg-[#ff8a3c]" />
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* CTA */}
-                {service.slug && (
-                  <Link
-                    href={`/${locale}/services`}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#ff8a3c] group/link"
-                  >
-                    <span className="relative">
-                      Lue lisää
-                      <span className="absolute bottom-0 left-0 w-0 h-px bg-[#ff8a3c] transition-all duration-300 group-hover/link:w-full" />
-                    </span>
-                    <svg
-                      className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </Link>
-                )}
-              </div>
-
-              {/* Corner accent */}
-              <div className="absolute bottom-0 right-0 w-12 h-12 overflow-hidden pointer-events-none">
-                <div className="absolute bottom-0 right-0 w-[1px] h-6 bg-gradient-to-t from-[#ff8a3c]/40 to-transparent transition-all duration-300 group-hover:h-10 group-hover:from-[#ff8a3c]/60" />
-                <div className="absolute bottom-0 right-0 w-6 h-[1px] bg-gradient-to-l from-[#ff8a3c]/40 to-transparent transition-all duration-300 group-hover:w-10 group-hover:from-[#ff8a3c]/60" />
-              </div>
-            </div>
+              service={service}
+              idx={idx}
+              locale={locale}
+            />
           ))}
         </div>
 
@@ -318,7 +237,7 @@ export default function ServicesContent({
             <span className="absolute inset-0 bg-gradient-to-r from-[#ff8a3c]/20 via-[#ff8a3c]/10 to-[#ff8a3c]/20 border border-[#ff8a3c]/30 rounded-sm" />
             <span className="absolute inset-0 bg-gradient-to-r from-[#ff8a3c]/0 via-[#ff8a3c]/20 to-[#ff8a3c]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
 
-            <span className="relative z-10">Katso kaikki palvelut</span>
+            <span className="relative z-10">{locale === "fi" ? "Katso kaikki palvelut" : "View all services"}</span>
             <svg
               className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
               fill="none"
@@ -339,5 +258,202 @@ export default function ServicesContent({
       {/* Bottom gradient separator */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     </section>
+  );
+}
+
+// Separate component for service card with gallery support
+function ServiceCard({ service, idx, locale }: { service: Service; idx: number; locale: string }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const cardRef = useRef<HTMLAnchorElement>(null);
+  
+  // Get all media from gallery or single image/video - more permissive matching
+  const allMedia = React.useMemo(() => {
+    const media: { type: "image" | "video"; url: string }[] = [];
+    
+    // Add gallery items first (handle both image and video types)
+    if (service.gallery && Array.isArray(service.gallery) && service.gallery.length > 0) {
+      service.gallery.forEach(item => {
+        // Check for image
+        if (item.imageUrl) {
+          media.push({ type: "image", url: item.imageUrl });
+        }
+        // Check for video
+        if (item.videoUrl) {
+          media.push({ type: "video", url: item.videoUrl });
+        }
+      });
+    }
+    
+    // Add main image if exists and not already included
+    if (service.imageUrl && !media.some(m => m.url === service.imageUrl)) {
+      media.unshift({ type: "image", url: service.imageUrl });
+    }
+    
+    // Add main video if exists and not already included
+    if (service.videoUrl && !media.some(m => m.url === service.videoUrl)) {
+      media.unshift({ type: "video", url: service.videoUrl });
+    }
+    
+    return media;
+  }, [service.gallery, service.imageUrl, service.videoUrl]);
+  
+  // Filter just images for cycling
+  const allImages = allMedia.filter(m => m.type === "image").map(m => m.url);
+  
+  // Cycle through images for gallery
+  useEffect(() => {
+    if (allImages.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => (prev + 1) % allImages.length);
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, [allImages.length]);
+
+  // Special animation for "tekninen-toteutus" - scrolling code effect
+  const isCodeCard = service.slug === "tekninen-toteutus";
+  
+  // Check if has media - use allMedia array which includes gallery items
+  const hasVideo = !!service.videoUrl || allMedia.some(m => m.type === "video");
+  const firstVideo = service.videoUrl || allMedia.find(m => m.type === "video")?.url;
+  const hasImages = allImages.length > 0;
+  const hasMedia = hasVideo || hasImages;
+
+  return (
+    <Link
+      ref={cardRef}
+      href={`/${locale}/services`}
+      data-service-card={idx}
+      className="group relative block rounded-lg rounded-br-none border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent p-6 lg:p-8 transition-all duration-500 hover:border-[#ff8a3c]/20 overflow-hidden"
+    >
+      {/* Full card background media */}
+      {hasMedia && (
+        <div className="absolute inset-0 z-0">
+          {hasVideo && firstVideo ? (
+            <video
+              src={firstVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-500"
+            />
+          ) : isCodeCard && allImages[0] ? (
+            // Special 3D scrolling animation for code image - "gliding over code"
+            <div className="absolute inset-0 overflow-hidden" style={{ perspective: "600px" }}>
+              <div 
+                className="absolute inset-x-[-30%] h-[400%] animate-scroll-code"
+                style={{
+                  transform: "rotateX(55deg)",
+                  transformOrigin: "center 15%",
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                <Image
+                  src={allImages[0]}
+                  alt={service.title}
+                  fill
+                  className="object-cover object-top transition-opacity duration-500"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              {/* Light vignette only at very edges for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-b from-[#050609]/40 via-transparent to-[#050609]/60" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#050609]/30 via-transparent to-[#050609]/30" />
+            </div>
+          ) : (
+            // Regular image or gallery
+            <>
+              {allImages.map((img, i) => (
+                <Image
+                  key={img}
+                  src={img}
+                  alt={service.title}
+                  fill
+                  className={`object-cover transition-all duration-1000 ${
+                    i === currentImageIndex 
+                      ? "opacity-40 group-hover:opacity-55" 
+                      : "opacity-0"
+                  }`}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority={i === 0 && idx < 2}
+                />
+              ))}
+            </>
+          )}
+          
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050609] via-[#050609]/70 to-[#050609]/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050609]/30 to-transparent" />
+        </div>
+      )}
+
+      {/* Hover glow effect from corner */}
+      <div className="absolute inset-0 rounded-lg rounded-br-none bg-[radial-gradient(ellipse_at_bottom_right,rgba(255,138,60,0.12)_0%,transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-[1]" />
+
+      {/* Top border accent */}
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#ff8a3c]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[1]" />
+
+      {/* Content */}
+      <div className="relative z-10">
+        {/* Number & Title Row */}
+        <div className="flex items-start gap-3 sm:gap-4 mb-4">
+          <span
+            data-card-number
+            style={{ fontFamily: "var(--font-goldman)" }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ff8a3c]/15 leading-none select-none transition-colors duration-300 shrink-0"
+          >
+            {String(idx + 1).padStart(2, "0")}
+          </span>
+          
+          <div className="flex-1 pt-2 min-w-0">
+            <h3
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="text-base sm:text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300"
+            >
+              {service.title.split(' ').map((word, i, arr) => (
+                <span key={i}>
+                  {word}
+                  {i < arr.length - 1 && (
+                    <><span className="hidden sm:inline"> </span><br className="sm:hidden" /></>
+                  )}
+                </span>
+              ))}
+            </h3>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p className="text-sm lg:text-base text-zinc-400 leading-relaxed mb-4">
+          {service.body}
+        </p>
+
+      </div>
+
+      {/* Gallery dots indicator */}
+      {allImages.length > 1 && !isCodeCard && (
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          {allImages.map((_, i) => (
+            <div 
+              key={i}
+              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                i === currentImageIndex 
+                  ? "bg-[#ff8a3c] w-4" 
+                  : "bg-white/30"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Corner arrow indicator - sharp corner lights up on hover */}
+      <div className="absolute bottom-0 right-0 w-20 h-20 overflow-visible pointer-events-none z-[2]">
+        {/* Vertical line */}
+        <div className="absolute bottom-0 right-0 w-[2px] h-6 bg-gradient-to-t from-[#ff8a3c]/20 to-transparent transition-all duration-500 group-hover:h-16 group-hover:from-[#ff8a3c] group-hover:shadow-[0_0_12px_rgba(255,138,60,0.8)]" />
+        {/* Horizontal line */}
+        <div className="absolute bottom-0 right-0 h-[2px] w-6 bg-gradient-to-l from-[#ff8a3c]/20 to-transparent transition-all duration-500 group-hover:w-16 group-hover:from-[#ff8a3c] group-hover:shadow-[0_0_12px_rgba(255,138,60,0.8)]" />
+      </div>
+    </Link>
   );
 }

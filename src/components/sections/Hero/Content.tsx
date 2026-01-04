@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -46,6 +46,9 @@ export default function HeroContent({
   // Refs for animation targets
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // State for mobile tech icon selection
+  const [selectedTech, setSelectedTech] = useState<number | null>(null);
+  
   // === 1. MAIN ENTRANCE ANIMATION ===
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -76,7 +79,7 @@ export default function HeroContent({
     <section
       id="hero"
       ref={containerRef} // Scope for GSAP
-      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-[#050609] pt-24 md:pt-0"
+      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-[#050609] pt-24 lg:pt-28"
     >
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
@@ -180,47 +183,83 @@ export default function HeroContent({
           </div>
 
           {/* Tech Stack */}
-          <div className="animate-in flex flex-wrap items-center gap-x-5 gap-y-5 pt-8 opacity-0">
-            <div className="flex items-center gap-4">
+          <div className="animate-in flex flex-col gap-4 pt-8 opacity-0 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-5">
+            {/* Label - hidden on mobile, shown on sm+ */}
+            <div className="hidden sm:flex items-center gap-4">
               <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-[0.25em] text-[#ff8a3c]/70">Tech Stack</span>
               <div className="h-5 w-px bg-gradient-to-b from-[#ff8a3c]/50 to-transparent" />
             </div>
-            {STACK_ICONS.map((tech, idx) => (
-              <div 
-                key={tech.name} 
-                className="group/tech relative"
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                <div className="relative flex h-12 w-12 items-center justify-center rounded-sm border border-white/5 bg-white/[0.02] p-2 backdrop-blur-sm transition-all duration-500 ease-out group-hover/tech:-translate-y-2 group-hover/tech:border-[#ff8a3c]/50 group-hover/tech:bg-[#ff8a3c]/10 group-hover/tech:shadow-[0_0_30px_rgba(255,138,60,0.3)]">
-                  <div className="relative h-full w-full opacity-60 transition-all duration-500 ease-out grayscale group-hover/tech:opacity-100 group-hover/tech:grayscale-0 group-hover/tech:scale-110">
-                    <Image 
-                      src={tech.src} 
-                      alt={tech.name}
-                      fill
-                      className="object-contain"
-                    />
+            
+            {/* Icons grid on mobile, flex row on desktop */}
+            <div className="flex items-center gap-2 sm:contents">
+              {/* Mobile label */}
+              <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-[0.2em] text-[#ff8a3c]/70 sm:hidden">Stack</span>
+              <div className="h-4 w-px bg-[#ff8a3c]/30 sm:hidden" />
+              
+              {STACK_ICONS.map((tech, idx) => (
+                <div 
+                  key={tech.name} 
+                  className="group/tech relative"
+                  style={{ animationDelay: `${idx * 0.1}s` }}
+                >
+                  {/* Clickable icon */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTech(selectedTech === idx ? null : idx)}
+                    className={`relative flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-sm border bg-white/[0.02] p-1.5 sm:p-2 backdrop-blur-sm transition-all duration-300 ease-out cursor-pointer sm:group-hover/tech:-translate-y-2 sm:group-hover/tech:border-[#ff8a3c]/50 sm:group-hover/tech:bg-[#ff8a3c]/10 sm:group-hover/tech:shadow-[0_0_30px_rgba(255,138,60,0.3)] ${
+                      selectedTech === idx 
+                        ? 'border-[#ff8a3c] bg-[#ff8a3c]/10 scale-125 z-30 shadow-[0_0_25px_rgba(255,138,60,0.4)]' 
+                        : 'border-white/5'
+                    }`}
+                  >
+                    <div className={`relative h-full w-full transition-all duration-300 ease-out sm:group-hover/tech:opacity-100 sm:group-hover/tech:grayscale-0 sm:group-hover/tech:scale-110 ${
+                      selectedTech === idx 
+                        ? 'opacity-100 grayscale-0' 
+                        : 'opacity-50 sm:opacity-60 grayscale'
+                    }`}>
+                      <Image 
+                        src={tech.src} 
+                        alt={tech.name}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                    
+                    {/* Glow effect behind */}
+                    <div className={`absolute inset-0 -z-10 rounded-sm bg-[#ff8a3c] blur-xl transition-opacity duration-300 sm:group-hover/tech:opacity-20 ${
+                      selectedTech === idx ? 'opacity-30' : 'opacity-0'
+                    }`} />
+                  </button>
+                  
+                  {/* Mobile tooltip - shows on tap */}
+                  <div 
+                    className={`sm:hidden pointer-events-none absolute left-1/2 -translate-x-1/2 z-40 transition-all duration-300 ease-out ${
+                      selectedTech === idx 
+                        ? '-top-14 opacity-100' 
+                        : '-top-10 opacity-0'
+                    }`}
+                  >
+                    <div className="relative whitespace-nowrap border border-[#ff8a3c] bg-[#090b12]/95 px-3 py-1.5 shadow-[0_0_20px_rgba(255,138,60,0.4)] rounded backdrop-blur-md">
+                      <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[11px] uppercase tracking-wider text-[#ff8a3c]">
+                        {tech.name}
+                      </span>
+                      {/* Arrow */}
+                      <div className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 border-b border-r border-[#ff8a3c] bg-[#090b12]/95" />
+                    </div>
                   </div>
                   
-                  {/* Glow effect behind */}
-                  <div className="absolute inset-0 -z-10 rounded-sm bg-[#ff8a3c] opacity-0 blur-xl transition-opacity duration-500 group-hover/tech:opacity-20" />
-                </div>
-                
-                {/* Tooltip */}
-                <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300 ease-out group-hover/tech:-top-14 group-hover/tech:opacity-100 z-20">
-                  <div className="relative whitespace-nowrap border border-[#ff8a3c]/40 bg-[#090b12]/95 px-3 py-1.5 shadow-[0_0_15px_rgba(255,138,60,0.3)] rounded backdrop-blur-md">
-                    <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-wider text-[#ff8a3c]">
-                      {tech.name}
-                    </span>
-                    {/* Arrow */}
-                    <div className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 border-b border-r border-[#ff8a3c]/40 bg-[#090b12]/95" />
+                  {/* Desktop Tooltip - only on hover */}
+                  <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300 ease-out sm:group-hover/tech:-top-14 sm:group-hover/tech:opacity-100 z-20 hidden sm:block">
+                    <div className="relative whitespace-nowrap border border-[#ff8a3c]/40 bg-[#090b12]/95 px-3 py-1.5 shadow-[0_0_15px_rgba(255,138,60,0.3)] rounded backdrop-blur-md">
+                      <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-wider text-[#ff8a3c]">
+                        {tech.name}
+                      </span>
+                      {/* Arrow */}
+                      <div className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 border-b border-r border-[#ff8a3c]/40 bg-[#090b12]/95" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            <div className="h-6 w-px bg-gradient-to-b from-white/10 to-transparent hidden sm:block" />
-            <div className="flex items-center gap-3">
-               <div className="h-2 w-2 rounded-full bg-[#4ade80] shadow-[0_0_10px_#4ade80] animate-pulse" />
-               <span className="max-w-[160px] leading-tight text-[11px] text-zinc-400">Valmiit sivut 2–4 viikossa pienille yrityksille</span>
+              ))}
             </div>
           </div>
         </div>
