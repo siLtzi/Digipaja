@@ -110,7 +110,7 @@ export default function HeroContent({
       />
 
       {/* === CONTENT LAYER === */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 pt-28 sm:pt-24 lg:flex-row lg:items-center lg:justify-between">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 pt-32 sm:pt-28 lg:pt-24 lg:flex-row lg:items-center lg:justify-between">
         
         {/* --- LEFT COLUMN: COPY --- */}
         <div className="max-w-2xl space-y-8">

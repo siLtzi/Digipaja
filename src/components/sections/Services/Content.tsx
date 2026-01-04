@@ -47,6 +47,19 @@ export default function ServicesContent({
       const section = sectionRef.current;
       if (!section) return;
 
+      // Check if we're on actual mobile (not just narrow viewport)
+      const isMobile = window.innerWidth < 768 || 
+        /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
+      // On mobile, use simpler animation that's more reliable
+      if (isMobile) {
+        // Set initial visible state for mobile - elements are visible by default
+        gsap.set(".laser-beam", { scaleX: 1, opacity: 1 });
+        gsap.set("[data-header-eyebrow], [data-header-title], [data-header-subtitle]", { opacity: 1, y: 0, x: 0 });
+        gsap.set("[data-service-card]", { opacity: 1, y: 0 });
+        return;
+      }
+
       // Laser beam animation
       const laserTl = gsap.timeline({
         scrollTrigger: {
