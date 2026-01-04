@@ -237,9 +237,16 @@ export default function ServicesContent({
                   <div className="flex-1 pt-2 min-w-0">
                     <h3
                       style={{ fontFamily: "var(--font-goldman)" }}
-                      className="text-base sm:text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300 break-words hyphens-auto"
+                      className="text-base sm:text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300"
                     >
-                      {service.title}
+                      {service.title.split(' ').map((word, i, arr) => (
+                        <span key={i}>
+                          {word}
+                          {i < arr.length - 1 && (
+                            <><span className="hidden sm:inline"> </span><br className="sm:hidden" /></>
+                          )}
+                        </span>
+                      ))}
                     </h3>
                   </div>
                 </div>

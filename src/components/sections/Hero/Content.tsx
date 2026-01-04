@@ -116,14 +116,14 @@ export default function HeroContent({
         <div className="max-w-2xl space-y-8">
           
           {/* Eyebrow */}
-          <div className="animate-in inline-flex items-center gap-3 opacity-0">
-            <span className="flex h-2 w-2 items-center justify-center">
+          <div className="animate-in inline-flex items-center gap-2 sm:gap-3 opacity-0">
+            <span className="flex h-2 w-2 items-center justify-center shrink-0">
               <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
             </span>
             <span
               style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
+              className="text-[10px] sm:text-[12px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#ff8a3c] whitespace-nowrap"
             >
               [ {eyebrow} ]
             </span>
