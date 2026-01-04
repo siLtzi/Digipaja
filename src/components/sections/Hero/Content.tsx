@@ -76,7 +76,7 @@ export default function HeroContent({
     <section
       id="hero"
       ref={containerRef} // Scope for GSAP
-      className="relative h-[100svh] flex flex-col justify-center overflow-hidden bg-[#050609]"
+      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-[#050609] pt-24 md:pt-0"
     >
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
@@ -110,7 +110,7 @@ export default function HeroContent({
       />
 
       {/* === CONTENT LAYER === */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 pt-32 sm:pt-28 lg:pt-24 lg:flex-row lg:items-center lg:justify-between">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 lg:flex-row lg:items-center lg:justify-between">
         
         {/* --- LEFT COLUMN: COPY --- */}
         <div className="max-w-2xl space-y-8">

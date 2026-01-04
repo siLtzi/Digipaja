@@ -225,19 +225,19 @@ export default function ServicesContent({
               {/* Content */}
               <div className="relative z-10">
                 {/* Number & Title Row */}
-                <div className="flex items-start gap-4 mb-4">
+                <div className="flex items-start gap-3 sm:gap-4 mb-4">
                   <span
                     data-card-number
                     data-number
                     style={{ fontFamily: "var(--font-goldman)" }}
-                    className="text-5xl lg:text-6xl font-bold text-[#ff8a3c]/15 leading-none select-none transition-colors duration-300"
+                    className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ff8a3c]/15 leading-none select-none transition-colors duration-300 shrink-0"
                   >
                     {String(idx + 1).padStart(2, "0")}
                   </span>
-                  <div className="flex-1 pt-2">
+                  <div className="flex-1 pt-2 min-w-0">
                     <h3
                       style={{ fontFamily: "var(--font-goldman)" }}
-                      className="text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300"
+                      className="text-base sm:text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300 break-words hyphens-auto"
                     >
                       {service.title}
                     </h3>
