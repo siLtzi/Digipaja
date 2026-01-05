@@ -165,7 +165,7 @@ export default function WhyUsContent({
             {title}
           </h2>
 
-          <p className="reveal-text mt-6 max-w-3xl text-base text-zinc-400 sm:text-lg">
+          <p className="reveal-text mt-6 max-w-3xl text-base text-zinc-300 sm:text-lg">
             {subtitle}
           </p>
         </div>
@@ -317,7 +317,7 @@ function GridItem({
         >
           <p
             className={`text-sm leading-relaxed ${
-              isHighlight ? "text-zinc-300" : "text-zinc-400 group-hover:text-zinc-300 transition-colors"
+              isHighlight ? "text-zinc-200" : "text-zinc-300 group-hover:text-zinc-200 transition-colors"
             }`}
           >
             {card.description}

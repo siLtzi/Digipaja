@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 
 import "./globals.css";
+import CustomCursor from "@/components/ui/CustomCursor";
+
+// Toggle this to enable/disable custom cursor site-wide
+const ENABLE_CUSTOM_CURSOR = true;
 
 // 1. Define the Goldman font (existing)
 const goldman = localFont({
@@ -45,6 +49,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           antialiased bg-[#08090C] text-zinc-50
         `}
       >
+        <CustomCursor enabled={ENABLE_CUSTOM_CURSOR} />
         {children}
       </body>
     </html>

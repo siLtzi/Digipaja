@@ -220,6 +220,199 @@
     "formCompanyLabel": "YRITYS (VALINNAINEN)",
     "formMessageLabel": "VIESTI / PROJEKTIN KUVAUS"
   },
+  "contactPage": {
+    "hero": {
+      "eyebrow": "Aloitetaan yhteistyö",
+      "title": "Kerro meille",
+      "titleAccent": "projektistasi",
+      "subtitle": "Täytä alla oleva lomake ja saamme hyvän käsityksen projektistasi. Mitä tarkemmin kerrot, sitä paremmin voimme auttaa."
+    },
+    "steps": {
+      "contact": "Yhteystiedot",
+      "project": "Projekti",
+      "features": "Ominaisuudet",
+      "details": "Lisätiedot"
+    },
+    "step1": {
+      "number": "01",
+      "title": "Yhteystiedot",
+      "description": "Kerro meille kuka olet, jotta voimme olla yhteydessä."
+    },
+    "step2": {
+      "number": "02",
+      "title": "Projektin tyyppi",
+      "description": "Valitse millaisen projektin haluat toteuttaa.",
+      "pageCountLabel": "Sivujen määrä (arvio)",
+      "timelineLabel": "Aikataulu"
+    },
+    "step3": {
+      "number": "03",
+      "title": "Ominaisuudet",
+      "description": "Valitse mitä ominaisuuksia sivustollasi tarvitaan.",
+      "budgetLabel": "Budjetti"
+    },
+    "step4": {
+      "number": "04",
+      "title": "Lisätiedot",
+      "description": "Kerro lisää projektistasi ja toiveistasi.",
+      "currentWebsiteLabel": "Nykyinen verkkosivusto (jos on)",
+      "currentWebsitePlaceholder": "https://nykyinensivusto.fi",
+      "competitorsLabel": "Kilpailijoiden sivustot (inspiraatio)",
+      "competitorsPlaceholder": "https://kilpailija1.fi, https://kilpailija2.fi",
+      "messageLabel": "Kerro lisää projektistasi",
+      "messagePlaceholder": "Kuvaile projektiasi, tavoitteitasi ja toiveitasi...",
+      "howFoundLabel": "Mistä kuulit meistä?",
+      "howFoundOptions": {
+        "placeholder": "Valitse...",
+        "google": "Google-haku",
+        "social": "Sosiaalinen media",
+        "referral": "Suositus",
+        "other": "Muu"
+      }
+    },
+    "form": {
+      "nameLabel": "Nimi",
+      "namePlaceholder": "Matti Meikäläinen",
+      "emailLabel": "Sähköposti",
+      "emailPlaceholder": "matti@yritys.fi",
+      "phoneLabel": "Puhelinnumero",
+      "phonePlaceholder": "+358 40 123 4567",
+      "companyLabel": "Yritys",
+      "companyPlaceholder": "Yritys Oy",
+      "previousButton": "Edellinen",
+      "nextButton": "Seuraava",
+      "submitButton": "Lähetä pyyntö",
+      "submitting": "Lähetetään..."
+    },
+    "projectTypes": {
+      "landing": {
+        "label": "Landing Page",
+        "description": "Yksi tehokas sivu"
+      },
+      "website": {
+        "label": "Verkkosivusto",
+        "description": "Yrityksen kotisivut"
+      },
+      "ecommerce": {
+        "label": "Verkkokauppa",
+        "description": "Online-myynti"
+      },
+      "webapp": {
+        "label": "Web-sovellus",
+        "description": "Räätälöity ratkaisu"
+      },
+      "portal": {
+        "label": "Asiakasportaali",
+        "description": "Käyttäjähallinta"
+      }
+    },
+    "features": {
+      "cms": {
+        "label": "Sisällönhallinta (CMS)",
+        "description": "Helppo sisällön muokkaus"
+      },
+      "blog": {
+        "label": "Blogi / Uutiset",
+        "description": "Ajankohtaista-osio"
+      },
+      "ecommerce": {
+        "label": "Verkkokauppa",
+        "description": "Tuotteiden myynti"
+      },
+      "booking": {
+        "label": "Ajanvaraus",
+        "description": "Online-varausjärjestelmä"
+      },
+      "seo": {
+        "label": "SEO-optimointi",
+        "description": "Hakukonenäkyvyys"
+      },
+      "analytics": {
+        "label": "Analytiikka",
+        "description": "Kävijäseuranta"
+      },
+      "multilang": {
+        "label": "Monikielisyys",
+        "description": "Useita kieliä"
+      },
+      "animations": {
+        "label": "Animaatiot",
+        "description": "Liike ja efektit"
+      },
+      "auth": {
+        "label": "Käyttäjätilit",
+        "description": "Kirjautuminen"
+      },
+      "api": {
+        "label": "API-integraatiot",
+        "description": "Kolmannen osapuolen palvelut"
+      },
+      "forms": {
+        "label": "Lomakkeet",
+        "description": "Yhteydenotto & kyselyt"
+      },
+      "chat": {
+        "label": "Live Chat",
+        "description": "Reaaliaikainen tuki"
+      }
+    },
+    "timeline": {
+      "urgent": {
+        "label": "Kiireellinen",
+        "description": "2-4 viikkoa"
+      },
+      "normal": {
+        "label": "Normaali",
+        "description": "1-2 kuukautta"
+      },
+      "relaxed": {
+        "label": "Joustava",
+        "description": "2-3 kuukautta"
+      },
+      "planning": {
+        "label": "Suunnitteluvaihe",
+        "description": "Ei kiirettä"
+      }
+    },
+    "budget": {
+      "starter": "1 500 - 3 000 €",
+      "growth": "3 000 - 6 000 €",
+      "professional": "6 000 - 12 000 €",
+      "enterprise": "12 000+ €",
+      "flexible": "Joustava budjetti"
+    },
+    "choicesSummary": {
+      "title": "Valintasi",
+      "subtitle": "Yhteenveto",
+      "projectTypeLabel": "Projektin tyyppi",
+      "pageCountLabel": "Sivumäärä",
+      "featuresLabel": "Ominaisuudet",
+      "timelineLabel": "Aikataulu",
+      "budgetLabel": "Budjetti",
+      "pagesUnit": "sivua",
+      "noSelection": "Ei valittu"
+    },
+    "contactCard": {
+      "title": "Suora yhteys",
+      "subtitle": "Yhteystietosi",
+      "nameLabel": "Nimi",
+      "emailLabel": "Sähköposti",
+      "phoneLabel": "Puhelin",
+      "companyLabel": "Yritys",
+      "notProvided": "Ei annettu"
+    },
+    "success": {
+      "title": "Kiitos yhteydenotostasi!",
+      "message": "Olemme vastaanottaneet viestisi ja palaamme asiaan mahdollisimman pian, yleensä 1-2 arkipäivän kuluessa.",
+      "backToHome": "Takaisin etusivulle"
+    },
+    "slider": {
+      "pageMin": "1 sivu",
+      "pageMid": "15 sivua",
+      "pageMax": "30+ sivua"
+    },
+    "startingFrom": "alkaen"
+  },
   "speechDeck": {
     "items": [
       {

@@ -259,7 +259,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
           </p>
           
           <Link
-            href={`/${locale}/#contact`}
+            href={`/${locale}/yhteydenotto`}
             style={{ fontFamily: "var(--font-goldman)" }}
             className="group/btn relative inline-flex items-center justify-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] cursor-pointer"
           >

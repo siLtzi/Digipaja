@@ -158,7 +158,7 @@ function ContactInner({
           <h2 className="max-w-3xl text-balance text-4xl font-bold leading-none sm:text-5xl lg:text-[4rem]" style={{ fontFamily: "var(--font-goldman)" }}>
             {title}
           </h2>
-          <p className="mt-6 max-w-2xl text-base text-zinc-400 sm:text-lg leading-relaxed">
+          <p className="mt-6 max-w-2xl text-base text-zinc-300 sm:text-lg leading-relaxed">
             {subtitle}
           </p>
         </div>
@@ -188,7 +188,7 @@ function ContactInner({
                       <h3 style={{ fontFamily: "var(--font-goldman)" }} className="text-2xl font-bold text-white">
                         {contactTitle}
                       </h3>
-                      <p className="text-sm leading-relaxed text-zinc-400">{contactSubtitle}</p>
+                      <p className="text-sm leading-relaxed text-zinc-300">{contactSubtitle}</p>
                     </div>
                     
                     <div className="space-y-4 pt-4">
@@ -210,7 +210,7 @@ function ContactInner({
                         <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-white mb-1">
                           Nopea vastaus
                         </h4>
-                        <p className="text-xs text-zinc-500">Vastaamme 24 tunnin sisällä</p>
+                        <p className="text-xs text-zinc-400">Vastaamme 24 tunnin sisällä</p>
                       </div>
                     </div>
                   </div>
@@ -226,11 +226,29 @@ function ContactInner({
                         <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-white mb-1">
                           Luottamuksellista
                         </h4>
-                        <p className="text-xs text-zinc-500">NDA-sopimus pyynnöstä</p>
+                        <p className="text-xs text-zinc-400">NDA-sopimus pyynnöstä</p>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Link to detailed contact form */}
+                <Link
+                  href="/fi/yhteydenotto"
+                  className="group/link flex items-center justify-between gap-4 rounded-lg border border-[#ff8a3c]/30 bg-[#ff8a3c]/5 p-5 transition-all duration-300 hover:border-[#ff8a3c]/50 hover:bg-[#ff8a3c]/10"
+                >
+                  <div>
+                    <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-[#ff8a3c] mb-1">
+                      Tarvitsetko tarkemman tarjouksen?
+                    </h4>
+                    <p className="text-xs text-zinc-400">Täytä laajempi projektilomake →</p>
+                  </div>
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#ff8a3c]/30 transition-all duration-300 group-hover/link:border-[#ff8a3c] group-hover/link:bg-[#ff8a3c]/20">
+                    <svg className="h-4 w-4 text-[#ff8a3c] transition-transform duration-300 group-hover/link:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </Link>
             </div>
         </div>
     </div>

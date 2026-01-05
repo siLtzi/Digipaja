@@ -233,7 +233,7 @@ export default function ProcessContent({
 
               <div className="process-subtitle relative border-l-2 border-[#ff8a3c]/30 pl-6">
                 <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-[#ff8a3c] to-transparent opacity-50" />
-                <p className="max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+                <p className="max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
                   {subtitle}
                 </p>
               </div>
@@ -313,7 +313,7 @@ export default function ProcessContent({
                           {step.title}
                         </h3>
                         
-                        <p className="max-w-lg text-base leading-relaxed text-zinc-400 transition-colors duration-500 group-hover:text-zinc-300">
+                        <p className="max-w-lg text-base leading-relaxed text-zinc-300 transition-colors duration-500 group-hover:text-zinc-200">
                           {step.description}
                         </p>
                       </div>

@@ -16,7 +16,7 @@ export default function Footer({ locale }: FooterProps) {
     { label: t("Palvelut", "Services"), href: "/#services" },
     { label: t("Työt", "Work"), href: "/work" },
     { label: t("Meistä", "About"), href: "/#about-us" },
-    { label: t("Ota yhteyttä", "Contact"), href: "/contact" },
+    { label: t("Ota yhteyttä", "Contact"), href: "/yhteydenotto" },
   ];
 
   const LEGAL_LINKS = [
@@ -100,7 +100,7 @@ export default function Footer({ locale }: FooterProps) {
             {/* Right: CTA Card */}
             <div className="flex justify-start lg:justify-end">
               <Link
-                href={`/${locale}/contact`}
+                href={`/${locale}/yhteydenotto`}
                 className="group relative isolate overflow-hidden rounded-lg border border-[#ff8a3c]/30 bg-[#0a0a0a]/80 p-8 backdrop-blur-sm transition-all duration-700 hover:border-[#ff8a3c]/60 hover:bg-[#0f0f12]/90 hover:shadow-[0_0_40px_-10px_rgba(255,138,60,0.3)] hover:-translate-y-1 hover:scale-[1.02]"
               >
                 {/* Corner accents */}

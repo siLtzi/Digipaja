@@ -52,47 +52,51 @@ export default function ServicesContent({
       const prefersReducedMotion = window.matchMedia?.(
         "(prefers-reduced-motion: reduce)"
       )?.matches;
-      if (prefersReducedMotion) return;
-
+      
       const section = sectionRef.current;
       if (!section) return;
+
+      // Always ensure elements are visible first (prevents flash of invisible content)
+      gsap.set(".laser-beam", { scaleX: 1, opacity: 1 });
+      gsap.set("[data-header-eyebrow], [data-header-title], [data-header-subtitle]", { opacity: 1, y: 0, x: 0 });
+      gsap.set("[data-service-card]", { opacity: 1, y: 0 });
+
+      if (prefersReducedMotion) return;
 
       // Check if we're on actual mobile (not just narrow viewport)
       const isMobile = window.innerWidth < 768 || 
         /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
-      // On mobile, use simpler animation that's more reliable
-      if (isMobile) {
-        // Set initial visible state for mobile - elements are visible by default
-        gsap.set(".laser-beam", { scaleX: 1, opacity: 1 });
-        gsap.set("[data-header-eyebrow], [data-header-title], [data-header-subtitle]", { opacity: 1, y: 0, x: 0 });
-        gsap.set("[data-service-card]", { opacity: 1, y: 0 });
-        return;
-      }
+      // On mobile, keep elements visible without animation
+      if (isMobile) return;
+
+      // Reset for animation on desktop
+      gsap.set(".laser-beam", { scaleX: 0, opacity: 0 });
+      gsap.set("[data-header-eyebrow]", { opacity: 0, y: 20 });
+      gsap.set("[data-header-title]", { opacity: 0, y: 30 });
+      gsap.set("[data-header-subtitle]", { opacity: 0, x: -20 });
+      gsap.set("[data-service-card]", { opacity: 0, y: 40 });
 
       // Laser beam animation
       const laserTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: "top 95%",
-          toggleActions: "play none none reverse",
+          toggleActions: "play none none none",
         },
       });
 
-      laserTl.fromTo(
+      laserTl.to(
         ".laser-beam:nth-child(1)",
-        { scaleX: 0, opacity: 0 },
         { scaleX: 1, opacity: 0.4, duration: 0.3, ease: "expo.out" }
       )
-      .fromTo(
+      .to(
         ".laser-beam:nth-child(2)",
-        { scaleX: 0, opacity: 0 },
         { scaleX: 1, opacity: 1, duration: 0.3, ease: "expo.out" },
         "-=0.25"
       )
-      .fromTo(
+      .to(
         ".laser-beam:nth-child(3)",
-        { scaleX: 0, opacity: 0 },
         { scaleX: 1, opacity: 0.9, duration: 0.3, ease: "expo.out" },
         "-=0.25"
       );
@@ -103,32 +107,32 @@ export default function ServicesContent({
           trigger: section,
           start: "top 95%",
           end: "top 50%",
-          toggleActions: "play none none reverse",
+          toggleActions: "play none none none",
         },
       });
 
       headerTl
-        .from("[data-header-eyebrow]", {
-          opacity: 0,
-          y: 20,
+        .to("[data-header-eyebrow]", {
+          opacity: 1,
+          y: 0,
           duration: 0.3,
           ease: "power3.out",
         })
-        .from(
+        .to(
           "[data-header-title]",
           {
-            opacity: 0,
-            y: 30,
+            opacity: 1,
+            y: 0,
             duration: 0.4,
             ease: "power3.out",
           },
           "-=0.15"
         )
-        .from(
+        .to(
           "[data-header-subtitle]",
           {
-            opacity: 0,
-            x: -20,
+            opacity: 1,
+            x: 0,
             duration: 0.3,
             ease: "power3.out",
           },
@@ -136,14 +140,14 @@ export default function ServicesContent({
         );
 
       // Cards stagger animation - single ScrollTrigger for all cards
-      gsap.from("[data-service-card]", {
+      gsap.to("[data-service-card]", {
         scrollTrigger: {
           trigger: section,
           start: "top 85%",
-          toggleActions: "play none none reverse",
+          toggleActions: "play none none none",
         },
-        opacity: 0,
-        y: 40,
+        opacity: 1,
+        y: 0,
         duration: 0.35,
         stagger: 0.05,
         ease: "power3.out",
@@ -207,7 +211,7 @@ export default function ServicesContent({
 
             <div data-header-subtitle className="relative lg:pt-2">
               <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-[#ff8a3c] via-[#ff8a3c]/30 to-transparent hidden lg:block" />
-              <p className="lg:pl-8 text-base text-zinc-400 leading-relaxed max-w-xl">
+              <p className="lg:pl-8 text-base text-zinc-300 leading-relaxed max-w-xl">
                 {subtitle}
               </p>
             </div>
@@ -231,26 +235,15 @@ export default function ServicesContent({
           <Link
             href={`/${locale}/services`}
             style={{ fontFamily: "var(--font-goldman)" }}
-            className="group relative inline-flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.2em] text-white overflow-hidden rounded-sm"
+            className="group relative isolate inline-flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
           >
-            {/* Button background with animated gradient */}
-            <span className="absolute inset-0 bg-gradient-to-r from-[#ff8a3c]/20 via-[#ff8a3c]/10 to-[#ff8a3c]/20 border border-[#ff8a3c]/30 rounded-sm" />
-            <span className="absolute inset-0 bg-gradient-to-r from-[#ff8a3c]/0 via-[#ff8a3c]/20 to-[#ff8a3c]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-
+            <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
             <span className="relative z-10">{locale === "fi" ? "Katso kaikki palvelut" : "View all services"}</span>
-            <svg
-              className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
+            <svg className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Link>
         </div>
       </div>
@@ -425,7 +418,7 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
         </div>
 
         {/* Description */}
-        <p className="text-sm lg:text-base text-zinc-400 leading-relaxed mb-4">
+        <p className="text-sm lg:text-base text-zinc-300 leading-relaxed mb-4">
           {service.body}
         </p>
 

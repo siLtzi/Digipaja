@@ -217,6 +217,199 @@
     "formCompanyLabel": "COMPANY (OPTIONAL)",
     "formMessageLabel": "MESSAGE / PROJECT DESCRIPTION"
   },
+  "contactPage": {
+    "hero": {
+      "eyebrow": "Let's collaborate",
+      "title": "Tell us about",
+      "titleAccent": "your project",
+      "subtitle": "Fill out the form below and we'll get a good understanding of your project. The more details you provide, the better we can help."
+    },
+    "steps": {
+      "contact": "Contact Info",
+      "project": "Project",
+      "features": "Features",
+      "details": "Details"
+    },
+    "step1": {
+      "number": "01",
+      "title": "Contact Information",
+      "description": "Tell us who you are so we can get in touch."
+    },
+    "step2": {
+      "number": "02",
+      "title": "Project Type",
+      "description": "Select what kind of project you want to build.",
+      "pageCountLabel": "Number of pages (estimate)",
+      "timelineLabel": "Timeline"
+    },
+    "step3": {
+      "number": "03",
+      "title": "Features",
+      "description": "Select what features your website needs.",
+      "budgetLabel": "Budget"
+    },
+    "step4": {
+      "number": "04",
+      "title": "Additional Details",
+      "description": "Tell us more about your project and wishes.",
+      "currentWebsiteLabel": "Current website (if any)",
+      "currentWebsitePlaceholder": "https://currentsite.com",
+      "competitorsLabel": "Competitor websites (inspiration)",
+      "competitorsPlaceholder": "https://competitor1.com, https://competitor2.com",
+      "messageLabel": "Tell us more about your project",
+      "messagePlaceholder": "Describe your project, goals and wishes...",
+      "howFoundLabel": "How did you hear about us?",
+      "howFoundOptions": {
+        "placeholder": "Select...",
+        "google": "Google search",
+        "social": "Social media",
+        "referral": "Referral",
+        "other": "Other"
+      }
+    },
+    "form": {
+      "nameLabel": "Name",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "Email",
+      "emailPlaceholder": "john@company.com",
+      "phoneLabel": "Phone number",
+      "phonePlaceholder": "+358 40 123 4567",
+      "companyLabel": "Company",
+      "companyPlaceholder": "Company Ltd",
+      "previousButton": "Previous",
+      "nextButton": "Next",
+      "submitButton": "Send request",
+      "submitting": "Sending..."
+    },
+    "projectTypes": {
+      "landing": {
+        "label": "Landing Page",
+        "description": "One powerful page"
+      },
+      "website": {
+        "label": "Website",
+        "description": "Company website"
+      },
+      "ecommerce": {
+        "label": "E-commerce",
+        "description": "Online sales"
+      },
+      "webapp": {
+        "label": "Web App",
+        "description": "Custom solution"
+      },
+      "portal": {
+        "label": "Client Portal",
+        "description": "User management"
+      }
+    },
+    "features": {
+      "cms": {
+        "label": "Content Management (CMS)",
+        "description": "Easy content editing"
+      },
+      "blog": {
+        "label": "Blog / News",
+        "description": "News section"
+      },
+      "ecommerce": {
+        "label": "E-commerce",
+        "description": "Product sales"
+      },
+      "booking": {
+        "label": "Booking",
+        "description": "Online booking system"
+      },
+      "seo": {
+        "label": "SEO Optimization",
+        "description": "Search visibility"
+      },
+      "analytics": {
+        "label": "Analytics",
+        "description": "Visitor tracking"
+      },
+      "multilang": {
+        "label": "Multilingual",
+        "description": "Multiple languages"
+      },
+      "animations": {
+        "label": "Animations",
+        "description": "Motion and effects"
+      },
+      "auth": {
+        "label": "User Accounts",
+        "description": "Login system"
+      },
+      "api": {
+        "label": "API Integrations",
+        "description": "Third-party services"
+      },
+      "forms": {
+        "label": "Forms",
+        "description": "Contact & surveys"
+      },
+      "chat": {
+        "label": "Live Chat",
+        "description": "Real-time support"
+      }
+    },
+    "timeline": {
+      "urgent": {
+        "label": "Urgent",
+        "description": "2-4 weeks"
+      },
+      "normal": {
+        "label": "Normal",
+        "description": "1-2 months"
+      },
+      "relaxed": {
+        "label": "Flexible",
+        "description": "2-3 months"
+      },
+      "planning": {
+        "label": "Planning phase",
+        "description": "No rush"
+      }
+    },
+    "budget": {
+      "starter": "€1,500 - €3,000",
+      "growth": "€3,000 - €6,000",
+      "professional": "€6,000 - €12,000",
+      "enterprise": "€12,000+",
+      "flexible": "Flexible budget"
+    },
+    "choicesSummary": {
+      "title": "Your Choices",
+      "subtitle": "Summary",
+      "projectTypeLabel": "Project type",
+      "pageCountLabel": "Page count",
+      "featuresLabel": "Features",
+      "timelineLabel": "Timeline",
+      "budgetLabel": "Budget",
+      "pagesUnit": "pages",
+      "noSelection": "Not selected"
+    },
+    "contactCard": {
+      "title": "Direct Contact",
+      "subtitle": "Your contact info",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone",
+      "companyLabel": "Company",
+      "notProvided": "Not provided"
+    },
+    "success": {
+      "title": "Thank you for contacting us!",
+      "message": "We have received your message and will get back to you as soon as possible, usually within 1-2 business days.",
+      "backToHome": "Back to home page"
+    },
+    "slider": {
+      "pageMin": "1 page",
+      "pageMid": "15 pages",
+      "pageMax": "30+ pages"
+    },
+    "startingFrom": "from"
+  },
   "speechDeck": {
     "items": [
       {

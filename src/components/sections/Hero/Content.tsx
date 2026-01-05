@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollSmoother } from "gsap/ScrollSmoother"; // Import this!
@@ -48,6 +50,10 @@ export default function HeroContent({
   
   // State for mobile tech icon selection
   const [selectedTech, setSelectedTech] = useState<number | null>(null);
+  
+  // Get locale from pathname
+  const pathname = usePathname();
+  const locale = pathname?.startsWith("/en") ? "en" : "fi";
   
   // === 1. MAIN ENTRANCE ANIMATION ===
   useGSAP(() => {
@@ -148,17 +154,16 @@ export default function HeroContent({
           </h1>
 
           {/* Subtitle */}
-          <div className="animate-in border-l-2 border-zinc-800 pl-6 opacity-0">
-            <p className="max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+          <div className="animate-in border-l-2 border-[#ff8a3c]/30 pl-6 opacity-0">
+            <p className="max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
               {subtitle}
             </p>
           </div>
 
           {/* CTAs */}
           <div className="animate-in flex flex-wrap items-center gap-5 pt-4 opacity-0">
-            <button
-              type="button"
-              onClick={() => scrollTo("contact")}
+            <Link
+              href={`/${locale}/yhteydenotto`}
               style={{ fontFamily: "var(--font-goldman)" }}
               className="group relative isolate flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] cursor-pointer"
             >
@@ -169,7 +174,7 @@ export default function HeroContent({
               <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
               <span className="relative z-10">{primaryCta}</span>
               <svg className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
+            </Link>
 
             <button
               type="button"

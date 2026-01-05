@@ -164,8 +164,8 @@ export default function ReferencesContent({
           >
             {title}
           </h2>
-          <div className="relative border-l-2 border-zinc-800 pl-6">
-            <p className="max-w-xl text-base text-zinc-400 sm:text-lg">
+          <div className="relative border-l-2 border-[#ff8a3c]/30 pl-6">
+            <p className="max-w-xl text-base text-zinc-300 sm:text-lg">
               {subtitle}
             </p>
           </div>
@@ -471,22 +471,16 @@ export default function ReferencesContent({
                 <div className="mt-8 flex justify-start">
                   <Link
                     href={`/work/${activeProject.slug}`}
-                    className="group/btn flex items-center gap-2 rounded-lg border border-[#ff8a3c]/30 bg-gradient-to-r from-[#ff8a3c]/20 to-[#ff8a3c]/10 px-6 py-4 text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 hover:border-[#ff8a3c] hover:bg-[#ff8a3c] hover:text-black hover:shadow-[0_0_30px_rgba(255,138,60,0.3)]"
+                    style={{ fontFamily: "var(--font-goldman)" }}
+                    className="group relative isolate flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
                   >
-                    {translations.viewCaseStudy}
-                    <svg
-                      className="h-4 w-4 transition-transform group-hover/btn:translate-x-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
+                    <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+                    <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+                    <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+                    <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+                    <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
+                    <span className="relative z-10">{translations.viewCaseStudy}</span>
+                    <svg className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </Link>
                 </div>
 

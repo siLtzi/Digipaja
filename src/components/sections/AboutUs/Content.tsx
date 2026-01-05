@@ -169,15 +169,15 @@ export default function AboutUsContent({
             {title}
           </h2>
 
-          <div className="animate-text relative border-l-2 border-zinc-800 pl-6">
-            <p className="text-sm leading-relaxed text-zinc-400 sm:text-base">
+          <div className="animate-text relative border-l-2 border-[#ff8a3c]/30 pl-6">
+            <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
               {subtitle}
             </p>
           </div>
 
-          <div className="animate-text flex items-center gap-3 rounded-sm border border-white/5 bg-white/5 px-4 py-3 backdrop-blur-sm">
+          <div className="animate-text flex items-center gap-3 rounded-sm border border-[#ff8a3c]/20 bg-[#ff8a3c]/5 px-4 py-3 backdrop-blur-sm">
             <span className="text-[#ff8a3c]">⚠</span>
-            <p className="text-xs font-medium text-zinc-400">{note}</p>
+            <p className="text-xs font-medium text-zinc-300">{note}</p>
           </div>
         </div>
 

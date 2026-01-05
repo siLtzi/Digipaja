@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -121,7 +121,7 @@ export default function PricingContent({
           >
             {title}
           </h2>
-          <p className="mt-6 max-w-2xl text-base text-zinc-400 sm:text-lg">
+          <p className="mt-6 max-w-2xl text-base text-zinc-300 sm:text-lg">
             {subtitle}
           </p>
         </div>
@@ -153,27 +153,15 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
   const strikeRef = useRef<HammerStrikeHandle>(null);
 
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = pathname?.startsWith("/en") ? "en" : "fi";
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { contextSafe } = useGSAP({ scope: cardRef });
 
   const handleSelectPackage = contextSafe(() => {
     const onDone = () => {
-      router.push(`?package=${encodeURIComponent(tier.name)}`, {
-        scroll: false,
-      });
-
-      const smoother = ScrollSmoother.get();
-      const contactSection = document.querySelector("#contact");
-
-      if (smoother && contactSection) {
-        smoother.scrollTo(contactSection, true, "center");
-      } else if (contactSection) {
-        contactSection.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
+      router.push(`/${locale}/yhteydenotto?package=${encodeURIComponent(tier.name)}`);
     };
 
     if (strikeRef.current) {
@@ -337,7 +325,7 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
         </button>
 
         <div className={`${isExpanded ? "block" : "hidden"} sm:block`}>
-          <p className="mb-8 text-sm leading-relaxed text-zinc-400 min-h-[40px]">
+          <p className="mb-8 text-sm leading-relaxed text-zinc-300 min-h-[40px]">
             {tier.description}
           </p>
           <ul className="space-y-4 mb-8">
@@ -365,40 +353,35 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
           ref={buttonRef}
           type="button"
           onClick={handleSelectPackage}
-          className={`group/btn relative flex w-full items-center justify-center overflow-hidden rounded-md border px-6 py-4 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer duration-300 ${
+          style={{ fontFamily: "var(--font-goldman)" }}
+          className={`group/btn relative flex w-full items-center justify-center gap-2 overflow-hidden px-6 py-4 text-xs font-bold uppercase tracking-[0.16em] transition-all cursor-pointer duration-300 ${
             isHighlight
-              ? "border-[#ff8a3c] bg-[#ff8a3c] text-black shadow-[0_0_20px_rgba(255,138,60,0.3)] hover:shadow-[0_0_30px_rgba(255,138,60,0.5)]"
-              : "border-[#ff8a3c]/20 bg-[#ff8a3c]/5 text-[#ff8a3c] hover:border-[#ff8a3c]/40 hover:bg-[#ff8a3c]/10 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
+              ? "text-[#ff8a3c] hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
+              : "text-[#ff8a3c] hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
           }`}
         >
+          {/* Corner brackets */}
+          <span className={`pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+          <span className={`pointer-events-none absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+          <span className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+          <span className={`pointer-events-none absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+          
+          {/* Background hover effect */}
+          <span className="pointer-events-none absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
+          
+          {/* Shimmer effect for highlighted cards */}
           {isHighlight && (
-            <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shimmer_1s_infinite]" />
-          )}
-          {!isHighlight && (
-            <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-10 transition-opacity bg-[linear-gradient(to_right,#ff8a3c_1px,transparent_1px),linear-gradient(to_bottom,#ff8a3c_1px,transparent_1px)] bg-[size:10px_10px]" />
+            <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#ff8a3c]/20 to-transparent group-hover/btn:animate-[shimmer_1s_infinite]" />
           )}
 
-          <span
-            className="relative z-10 flex items-center gap-2"
-            style={{ fontFamily: "var(--font-goldman)" }}
+          <span className="relative z-10">{tier.cta}</span>
+          <svg
+            className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1"
+            viewBox="0 0 12 12"
+            fill="none"
           >
-            <span className={isHighlight ? "text-black" : "text-white"}>
-              {tier.cta}
-            </span>
-            <svg
-              className={`h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </span>
+            <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
 
         <HammerStrike

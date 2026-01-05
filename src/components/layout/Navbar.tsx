@@ -90,9 +90,8 @@ export default function Navbar({ locale }: NavbarProps) {
         `}
       >
         {/* LEFT: Logo */}
-        <button
-          type="button"
-          onClick={() => handleScrollTo("hero")}
+        <Link
+          href={`/${locale}`}
           className="group flex items-center gap-2 focus:outline-none cursor-pointer min-w-0"
           aria-label="Digipaja – etusivu"
         >
@@ -107,7 +106,7 @@ export default function Navbar({ locale }: NavbarProps) {
           >
             <LogoMark />
           </div>
-        </button>
+        </Link>
 
         {/* CENTER: Desktop Nav */}
         <nav
@@ -132,16 +131,15 @@ export default function Navbar({ locale }: NavbarProps) {
         <div className="flex items-center gap-4 shrink-0">
           
           {/* DESKTOP CONTACT BUTTON */}
-          <button
-            type="button"
-            onClick={() => handleScrollTo("contact")} // 🔥 Links to #contact via GSAP
+          <Link
+            href={`/${locale}/yhteydenotto`}
             className={`
                cyber-btn relative place-content-center hidden md:inline-grid 
                ${scrolled ? "text-[12px]" : "text-[15px]"}
             `}
           >
             {t("Ota yhteyttä", "Contact")}
-          </button>
+          </Link>
 
           {/* MOBILE MENU TOGGLE */}
           <button
@@ -189,13 +187,12 @@ export default function Navbar({ locale }: NavbarProps) {
             </button>
           ))}
           <div className="mt-4 flex justify-center border-t border-white/10 pt-6">
-            <button
-              type="button"
-              onClick={() => handleScrollTo("contact")}
+            <Link
+              href={`/${locale}/yhteydenotto`}
               className="cyber-btn text-[14px]"
             >
               {t("Ota yhteyttä", "Contact")}
-            </button>
+            </Link>
           </div>
         </nav>
       </div>
