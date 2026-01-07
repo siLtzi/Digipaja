@@ -188,7 +188,7 @@ export default function CustomCursor({ enabled = true }: CustomCursorProps) {
       {/* Canvas for smooth tail */}
       <canvas
         ref={canvasRef}
-        className="pointer-events-none fixed inset-0 z-[9997]"
+        className="pointer-events-none fixed inset-0 z-[10001]"
         style={{
           opacity: isVisible ? 1 : 0,
           transition: "opacity 0.2s ease",
@@ -198,7 +198,7 @@ export default function CustomCursor({ enabled = true }: CustomCursorProps) {
       {/* Center dot (head of teardrop) */}
       <div
         ref={cursorRef}
-        className="pointer-events-none fixed z-[9999]"
+        className="pointer-events-none fixed z-[10002]"
         style={{
           left: -100,
           top: -100,
