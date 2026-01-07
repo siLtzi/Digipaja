@@ -1,8 +1,32 @@
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+
+const BASE_URL = "https://digipajaoulu.fi";
+
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ locale: "fi" | "en" }> 
+}): Promise<Metadata> {
+  const { locale } = await params;
+  
+  return {
+    alternates: {
+      languages: {
+        "fi": `${BASE_URL}/fi`,
+        "en": `${BASE_URL}/en`,
+        "x-default": `${BASE_URL}/fi`,
+      },
+    },
+    other: {
+      "google-site-verification": "YOUR_GOOGLE_VERIFICATION_CODE", // Replace with actual code
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,

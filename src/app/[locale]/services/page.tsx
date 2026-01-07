@@ -30,11 +30,40 @@ type ServicesOverviewData = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const isFi = locale === "fi";
+  const baseUrl = "https://digipajaoulu.fi";
+  
   return {
-    title: isFi ? "Palvelut – Digipaja" : "Services – Digipaja",
+    title: isFi ? "Palvelut" : "Services",
     description: isFi 
-      ? "Modernit verkkosivut, verkkokaupat ja tekniset ratkaisut." 
-      : "Modern websites, e-commerce, and technical solutions.",
+      ? "Digipajan palvelut: modernit verkkosivut, verkkokaupat, hakukoneoptimointi ja tekniset integraatiot. Räätälöidyt digitaaliset ratkaisut yrityksellesi Oulussa." 
+      : "Digipaja services: modern websites, e-commerce solutions, SEO, and technical integrations. Custom digital solutions for your business in Oulu, Finland.",
+    keywords: isFi
+      ? ["verkkosivut", "verkkokauppa", "hakukoneoptimointi", "SEO", "web-kehitys", "digitaaliset palvelut", "Oulu"]
+      : ["websites", "e-commerce", "SEO", "web development", "digital services", "Oulu", "Finland"],
+    alternates: {
+      canonical: `${baseUrl}/${locale}/services`,
+      languages: {
+        fi: `${baseUrl}/fi/services`,
+        en: `${baseUrl}/en/services`,
+      },
+    },
+    openGraph: {
+      title: isFi ? "Palvelut | Digipaja" : "Services | Digipaja",
+      description: isFi 
+        ? "Modernit verkkosivut, verkkokaupat ja tekniset ratkaisut yrityksellesi." 
+        : "Modern websites, e-commerce, and technical solutions for your business.",
+      url: `${baseUrl}/${locale}/services`,
+      siteName: "Digipaja",
+      locale: isFi ? "fi_FI" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: isFi ? "Palvelut | Digipaja" : "Services | Digipaja",
+      description: isFi 
+        ? "Modernit verkkosivut, verkkokaupat ja tekniset ratkaisut." 
+        : "Modern websites, e-commerce, and technical solutions.",
+    },
   };
 }
 
@@ -165,14 +194,50 @@ export default async function ServicesPage({ params }: Props) {
     ]
   };
 
+  const services = data?.services || fallbackData.services;
+  const isFi = locale === "fi";
+  const BASE_URL = "https://digipajaoulu.fi";
+
+  // JSON-LD ItemList for services
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: isFi ? "Digipajan palvelut" : "Digipaja services",
+    description: isFi 
+      ? "Räätälöidyt digitaaliset ratkaisut yrityksellesi" 
+      : "Custom digital solutions for your business",
+    numberOfItems: services.length,
+    itemListElement: services.map((service, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Service",
+        name: service.title,
+        description: service.shortDescription,
+        url: `${BASE_URL}/${locale}/services/${service.slug}`,
+        provider: {
+          "@type": "Organization",
+          name: "Digipaja",
+          url: BASE_URL,
+        },
+      },
+    })),
+  };
+
   return (
-    <ServicesOverviewContent
-      eyebrow={(data?.eyebrow || fallbackData.eyebrow)}
-      title={(data?.title || fallbackData.title)}
-      subtitle={(data?.subtitle || fallbackData.subtitle)}
-      heroVideo={data?.heroVideo}
-      services={(data?.services || fallbackData.services)}
-      locale={locale}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ServicesOverviewContent
+        eyebrow={(data?.eyebrow || fallbackData.eyebrow)}
+        title={(data?.title || fallbackData.title)}
+        subtitle={(data?.subtitle || fallbackData.subtitle)}
+        heroVideo={data?.heroVideo}
+        services={services}
+        locale={locale}
+      />
+    </>
   );
 }

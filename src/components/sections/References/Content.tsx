@@ -500,7 +500,7 @@ export default function ReferencesContent({
                   
                   <div
                     ref={mobileScrollRef}
-                    className="absolute inset-1 z-30 h-[calc(100%-8px)] w-[calc(100%-8px)] overflow-y-auto rounded-[16px] bg-[#050609] overscroll-y-contain pointer-events-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="absolute inset-1 z-30 h-[calc(100%-8px)] w-[calc(100%-8px)] overflow-y-auto rounded-[16px] bg-[#050609] overscroll-y-contain pointer-events-auto touch-pan-y [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   >
                     <div className="relative w-full min-h-[101%]">
                       <Image
@@ -508,7 +508,7 @@ export default function ReferencesContent({
                         alt={`${activeProject.title} Mobile View`}
                         width={800}
                         height={2000}
-                        className="w-full h-auto object-cover object-top opacity-90"
+                        className="w-full h-auto object-cover object-top opacity-90 select-none"
                       />
                     </div>
                   </div>

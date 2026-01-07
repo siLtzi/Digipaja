@@ -161,7 +161,8 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
 
   const handleSelectPackage = contextSafe(() => {
     const onDone = () => {
-      router.push(`/${locale}/yhteydenotto?package=${encodeURIComponent(tier.name)}`);
+      // Dispatch custom event with package selection
+      window.dispatchEvent(new CustomEvent('packageSelected', { detail: { package: tier.name } }));
     };
 
     if (strikeRef.current) {

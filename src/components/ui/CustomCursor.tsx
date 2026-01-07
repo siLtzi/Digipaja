@@ -17,6 +17,32 @@ export default function CustomCursor({ enabled = true }: CustomCursorProps) {
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile/touch devices
+  useEffect(() => {
+    const checkMobile = () => {
+      const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+      const hasNoHover = window.matchMedia("(hover: none)").matches;
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      setIsMobile(hasCoarsePointer || hasNoHover || isTouchDevice);
+    };
+    
+    checkMobile();
+    
+    // Listen for media query changes
+    const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
+    const hoverQuery = window.matchMedia("(hover: none)");
+    
+    const handler = () => checkMobile();
+    coarsePointerQuery.addEventListener("change", handler);
+    hoverQuery.addEventListener("change", handler);
+    
+    return () => {
+      coarsePointerQuery.removeEventListener("change", handler);
+      hoverQuery.removeEventListener("change", handler);
+    };
+  }, []);
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
@@ -60,12 +86,15 @@ export default function CustomCursor({ enabled = true }: CustomCursorProps) {
     ctx.lineJoin = "round";
 
     // Draw from tail to head with increasing thickness and opacity
-    for (let i = points.length - 1; i > 0; i--) {
+    // When hovering, skip the last few points so the tail doesn't overlap the pointer
+    const skipPoints = isHovering ? 4 : 0;
+    for (let i = points.length - 1; i > skipPoints; i--) {
       const t = 1 - i / points.length; // 0 at tail, 1 at head
       const nextT = 1 - (i - 1) / points.length;
       
       // Thickness: thin at tail, thick at head (teardrop shape)
-      const thickness = lerp(1, isHovering ? 14 : 10, t * t); // Quadratic for smoother taper
+      const maxThickness = isHovering ? 6 : 10;
+      const thickness = lerp(1, maxThickness, t * t); // Quadratic for smoother taper
       
       // Opacity: fade out toward tail
       const opacity = lerp(0, 0.9, t);
@@ -151,7 +180,8 @@ export default function CustomCursor({ enabled = true }: CustomCursorProps) {
     };
   }, [enabled, isVisible, drawTail]);
 
-  if (!enabled) return null;
+  // Don't render on mobile devices
+  if (!enabled || isMobile) return null;
 
   return (
     <>
@@ -168,24 +198,32 @@ export default function CustomCursor({ enabled = true }: CustomCursorProps) {
       {/* Center dot (head of teardrop) */}
       <div
         ref={cursorRef}
-        className="pointer-events-none fixed z-[9999] -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none fixed z-[9999]"
         style={{
           left: -100,
           top: -100,
           opacity: isVisible ? 1 : 0,
-          transition: "opacity 0.15s ease",
+          transition: "opacity 0.15s ease, transform 0.2s ease",
+          transform: isHovering 
+            ? "translate(0, 0)" 
+            : "translate(-50%, -50%)",
         }}
       >
         <div
-          className="rounded-full bg-[#ff8a3c]"
+          className="bg-[#ff8a3c]"
           style={{
-            width: isHovering ? "16px" : "12px",
-            height: isHovering ? "16px" : "12px",
-            transform: isClicking ? "scale(0.8)" : "scale(1)",
-            transition: "width 0.2s ease, height 0.2s ease, transform 0.1s ease",
+            width: isHovering ? "20px" : "12px",
+            height: isHovering ? "24px" : "12px",
+            borderRadius: isHovering ? "0 50% 50% 50%" : "50%",
+            border: "2px solid rgba(255, 255, 255, 0.8)",
+            transform: isClicking 
+              ? "scale(0.8)" 
+              : "scale(1)",
+            transformOrigin: isHovering ? "0 0" : "center center",
+            transition: "width 0.2s ease, height 0.2s ease, transform 0.15s ease",
             boxShadow: isHovering 
-              ? "0 0 20px 6px rgba(255,138,60,0.5)" 
-              : "0 0 12px 4px rgba(255,138,60,0.4)",
+              ? "0 0 20px 6px rgba(255,138,60,0.5), 0 0 0 1px rgba(0,0,0,0.1)" 
+              : "0 0 12px 4px rgba(255,138,60,0.4), 0 0 0 1px rgba(0,0,0,0.1)",
           }}
         />
       </div>

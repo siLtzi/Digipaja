@@ -226,6 +226,7 @@
     },
     "steps": {
       "contact": "Contact Info",
+      "package": "Package",
       "project": "Project",
       "features": "Features",
       "details": "Details"

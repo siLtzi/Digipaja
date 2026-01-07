@@ -12,6 +12,8 @@ type FeatureCardProps = {
   description: string;
   selected: boolean;
   onClick: () => void;
+  disabled?: boolean;
+  disabledText?: string;
 };
 
 export default function FeatureCard({ 
@@ -19,18 +21,29 @@ export default function FeatureCard({
   label, 
   description, 
   selected, 
-  onClick 
+  onClick,
+  disabled = false,
+  disabledText = "Pro",
 }: FeatureCardProps) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       className={`group relative overflow-hidden rounded-lg rounded-br-none border p-4 text-left transition-all duration-300 ${
-        selected
-          ? "border-[#ff8a3c] bg-linear-to-br from-[#ff8a3c]/10 to-transparent"
-          : "border-zinc-800 bg-[#0a0a0a] hover:border-zinc-700"
+        disabled
+          ? "border-zinc-800/50 bg-[#0a0a0a]/50 cursor-not-allowed opacity-50"
+          : selected
+            ? "border-[#ff8a3c] bg-linear-to-br from-[#ff8a3c]/10 to-transparent"
+            : "border-zinc-800 bg-[#0a0a0a] hover:border-zinc-700"
       }`}
     >
+      {/* Disabled indicator */}
+      {disabled && (
+        <div className="absolute top-2 right-2 rounded-full bg-zinc-700 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-zinc-400">
+          {disabledText}
+        </div>
+      )}
       {/* Top left corner accent */}
       <div className={`absolute top-0 left-0 h-2 w-2 border-l border-t transition-colors duration-300 ${
         selected ? "border-[#ff8a3c]" : "border-zinc-700"

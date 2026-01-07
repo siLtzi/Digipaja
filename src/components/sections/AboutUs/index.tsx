@@ -13,7 +13,6 @@ type AboutUsMessages = {
   techBody: string;
   bizTitle: string;
   bizBody: string;
-  note: string;
 };
 
 type MessagesFile = {
@@ -40,9 +39,6 @@ type AboutUsSettings = {
   aboutUsBizTitle_en?: string | null;
   aboutUsBizBody_fi?: string | null;
   aboutUsBizBody_en?: string | null;
-
-  aboutUsNote_fi?: string | null;
-  aboutUsNote_en?: string | null;
 
   samuliPhoto?: string | null;
   joukoPhoto?: string | null;
@@ -93,10 +89,6 @@ export default async function AboutUs({
     ? cms.aboutUsBizBody_fi || m.bizBody
     : cms.aboutUsBizBody_en || m.bizBody;
 
-  const note = isFi
-    ? cms.aboutUsNote_fi || m.note
-    : cms.aboutUsNote_en || m.note;
-
   // Sanity → fallback to local files if empty
   const samuliPhoto =
     cms.samuliPhoto || "/image/Samuli.png";
@@ -113,7 +105,6 @@ export default async function AboutUs({
       techBody={techBody}
       bizTitle={bizTitle}
       bizBody={bizBody}
-      note={note}
       samuliPhoto={samuliPhoto}
       joukoPhoto={joukoPhoto}
     />

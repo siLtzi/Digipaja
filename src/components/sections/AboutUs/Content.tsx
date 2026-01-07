@@ -18,7 +18,6 @@ type AboutUsProps = {
   techBody: string;
   bizTitle: string;
   bizBody: string;
-  note: string;
   samuliPhoto: string;
   joukoPhoto: string;
 };
@@ -46,7 +45,6 @@ export default function AboutUsContent({
   techBody,
   bizTitle,
   bizBody,
-  note,
   samuliPhoto,
   joukoPhoto,
 }: AboutUsProps) {
@@ -173,11 +171,6 @@ export default function AboutUsContent({
             <p className="text-sm leading-relaxed text-zinc-300 sm:text-base">
               {subtitle}
             </p>
-          </div>
-
-          <div className="animate-text flex items-center gap-3 rounded-sm border border-[#ff8a3c]/20 bg-[#ff8a3c]/5 px-4 py-3 backdrop-blur-sm">
-            <span className="text-[#ff8a3c]">⚠</span>
-            <p className="text-xs font-medium text-zinc-300">{note}</p>
           </div>
         </div>
 

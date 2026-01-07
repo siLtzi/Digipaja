@@ -90,8 +90,19 @@ export default function Navbar({ locale }: NavbarProps) {
         `}
       >
         {/* LEFT: Logo */}
-        <Link
-          href={`/${locale}`}
+        <button
+          onClick={() => {
+            if (isHomePage) {
+              // On homepage, scroll to top and refresh
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            } else {
+              // Not on homepage, navigate there
+              router.push(`/${locale}`);
+            }
+          }}
           className="group flex items-center gap-2 focus:outline-none cursor-pointer min-w-0"
           aria-label="Digipaja – etusivu"
         >
@@ -106,7 +117,7 @@ export default function Navbar({ locale }: NavbarProps) {
           >
             <LogoMark />
           </div>
-        </Link>
+        </button>
 
         {/* CENTER: Desktop Nav */}
         <nav

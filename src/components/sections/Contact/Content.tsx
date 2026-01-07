@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, forwardRef } from "react";
+import { useEffect, useRef, forwardRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -129,15 +129,43 @@ function ContactInner({
 }: ContactProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
-  const initialPackage = searchParams.get("package") || "";
+  const urlPackage = searchParams.get("package") || "";
+  const [selectedPackage, setSelectedPackage] = useState(urlPackage);
 
   useEffect(() => {
-    if (initialPackage && containerRef.current) {
+    // Listen for package selection events from pricing section
+    const handlePackageSelected = (e: CustomEvent) => {
+      if (e.detail?.package) {
+        setSelectedPackage(e.detail.package);
+        // Scroll to contact form after state update
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const contactSection = document.getElementById('contact');
+            if (contactSection) {
+              const yOffset = -100; // Offset for fixed header
+              const y = contactSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+          }, 200);
+        });
+      }
+    };
+
+    window.addEventListener('packageSelected', handlePackageSelected as EventListener);
+    
+    return () => {
+      window.removeEventListener('packageSelected', handlePackageSelected as EventListener);
+    };
+  }, []);
+
+  // Only handle URL-based package selection for scroll
+  useEffect(() => {
+    if (urlPackage && containerRef.current) {
       setTimeout(() => {
         containerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 100);
     }
-  }, [initialPackage]);
+  }, [urlPackage]);
 
   return (
     <div ref={containerRef} className="w-full">
@@ -166,7 +194,7 @@ function ContactInner({
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_0.9fr] items-start">
             
             <ContactForm 
-                initialPackage={initialPackage}
+                initialPackage={selectedPackage}
                 formTitle={formTitle}
                 formSubtitle={formSubtitle}
                 formCta={formCta}

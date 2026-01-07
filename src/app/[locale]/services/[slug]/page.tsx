@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 import { sanityClient } from "@/sanity/config";
 import { serviceBySlugQuery } from "@/sanity/queries";
 import ServiceClientAnimation from "./client-animation";
@@ -41,6 +42,52 @@ type ServiceData = {
   };
 };
 
+const BASE_URL = "https://digipajaoulu.fi";
+
+export async function generateMetadata({ params }: ServiceDetailProps): Promise<Metadata> {
+  const { locale, slug } = await params;
+  
+  const service = await sanityClient.fetch<ServiceData | null>(serviceBySlugQuery, {
+    slug,
+    locale,
+  });
+  
+  if (!service) {
+    return {
+      title: locale === "fi" ? "Palvelu ei löytynyt" : "Service not found",
+    };
+  }
+  
+  const isFi = locale === "fi";
+  
+  return {
+    title: service.title,
+    description: service.description || service.body?.substring(0, 160),
+    alternates: {
+      canonical: `${BASE_URL}/${locale}/services/${slug}`,
+      languages: {
+        fi: `${BASE_URL}/fi/services/${slug}`,
+        en: `${BASE_URL}/en/services/${slug}`,
+      },
+    },
+    openGraph: {
+      title: `${service.title} | Digipaja`,
+      description: service.description || service.body?.substring(0, 160),
+      url: `${BASE_URL}/${locale}/services/${slug}`,
+      siteName: "Digipaja",
+      locale: isFi ? "fi_FI" : "en_US",
+      type: "article",
+      images: service.imageUrl ? [{ url: service.imageUrl }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${service.title} | Digipaja`,
+      description: service.description || service.body?.substring(0, 160),
+      images: service.imageUrl ? [service.imageUrl] : undefined,
+    },
+  };
+}
+
 export default async function ServiceDetailPage({ params }: ServiceDetailProps) {
   const { locale, slug } = await params;
 
@@ -53,8 +100,70 @@ export default async function ServiceDetailPage({ params }: ServiceDetailProps) 
     notFound();
   }
 
+  const isFi = locale === "fi";
+
+  // JSON-LD Service schema
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.description || service.body?.substring(0, 160),
+    url: `${BASE_URL}/${locale}/services/${slug}`,
+    provider: {
+      "@type": "Organization",
+      name: "Digipaja",
+      url: BASE_URL,
+      logo: `${BASE_URL}/icons/favicon-196x196.png`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Oulu",
+        addressCountry: "FI",
+      },
+    },
+    areaServed: {
+      "@type": "Country",
+      name: "Finland",
+    },
+    serviceType: service.title,
+    ...(service.imageUrl && { image: service.imageUrl }),
+  };
+
+  // Breadcrumb schema
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: isFi ? "Etusivu" : "Home",
+        item: `${BASE_URL}/${locale}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: isFi ? "Palvelut" : "Services",
+        item: `${BASE_URL}/${locale}/services`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: service.title,
+        item: `${BASE_URL}/${locale}/services/${slug}`,
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <ServiceClientAnimation />
       
       {/* Hero Section */}

@@ -223,3 +223,77 @@ export const serviceBySlugQuery = groq`
     }
   }
 `;
+
+export const contactPageSettingsQuery = `
+  *[_type == "contactPageSettings"][0] {
+    hero {
+      eyebrow,
+      title,
+      titleAccent,
+      subtitle
+    },
+    steps {
+      contact,
+      package,
+      project,
+      features,
+      details
+    },
+    sectionHeaders {
+      contact {
+        number,
+        title,
+        description
+      },
+      package {
+        number,
+        title,
+        description
+      },
+      project {
+        number,
+        title,
+        description
+      },
+      features {
+        number,
+        title,
+        description
+      },
+      details {
+        number,
+        title,
+        description
+      }
+    },
+    formLabels,
+    projectTypes[] {
+      id,
+      icon,
+      label,
+      description
+    },
+    features[] {
+      id,
+      label,
+      description
+    },
+    timelineOptions[] {
+      id,
+      label,
+      description
+    },
+    budgetRanges[] {
+      id,
+      label
+    },
+    howFoundOptions[] {
+      id,
+      label
+    },
+    buttons,
+    success,
+    sidebar,
+    popularBadge
+  }
+`;

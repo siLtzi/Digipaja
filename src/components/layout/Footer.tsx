@@ -193,7 +193,7 @@ export default function Footer({ locale }: FooterProps) {
                        <a 
                          href={link.href} 
                          target="_blank" 
-                         rel="noopener" 
+                         rel="noopener noreferrer" 
                          className="group relative inline-flex items-center gap-2 text-sm text-zinc-400 transition-all duration-300 hover:text-white hover:translate-x-1"
                        >
                           <span className="h-1 w-1 rounded-full bg-zinc-700 transition-all duration-300 group-hover:bg-[#ff8a3c] group-hover:scale-125" />

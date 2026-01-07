@@ -229,6 +229,7 @@
     },
     "steps": {
       "contact": "Yhteystiedot",
+      "package": "Paketti",
       "project": "Projekti",
       "features": "Ominaisuudet",
       "details": "Lisätiedot"
