@@ -220,13 +220,17 @@ export default function ReferencesContent({
                         <div className="relative mx-auto w-[200px] rounded-[28px] border-4 border-[#1a1c23] bg-[#0a0a0a] p-1 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
                           {/* Notch */}
                           <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-1.5 rounded-full bg-black z-20" />
-                          {/* Screen */}
-                          <div className="relative w-full rounded-[22px] overflow-hidden bg-[#050609]" style={{ aspectRatio: '9/19' }}>
+                          {/* Screen - Scrollable */}
+                          <div 
+                            className="relative w-full rounded-[22px] overflow-y-auto bg-[#050609] touch-pan-y overscroll-y-contain [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]" 
+                            style={{ aspectRatio: '9/19' }}
+                          >
                             <Image 
                               src={project.mobileImage || project.image} 
                               alt={project.title}
-                              fill
-                              className="object-cover object-top"
+                              width={400}
+                              height={1000}
+                              className="w-full h-auto object-cover object-top select-none"
                             />
                           </div>
                         </div>
