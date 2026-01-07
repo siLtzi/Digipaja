@@ -214,6 +214,16 @@ export default function ContactPageContent({ locale, pricingTiers, cmsContent }:
     }
   };
 
+  // Check if form can be submitted (all required fields filled)
+  const canSubmit = useMemo(() => {
+    return (
+      formData.name.trim() !== "" &&
+      formData.email.trim() !== "" &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+      formData.projectType !== ""
+    );
+  }, [formData.name, formData.email, formData.projectType]);
+
   const handleNextStep = () => {
     if (validateStep(currentStep)) {
       setCurrentStep(prev => prev + 1);
@@ -746,8 +756,8 @@ export default function ContactPageContent({ locale, pricingTiers, cmsContent }:
                   // Last step: Submit button
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="group/btn relative inline-flex items-center justify-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white disabled:opacity-50"
+                    disabled={isSubmitting || !canSubmit}
+                    className="group/btn relative inline-flex items-center justify-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-[#ff8a3c]"
                     style={{ fontFamily: "var(--font-goldman)" }}
                   >
                     <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
