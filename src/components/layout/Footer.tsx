@@ -20,8 +20,8 @@ export default function Footer({ locale }: FooterProps) {
   ];
 
   const LEGAL_LINKS = [
-    { label: t("Tietosuoja", "Privacy Policy"), href: "/privacy" },
-    { label: t("Ehdot", "Terms of Service"), href: "/terms" },
+    { label: t("Tietosuoja", "Privacy Policy"), href: "/tietosuoja" },
+    { label: t("Käyttöehdot", "Terms of Service"), href: "/kayttoehdot" },
   ];
 
   const SOCIALS = [

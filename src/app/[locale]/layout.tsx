@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CookieConsent from "@/components/ui/CookieConsent";
 
 const BASE_URL = "https://digipajaoulu.fi";
 
@@ -48,6 +49,9 @@ export default async function LocaleLayout({
           <main>{children}</main>
           <Footer locale={locale} />
         </SmoothScrollProvider>
+        
+        {/* GDPR Cookie Consent Banner */}
+        <CookieConsent locale={locale} />
       </div>
     </NextIntlClientProvider>
   );

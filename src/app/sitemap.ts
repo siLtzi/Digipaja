@@ -94,6 +94,56 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
       },
     },
+    // Legal pages - Finnish
+    {
+      url: `${BASE_URL}/fi/tietosuoja`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: {
+          fi: `${BASE_URL}/fi/tietosuoja`,
+          en: `${BASE_URL}/en/tietosuoja`,
+        },
+      },
+    },
+    {
+      url: `${BASE_URL}/fi/kayttoehdot`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: {
+          fi: `${BASE_URL}/fi/kayttoehdot`,
+          en: `${BASE_URL}/en/kayttoehdot`,
+        },
+      },
+    },
+    // Legal pages - English
+    {
+      url: `${BASE_URL}/en/tietosuoja`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: {
+          fi: `${BASE_URL}/fi/tietosuoja`,
+          en: `${BASE_URL}/en/tietosuoja`,
+        },
+      },
+    },
+    {
+      url: `${BASE_URL}/en/kayttoehdot`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+      alternates: {
+        languages: {
+          fi: `${BASE_URL}/fi/kayttoehdot`,
+          en: `${BASE_URL}/en/kayttoehdot`,
+        },
+      },
+    },
   ];
 
   // Dynamic service pages
