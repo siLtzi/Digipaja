@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import React, { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { HammerIcon } from "@/components/icons/HammerIcon";
@@ -24,66 +24,72 @@ export const HammerStrike = forwardRef<HammerStrikeHandle, HammerStrikeProps>(
 
     const { contextSafe } = useGSAP({ scope: rootRef });
 
-    const show = contextSafe(() => {
-      const el = hammerRef.current;
-      if (!el) return;
+    const show = useCallback(() => {
+      contextSafe(() => {
+        const el = hammerRef.current;
+        if (!el) return;
 
-      gsap.killTweensOf(el);
-      gsap.to(el, {
-        opacity: 1,
-        scale: 1,
-        rotation: 0,
-        duration: 0.25,
-        ease: "elastic.out(1, 0.5)",
-        overwrite: "auto",
-      });
-    });
+        gsap.killTweensOf(el);
+        gsap.to(el, {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          duration: 0.25,
+          ease: "elastic.out(1, 0.5)",
+          overwrite: "auto",
+        });
+      })();
+    }, [contextSafe]);
 
-    const hide = contextSafe(() => {
-      const el = hammerRef.current;
-      if (!el) return;
+    const hide = useCallback(() => {
+      contextSafe(() => {
+        const el = hammerRef.current;
+        if (!el) return;
 
-      gsap.killTweensOf(el);
-      gsap.to(el, {
-        opacity: 0,
-        scale: 0.5,
-        duration: 0.12,
-        ease: "power2.out",
-        overwrite: "auto",
-        onComplete: () => {
-          gsap.set(el, { opacity: 0, scale: 0.5 });
-        },
-      });
-    });
-
-    const strike = contextSafe((opts?: { onComplete?: () => void }) => {
-      const hammerEl = hammerRef.current;
-      const sparksEl = sparksRef.current;
-      const targetEl = targetRef.current;
-
-      if (!hammerEl || !sparksEl || !targetEl) return;
-      if (gsap.isTweening(hammerEl)) return;
-
-      gsap.set(hammerEl, { transformOrigin: "90% 10%" });
-
-      const tl = gsap.timeline({
-        onComplete: () => {
-          opts?.onComplete?.();
-        },
-      });
-
-      tl.to(hammerEl, {
-        rotation: 45,
-        scale: 1.2,
-        duration: 0.25,
-        ease: "back.out(1.2)",
-      })
-        .to(hammerEl, {
-          rotation: -15,
-          scale: 1.32,
-          duration: 0.1,
-          ease: "power4.in",
+        gsap.killTweensOf(el);
+        gsap.to(el, {
+          opacity: 0,
+          scale: 0.5,
+          duration: 0.12,
+          ease: "power2.out",
+          overwrite: "auto",
           onComplete: () => {
+            gsap.set(el, { opacity: 0, scale: 0.5 });
+          },
+        });
+      })();
+    }, [contextSafe]);
+
+    const strike = useCallback(
+      (opts?: { onComplete?: () => void }) => {
+        contextSafe((safeOpts?: { onComplete?: () => void }) => {
+          const hammerEl = hammerRef.current;
+          const sparksEl = sparksRef.current;
+          const targetEl = targetRef.current;
+
+          if (!hammerEl || !sparksEl || !targetEl) return;
+          if (gsap.isTweening(hammerEl)) return;
+
+          gsap.set(hammerEl, { transformOrigin: "90% 10%" });
+
+          const tl = gsap.timeline({
+            onComplete: () => {
+              safeOpts?.onComplete?.();
+            },
+          });
+
+          tl.to(hammerEl, {
+            rotation: 45,
+            scale: 1.2,
+            duration: 0.25,
+            ease: "back.out(1.2)",
+          })
+            .to(hammerEl, {
+              rotation: -15,
+              scale: 1.32,
+              duration: 0.1,
+              ease: "power4.in",
+              onComplete: () => {
             // ---- IMPORTANT: disable CSS transition on the button during the hit ----
             const prevTransition = (targetEl as HTMLElement).style.transition;
             (targetEl as HTMLElement).style.transition = "none";
@@ -186,20 +192,23 @@ export const HammerStrike = forwardRef<HammerStrikeHandle, HammerStrikeProps>(
                 duration: 0.2,
               }
             );
-          },
-        })
-        .to(hammerEl, {
-          rotation: 0,
-          scale: 1,
-          duration: 0.2,
-          ease: "elastic.out(1, 0.5)",
-        })
-        .to(hammerEl, {
-          opacity: 0,
-          scale: 0.5,
-          duration: 0.2,
-        });
-    });
+              },
+            })
+            .to(hammerEl, {
+              rotation: 0,
+              scale: 1,
+              duration: 0.2,
+              ease: "elastic.out(1, 0.5)",
+            })
+            .to(hammerEl, {
+              opacity: 0,
+              scale: 0.5,
+              duration: 0.2,
+            });
+        })(opts);
+      },
+      [contextSafe, targetRef]
+    );
 
     useImperativeHandle(ref, () => ({ show, hide, strike }), [show, hide, strike]);
 

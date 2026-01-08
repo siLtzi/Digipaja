@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -80,14 +79,14 @@ export default function PricingContent({
     >
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
-        <div className="laser-beam h-[4px] w-full max-w-5xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 scale-x-0" />
-        <div className="laser-beam absolute top-0 h-[2px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0 scale-x-0" />
-        <div className="laser-beam absolute top-0 h-[1px] w-2/3 max-w-3xl bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
+        <div className="laser-beam h-1 w-full max-w-5xl bg-linear-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-0.5 w-3/4 max-w-4xl bg-linear-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-px w-2/3 max-w-3xl bg-linear-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         {/* Tech grid pattern */}
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_50%,#000_50%,transparent_100%)]" />
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_80%_60%_at_50%_50%,#000_50%,transparent_100%)]" />
         
         {/* Spotlight gradient */}
         <div
@@ -142,61 +141,69 @@ export default function PricingContent({
   );
 }
 
-function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
+export type { PricingTier };
+
+export function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
   const isHighlight = tier.highlight;
   const tierId = `SYS.0${index + 1}`;
-  const originalPrice = tier.price;
 
   const cardRef = useRef<HTMLElement>(null);
   const priceRef = useRef<HTMLSpanElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const strikeRef = useRef<HammerStrikeHandle>(null);
 
-  const router = useRouter();
-  const pathname = usePathname();
-  const locale = pathname?.startsWith("/en") ? "en" : "fi";
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { contextSafe } = useGSAP({ scope: cardRef });
 
-  const handleSelectPackage = contextSafe(() => {
-    const onDone = () => {
-      // Dispatch custom event with package selection
-      window.dispatchEvent(new CustomEvent('packageSelected', { detail: { package: tier.name } }));
-    };
+  const handleSelectPackage = useCallback(() => {
+    contextSafe(() => {
+      const onDone = () => {
+        window.dispatchEvent(
+          new CustomEvent("packageSelected", {
+            detail: { package: tier.name },
+          })
+        );
+      };
 
-    if (strikeRef.current) {
-      strikeRef.current.strike({ onComplete: onDone });
-    } else {
-      onDone();
-    }
-  });
+      if (strikeRef.current) {
+        strikeRef.current.strike({ onComplete: onDone });
+      } else {
+        onDone();
+      }
+    })();
+  }, [contextSafe, tier.name]);
 
-  const handleMouseEnter = contextSafe(() => {
-    if (priceRef.current) {
-      gsap.to(priceRef.current, {
-        textShadow: "0 0 20px rgba(255,138,60,0.8), 0 0 40px rgba(255,138,60,0.4)",
-        scale: 1.05,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
+  const handleMouseEnter = useCallback(() => {
+    contextSafe(() => {
+      if (priceRef.current) {
+        gsap.to(priceRef.current, {
+          textShadow:
+            "0 0 20px rgba(255,138,60,0.8), 0 0 40px rgba(255,138,60,0.4)",
+          scale: 1.05,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      }
 
-    strikeRef.current?.show();
-  });
+      strikeRef.current?.show();
+    })();
+  }, [contextSafe]);
 
-  const handleMouseLeave = contextSafe(() => {
-    if (priceRef.current) {
-      gsap.to(priceRef.current, {
-        textShadow: "0 0 0px rgba(255,138,60,0)",
-        scale: 1,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
+  const handleMouseLeave = useCallback(() => {
+    contextSafe(() => {
+      if (priceRef.current) {
+        gsap.to(priceRef.current, {
+          textShadow: "0 0 0px rgba(255,138,60,0)",
+          scale: 1,
+          duration: 0.3,
+          ease: "power2.out",
+        });
+      }
 
-    strikeRef.current?.hide();
-  });
+      strikeRef.current?.hide();
+    })();
+  }, [contextSafe]);
 
   useGSAP(() => {
     if (!isHighlight || !cardRef.current) return;
@@ -220,8 +227,8 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
       onMouseLeave={handleMouseLeave}
       className={`group relative flex flex-col justify-between rounded-lg p-6 sm:p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 border ${
         isHighlight
-          ? "bg-gradient-to-b from-[#0a0a0a] to-[#050609] border-[#ff8a3c]/30 shadow-[0_0_40px_rgba(255,138,60,0.15)]"
-          : "bg-gradient-to-b from-[#0a0a0a]/80 to-[#050609]/60 border-white/5 hover:border-[#ff8a3c]/20 hover:bg-gradient-to-b hover:from-[#0f0f12] hover:to-[#0a0a0a]"
+          ? "bg-linear-to-b from-[#0a0a0a] to-[#050609] border-[#ff8a3c]/30 shadow-[0_0_40px_rgba(255,138,60,0.15)]"
+          : "bg-linear-to-b from-[#0a0a0a]/80 to-[#050609]/60 border-white/5 hover:border-[#ff8a3c]/20 hover:bg-linear-to-b hover:from-[#0f0f12] hover:to-[#0a0a0a]"
       }`}
     >
       <span
@@ -237,7 +244,7 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
         className={`absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 transition-all duration-500 group-hover:h-8 group-hover:w-8 ${cornerColor}`}
       />
       <div
-        className={`absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100 ${
+        className={`absolute inset-0 pointer-events-none rounded-lg bg-linear-to-b from-white/2 to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100 ${
           isHighlight ? "opacity-100" : ""
         }`}
       />
@@ -282,11 +289,11 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
           </div>
         </div>
 
-        <div className="mb-4 sm:mb-8 relative h-[1px] w-full">
+        <div className="mb-4 sm:mb-8 relative h-px w-full">
           <div className={`absolute inset-0 transition-all duration-500 ${
             isHighlight
-              ? "bg-gradient-to-r from-[#ff8a3c] via-[#ff8a3c]/50 to-transparent shadow-[0_0_8px_rgba(255,138,60,0.4)]"
-              : "bg-gradient-to-r from-white/10 to-transparent group-hover:from-[#ff8a3c]/30 group-hover:shadow-[0_0_6px_rgba(255,138,60,0.3)]"
+              ? "bg-linear-to-r from-[#ff8a3c] via-[#ff8a3c]/50 to-transparent shadow-[0_0_8px_rgba(255,138,60,0.4)]"
+              : "bg-linear-to-r from-white/10 to-transparent group-hover:from-[#ff8a3c]/30 group-hover:shadow-[0_0_6px_rgba(255,138,60,0.3)]"
           }`} />
         </div>
         <div className="mb-4 flex items-baseline gap-1">
@@ -326,7 +333,7 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
         </button>
 
         <div className={`${isExpanded ? "block" : "hidden"} sm:block`}>
-          <p className="mb-8 text-sm leading-relaxed text-zinc-300 min-h-[40px]">
+          <p className="mb-8 text-sm leading-relaxed text-zinc-300 min-h-10">
             {tier.description}
           </p>
           <ul className="space-y-4 mb-8">
@@ -336,7 +343,7 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
                 className="flex items-center gap-3 text-sm text-zinc-300"
               >
                 <div
-                  className={`h-1.5 w-1.5 rounded-sm transition-all duration-300 flex-shrink-0 ${
+                  className={`h-1.5 w-1.5 rounded-sm transition-all duration-300 shrink-0 ${
                     isHighlight
                       ? "bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]"
                       : "bg-zinc-700 shadow-[0_0_4px_rgba(113,113,122,0.5)] group-hover:bg-[#ff8a3c] group-hover:shadow-[0_0_8px_rgba(255,138,60,0.8)]"
@@ -372,7 +379,7 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
           
           {/* Shimmer effect for highlighted cards */}
           {isHighlight && (
-            <div className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#ff8a3c]/20 to-transparent group-hover/btn:animate-[shimmer_1s_infinite]" />
+            <div className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-[#ff8a3c]/20 to-transparent group-hover/btn:animate-[shimmer_1s_infinite]" />
           )}
 
           <span className="relative z-10">{tier.cta}</span>
