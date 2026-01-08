@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { sanityClient } from "@/sanity/config";
 import { contactSettingsQuery } from "@/sanity/queries"; 
 import dynamic from "next/dynamic";
@@ -115,22 +116,24 @@ export default async function Contact({ locale }: { locale: "fi" | "en" }) {
   const phone = cms.phone || "+358 40 123 4567";
 
   return (
-    <ContactContent
-      eyebrow={eyebrow}
-      title={title}
-      subtitle={subtitle}
-      contactTitle={contactTitle}
-      contactSubtitle={contactSubtitle}
-      email={email}
-      phone={phone}
-      ctaText={ctaText}
-      formNameLabel={formNameLabel}
-      formEmailLabel={formEmailLabel}
-      formCompanyLabel={formCompanyLabel}
-      formMessageLabel={formMessageLabel}
-      formTitle={formTitle}
-      formSubtitle={formSubtitle}
-      formCta={formCta}
-    />
+    <Suspense fallback={null}>
+      <ContactContent
+        eyebrow={eyebrow}
+        title={title}
+        subtitle={subtitle}
+        contactTitle={contactTitle}
+        contactSubtitle={contactSubtitle}
+        email={email}
+        phone={phone}
+        ctaText={ctaText}
+        formNameLabel={formNameLabel}
+        formEmailLabel={formEmailLabel}
+        formCompanyLabel={formCompanyLabel}
+        formMessageLabel={formMessageLabel}
+        formTitle={formTitle}
+        formSubtitle={formSubtitle}
+        formCta={formCta}
+      />
+    </Suspense>
   );
 }
