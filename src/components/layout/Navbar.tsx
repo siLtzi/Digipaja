@@ -26,6 +26,126 @@ const NAV_ITEMS: NavItem[] = [
   { id: "pricing", href: "pricing", labelFi: "Hinnasto", labelEn: "Pricing" },
 ];
 
+// Flag components
+// Styled language button with sharp angular frame
+function LanguageButton({ 
+  isActive, 
+  onClick, 
+  label, 
+  title,
+  children,
+  scrolled 
+}: { 
+  isActive: boolean; 
+  onClick: () => void; 
+  label: string;
+  title: string;
+  children: React.ReactNode;
+  scrolled?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group relative cursor-pointer"
+      aria-label={label}
+      title={title}
+    >
+      {/* Outer angular frame */}
+      <div 
+        className={`
+          relative flex items-center justify-center
+          transition-all duration-300
+          ${scrolled ? "h-7 w-10" : "h-8 w-11"}
+        `}
+        style={{
+          clipPath: "polygon(12% 0%, 100% 0%, 100% 75%, 88% 100%, 0% 100%, 0% 25%)",
+        }}
+      >
+        {/* Background glow for active */}
+        <div 
+          className={`
+            absolute inset-0 transition-opacity duration-300
+            ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"}
+          `}
+          style={{
+            background: "linear-gradient(135deg, rgba(255,138,60,0.3) 0%, rgba(255,138,60,0.1) 100%)",
+          }}
+        />
+        
+        {/* Border frame */}
+        <div 
+          className={`
+            absolute inset-0 transition-all duration-300
+            ${isActive 
+              ? "bg-gradient-to-br from-[#ff8a3c] via-[#ff8a3c]/60 to-[#ff8a3c]" 
+              : "bg-gradient-to-br from-zinc-600 via-zinc-700 to-zinc-600 group-hover:from-[#ff8a3c]/50 group-hover:to-[#ff8a3c]/50"
+            }
+          `}
+          style={{
+            clipPath: "polygon(12% 0%, 100% 0%, 100% 75%, 88% 100%, 0% 100%, 0% 25%)",
+          }}
+        />
+        
+        {/* Inner content area */}
+        <div 
+          className={`
+            absolute inset-[2px] flex items-center justify-center overflow-hidden
+            bg-[#0a0c10] transition-all duration-300
+            ${!isActive && "group-hover:bg-[#0f1218]"}
+          `}
+          style={{
+            clipPath: "polygon(12% 0%, 100% 0%, 100% 75%, 88% 100%, 0% 100%, 0% 25%)",
+          }}
+        >
+          {/* Flag content */}
+          <div className={`
+            w-full h-full transition-all duration-300
+            ${isActive ? "opacity-100" : "opacity-40 group-hover:opacity-80"}
+          `}>
+            {children}
+          </div>
+        </div>
+        
+        {/* Active indicator dot */}
+        {isActive && (
+          <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-[#ff8a3c] shadow-[0_0_6px_rgba(255,138,60,0.8)]" />
+        )}
+      </div>
+    </button>
+  );
+}
+
+function FinnishFlag({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 36 24" className={className} aria-hidden="true">
+      <rect width="36" height="24" fill="#fff" />
+      <rect x="10" width="6" height="24" fill="#003580" />
+      <rect y="9" width="36" height="6" fill="#003580" />
+    </svg>
+  );
+}
+
+function UKFlag({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 30" className={className} aria-hidden="true">
+      <clipPath id="uk-s">
+        <path d="M0,0 v30 h60 v-30 z" />
+      </clipPath>
+      <clipPath id="uk-t">
+        <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
+      </clipPath>
+      <g clipPath="url(#uk-s)">
+        <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
+        <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
+        <path d="M0,0 L60,30 M60,0 L0,30" clipPath="url(#uk-t)" stroke="#C8102E" strokeWidth="4" />
+        <path d="M30,0 v30 M0,15 h60" stroke="#fff" strokeWidth="10" />
+        <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6" />
+      </g>
+    </svg>
+  );
+}
+
 export default function Navbar({ locale }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,6 +155,21 @@ export default function Navbar({ locale }: NavbarProps) {
 
   // Helper: Are we on the homepage? (root "/" or "/fi" or "/en")
   const isHomePage = pathname === `/${locale}` || pathname === "/" || pathname === `/${locale}/`;
+
+  // Language switcher: swap locale in current path
+  const switchLocale = (newLocale: "fi" | "en") => {
+    if (newLocale === locale) return;
+    
+    // Replace current locale with new one in the path
+    const segments = pathname.split("/");
+    if (segments[1] === "fi" || segments[1] === "en") {
+      segments[1] = newLocale;
+    } else {
+      segments.splice(1, 0, newLocale);
+    }
+    const newPath = segments.join("/") || `/${newLocale}`;
+    router.push(newPath);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -138,8 +273,30 @@ export default function Navbar({ locale }: NavbarProps) {
           ))}
         </nav>
 
-        {/* RIGHT: CTA & Mobile Toggle */}
+        {/* RIGHT: Language Switcher, CTA & Mobile Toggle */}
         <div className="flex items-center gap-4 shrink-0">
+          
+          {/* LANGUAGE SWITCHER */}
+          <div className="flex items-center gap-1">
+            <LanguageButton
+              isActive={locale === "fi"}
+              onClick={() => switchLocale("fi")}
+              label="Vaihda suomeksi"
+              title="Suomi"
+              scrolled={scrolled}
+            >
+              <FinnishFlag className="h-full w-full scale-125" />
+            </LanguageButton>
+            <LanguageButton
+              isActive={locale === "en"}
+              onClick={() => switchLocale("en")}
+              label="Switch to English"
+              title="English"
+              scrolled={scrolled}
+            >
+              <UKFlag className="h-full w-full scale-125" />
+            </LanguageButton>
+          </div>
           
           {/* DESKTOP CONTACT BUTTON */}
           <Link
@@ -197,6 +354,38 @@ export default function Navbar({ locale }: NavbarProps) {
               {t(item.labelFi, item.labelEn)}
             </button>
           ))}
+          
+          {/* Mobile Language Switcher */}
+          <div className="mt-4 flex items-center justify-center gap-3 border-t border-white/10 pt-4">
+            <span className="text-[10px] uppercase tracking-widest text-zinc-500">
+              {t("Kieli", "Language")}
+            </span>
+            <div className="flex gap-2">
+              <LanguageButton
+                isActive={locale === "fi"}
+                onClick={() => {
+                  switchLocale("fi");
+                  setMenuOpen(false);
+                }}
+                label="Vaihda suomeksi"
+                title="Suomi"
+              >
+                <FinnishFlag className="h-full w-full scale-125" />
+              </LanguageButton>
+              <LanguageButton
+                isActive={locale === "en"}
+                onClick={() => {
+                  switchLocale("en");
+                  setMenuOpen(false);
+                }}
+                label="Switch to English"
+                title="English"
+              >
+                <UKFlag className="h-full w-full scale-125" />
+              </LanguageButton>
+            </div>
+          </div>
+          
           <div className="mt-4 flex justify-center border-t border-white/10 pt-6">
             <Link
               href={`/${locale}/yhteydenotto`}
