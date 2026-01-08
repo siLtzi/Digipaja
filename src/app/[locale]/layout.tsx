@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Navbar from "@/components/layout/Navbar";
@@ -7,13 +8,24 @@ import Footer from "@/components/layout/Footer";
 import CookieConsent from "@/components/ui/CookieConsent";
 
 const BASE_URL = "https://digipajaoulu.fi";
+const locales = ["fi", "en"] as const;
+type Locale = (typeof locales)[number];
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({ 
   params 
 }: { 
-  params: Promise<{ locale: "fi" | "en" }> 
+  params: Promise<{ locale: string }> 
 }): Promise<Metadata> {
   const { locale } = await params;
+  
+  // Validate locale
+  if (!locales.includes(locale as Locale)) {
+    return {};
+  }
   
   return {
     alternates: {
@@ -34,9 +46,18 @@ export default async function LocaleLayout({
   params,
 }: {
   children: ReactNode;
-  params: Promise<{ locale: "fi" | "en" }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  const { locale: localeParam } = await params;
+  
+  // Validate locale - return 404 for invalid locales (like icon-192.png)
+  if (!locales.includes(localeParam as Locale)) {
+    notFound();
+  }
+  
+  // Now we know locale is valid
+  const locale = localeParam as Locale;
+  
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
 
   return (

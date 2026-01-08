@@ -495,5 +495,32 @@
       "title": "Want a site that<br />does the work for you?",
       "body": "Tell us what you sell – we build the path that makes buying easy."
     }
+  },
+  "projectDetail": {
+    "breadcrumb": {
+      "home": "Home",
+      "projects": "Projects"
+    },
+    "meta": {
+      "client": "Client",
+      "duration": "Duration",
+      "website": "Website"
+    },
+    "visitWebsite": "Visit Website",
+    "techStack": "Tech Stack",
+    "sections": {
+      "challenge": "The Challenge",
+      "solution": "Our Solution",
+      "results": "Results",
+      "keyFeatures": "Key Features",
+      "gallery": "Gallery",
+      "lighthouse": "Performance Scores"
+    },
+    "cta": {
+      "title": "Want a similar project?",
+      "description": "Tell us about your vision and let's build something amazing together. Custom solutions tailored to your business needs.",
+      "button": "Start a Conversation",
+      "backToProjects": "Back to Projects"
+    }
   }
 }

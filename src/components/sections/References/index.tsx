@@ -102,6 +102,7 @@ export default async function References({ locale }: { locale: "fi" | "en" }) {
       title={title}
       subtitle={subtitle}
       projects={projects}
+      locale={locale}
       translations={{
         viewCase: m.viewCase,
         viewCaseStudy: m.viewCaseStudy,

@@ -451,5 +451,32 @@
       "title": "Haluatko sivun, joka tekee työn puolestasi?",
       "body": "Kerro mitä myyt – me rakennamme polun, joka tekee ostamisesta helppoa."
     }
+  },
+  "projectDetail": {
+    "breadcrumb": {
+      "home": "Etusivu",
+      "projects": "Projektit"
+    },
+    "meta": {
+      "client": "Asiakas",
+      "duration": "Kesto",
+      "website": "Sivusto"
+    },
+    "visitWebsite": "Avaa sivusto",
+    "techStack": "Teknologiat",
+    "sections": {
+      "challenge": "Haaste",
+      "solution": "Ratkaisu",
+      "results": "Tulokset",
+      "keyFeatures": "Keskeiset ominaisuudet",
+      "gallery": "Galleria",
+      "lighthouse": "Suorituskykypisteet"
+    },
+    "cta": {
+      "title": "Haluatko samanlaisen projektin?",
+      "description": "Kerro meille visiostasi ja rakennetaan yhdessä jotain upeaa. Räätälöidyt ratkaisut yrityksesi tarpeisiin.",
+      "button": "Aloitetaan keskustelu",
+      "backToProjects": "Takaisin projekteihin"
+    }
   }
 }

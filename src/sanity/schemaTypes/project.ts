@@ -36,6 +36,140 @@ export default defineType({
       type: "text",
       rows: 3,
     }),
+    // === DETAILED CONTENT FOR PROJECT PAGE ===
+    defineField({
+      name: "clientName",
+      title: "Client Name",
+      type: "string",
+      description: "The name of the client or company",
+    }),
+    defineField({
+      name: "projectYear",
+      title: "Project Year",
+      type: "string",
+      description: "e.g. '2024' or '2023-2024'",
+    }),
+    defineField({
+      name: "projectDuration",
+      title: "Project Duration",
+      type: "string",
+      description: "e.g. '6 weeks' or '3 months'",
+    }),
+    defineField({
+      name: "challenge_fi",
+      title: "The Challenge (FI)",
+      type: "text",
+      rows: 4,
+      description: "What problem was the client facing?",
+    }),
+    defineField({
+      name: "challenge_en",
+      title: "The Challenge (EN)",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "solution_fi",
+      title: "Our Solution (FI)",
+      type: "text",
+      rows: 4,
+      description: "How did we solve the problem?",
+    }),
+    defineField({
+      name: "solution_en",
+      title: "Our Solution (EN)",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "results_fi",
+      title: "Results (FI)",
+      type: "text",
+      rows: 4,
+      description: "What were the outcomes?",
+    }),
+    defineField({
+      name: "results_en",
+      title: "Results (EN)",
+      type: "text",
+      rows: 4,
+    }),
+    defineField({
+      name: "testimonial_fi",
+      title: "Client Testimonial (FI)",
+      type: "text",
+      rows: 3,
+      description: "Optional quote from the client",
+    }),
+    defineField({
+      name: "testimonial_en",
+      title: "Client Testimonial (EN)",
+      type: "text",
+      rows: 3,
+    }),
+    defineField({
+      name: "testimonialAuthor",
+      title: "Testimonial Author",
+      type: "string",
+      description: "Name and title of the person quoted",
+    }),
+    defineField({
+      name: "keyFeatures_fi",
+      title: "Key Features (FI)",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      description: "List of key features delivered",
+    }),
+    defineField({
+      name: "keyFeatures_en",
+      title: "Key Features (EN)",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+    }),
+    defineField({
+      name: "metrics",
+      title: "Project Metrics",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            { name: "label_fi", title: "Label (FI)", type: "string" },
+            { name: "label_en", title: "Label (EN)", type: "string" },
+            { name: "value", title: "Value", type: "string" },
+          ],
+        },
+      ],
+      description: "e.g. '95+' - 'Lighthouse Score', '2s' - 'Load Time'",
+    }),
+    // === LIGHTHOUSE SCORES ===
+    defineField({
+      name: "lighthouseMobile",
+      title: "Lighthouse Scores (Mobile)",
+      type: "object",
+      fields: [
+        { name: "performance", title: "Performance", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+        { name: "accessibility", title: "Accessibility", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+        { name: "bestPractices", title: "Best Practices", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+        { name: "seo", title: "SEO", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+      ],
+      description: "Lighthouse scores for mobile version (0-100)",
+    }),
+    defineField({
+      name: "lighthouseDesktop",
+      title: "Lighthouse Scores (Desktop)",
+      type: "object",
+      fields: [
+        { name: "performance", title: "Performance", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+        { name: "accessibility", title: "Accessibility", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+        { name: "bestPractices", title: "Best Practices", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+        { name: "seo", title: "SEO", type: "number", validation: (Rule) => Rule.min(0).max(100) },
+      ],
+      description: "Lighthouse scores for desktop version (0-100)",
+    }),
+    // === IMAGES ===
     defineField({
       name: "mainImage",
       title: "Main Image (Desktop)",
@@ -50,6 +184,19 @@ export default defineType({
       options: { hotspot: true },
       description: "Upload a screenshot taken at mobile width (e.g. iPhone 14 size). If left empty, Desktop image will be used.",
     }),
+    defineField({
+      name: "gallery",
+      title: "Project Gallery",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+        },
+      ],
+      description: "Additional screenshots or images from the project",
+    }),
+    // === LINKS & META ===
     defineField({
       name: "liveUrl",
       title: "Live Website URL",
@@ -71,4 +218,11 @@ export default defineType({
       initialValue: () => new Date().toISOString(),
     }),
   ],
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "clientName",
+      media: "mainImage",
+    },
+  },
 });

@@ -25,6 +25,7 @@ type ReferencesProps = {
   title: string;
   subtitle: string;
   projects: ReferenceProject[];
+  locale: "fi" | "en";
   translations: {
     viewCase: string;
     viewCaseStudy: string;
@@ -41,6 +42,7 @@ export default function ReferencesContent({
   title,
   subtitle,
   projects,
+  locale,
   translations,
 }: ReferencesProps) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -268,7 +270,7 @@ export default function ReferencesContent({
                             </a>
                           )}
                           <Link
-                            href={`/work/${project.slug}`}
+                            href={`/${locale}/projects/${project.slug}`}
                             className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-white/10"
                           >
                             {translations.viewCase}
@@ -474,7 +476,7 @@ export default function ReferencesContent({
                 {/* CTA Button - Below monitor */}
                 <div className="mt-8 flex justify-start">
                   <Link
-                    href={`/work/${activeProject.slug}`}
+                    href={`/${locale}/projects/${activeProject.slug}`}
                     style={{ fontFamily: "var(--font-goldman)" }}
                     className="group relative isolate flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
                   >

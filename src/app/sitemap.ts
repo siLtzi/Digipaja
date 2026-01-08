@@ -10,6 +10,12 @@ const servicesQuery = `*[_type == "service"] {
   _updatedAt
 }`;
 
+// Query to get all project slugs from Sanity
+const projectsQuery = `*[_type == "project"] {
+  "slug": slug.current,
+  _updatedAt
+}`;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch dynamic service pages
   const services = await sanityClient.fetch<Array<{
@@ -17,6 +23,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     slugEn: string;
     _updatedAt: string;
   }>>(servicesQuery);
+
+  // Fetch dynamic project pages
+  const projects = await sanityClient.fetch<Array<{
+    slug: string;
+    _updatedAt: string;
+  }>>(projectsQuery);
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -183,5 +195,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return pages;
   });
 
-  return [...staticPages, ...servicePages];
+  // Dynamic project pages
+  const projectPages: MetadataRoute.Sitemap = projects.flatMap((project) => {
+    if (!project.slug) return [];
+    
+    return [
+      {
+        url: `${BASE_URL}/fi/projects/${project.slug}`,
+        lastModified: new Date(project._updatedAt),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+        alternates: {
+          languages: {
+            fi: `${BASE_URL}/fi/projects/${project.slug}`,
+            en: `${BASE_URL}/en/projects/${project.slug}`,
+          },
+        },
+      },
+      {
+        url: `${BASE_URL}/en/projects/${project.slug}`,
+        lastModified: new Date(project._updatedAt),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+        alternates: {
+          languages: {
+            fi: `${BASE_URL}/fi/projects/${project.slug}`,
+            en: `${BASE_URL}/en/projects/${project.slug}`,
+          },
+        },
+      },
+    ];
+  });
+
+  return [...staticPages, ...servicePages, ...projectPages];
 }

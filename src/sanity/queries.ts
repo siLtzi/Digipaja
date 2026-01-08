@@ -97,6 +97,60 @@ export const referencesQuery = groq`{
     technologies
   }
 }`;
+
+// Single project by slug for project detail page
+export const projectBySlugQuery = groq`
+  *[_type == "project" && slug.current == $slug][0]{
+    title,
+    "slug": slug.current,
+    category,
+    clientName,
+    projectYear,
+    projectDuration,
+    description_fi,
+    description_en,
+    challenge_fi,
+    challenge_en,
+    solution_fi,
+    solution_en,
+    results_fi,
+    results_en,
+    testimonial_fi,
+    testimonial_en,
+    testimonialAuthor,
+    keyFeatures_fi,
+    keyFeatures_en,
+    metrics[]{
+      label_fi,
+      label_en,
+      value
+    },
+    lighthouseMobile{
+      performance,
+      accessibility,
+      bestPractices,
+      seo
+    },
+    lighthouseDesktop{
+      performance,
+      accessibility,
+      bestPractices,
+      seo
+    },
+    "mainImage": mainImage.asset->url,
+    "mobileImage": mobileImage.asset->url,
+    "gallery": gallery[].asset->url,
+    liveUrl,
+    technologies,
+    publishedAt
+  }
+`;
+
+// All project slugs for static generation
+export const allProjectSlugsQuery = groq`
+  *[_type == "project" && defined(slug.current)][].slug.current
+`;
+
 export const processSettingsQuery = groq`
   *[_type == "processSettings"][0]{
     processEyebrow_fi,
