@@ -8,7 +8,7 @@ type PricingTier = {
   name: string;
   price: string;
   description: string;
-  features: string[];
+  features: string[] | null;
   cta: string;
   highlight?: boolean;
 };

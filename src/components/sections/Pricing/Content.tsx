@@ -19,7 +19,7 @@ type PricingTier = {
   name: string;
   price: string;
   description: string;
-  features: string[];
+  features: string[] | null;
   cta: string;
   highlight?: boolean;
 };
@@ -330,7 +330,7 @@ function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
             {tier.description}
           </p>
           <ul className="space-y-4 mb-8">
-            {tier.features.map((feature, i) => (
+            {(tier.features ?? []).map((feature, i) => (
               <li
                 key={i}
                 className="flex items-center gap-3 text-sm text-zinc-300"
