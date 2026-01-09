@@ -290,9 +290,8 @@ export default function ReferencesContent({
                   {/* WRAPPER: Handles Desktop Logic */}
                   <button
                     onClick={() => setActiveIndex(index)}
-                    onMouseEnter={() => setActiveIndex(index)}
                     className={`
-                      w-full flex flex-col gap-4 overflow-hidden rounded-lg text-left transition-all duration-300
+                      w-full flex flex-col gap-4 overflow-hidden rounded-lg text-left transition-all duration-300 cursor-pointer
                       p-6 border bg-gradient-to-br from-white/[0.03] to-transparent
                       ${
                         isActive

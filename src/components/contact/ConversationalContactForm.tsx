@@ -51,7 +51,7 @@ function CTAButton({
       onClick={onClick}
       disabled={disabled || isLoading}
       style={{ fontFamily: "var(--font-goldman)" }}
-      className="group relative isolate flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-[#ff8a3c] disabled:hover:shadow-none"
+      className="group relative isolate flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 cursor-pointer hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-[#ff8a3c] disabled:hover:shadow-none"
     >
       <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full group-disabled:group-hover:h-3 group-disabled:group-hover:w-3" />
       <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full group-disabled:group-hover:h-3 group-disabled:group-hover:w-3" />
@@ -503,7 +503,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
       />
 
       {/* Mobile step indicator - top */}
-      <div className="sm:hidden fixed top-0 left-0 right-0 pt-20 pb-3 px-6 z-20 bg-gradient-to-b from-[#050609] via-[#050609]/95 to-transparent">
+      <div className="sm:hidden fixed top-0 left-0 right-0 pt-24 pb-3 px-6 z-20 bg-gradient-to-b from-[#050609] via-[#050609]/95 to-transparent">
         <div className="flex items-center justify-center gap-1.5">
           {Array.from({ length: TOTAL_STEPS }).map((_, index) => (
             <div
@@ -624,7 +624,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
                 <button
                   onClick={prevStep}
                   disabled={isAnimating}
-                  className="group flex items-center gap-2 text-zinc-500 hover:text-[#ff8a3c] transition-colors disabled:opacity-50"
+                  className="group flex items-center gap-2 text-zinc-500 hover:text-[#ff8a3c] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <svg
                     className="w-4 h-4 transition-transform group-hover:-translate-x-1"
@@ -648,7 +648,8 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
               )}
             </div>
             
-            {/* Next/Submit button */}
+            {/* Next/Submit button - hidden for steps 1 & 2 (auto-advance on selection) */}
+            {currentStep !== 1 && currentStep !== 2 && (
             <div
               className={`order-1 sm:order-2 transition-all duration-300 ${
                 canProceed()
@@ -674,6 +675,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
                 </CTAButton>
               )}
             </div>
+            )}
           </div>
           </div>
         </div>
@@ -846,7 +848,7 @@ function ContactMethodStep({
               <button
                 onClick={() => onChange(option.id)}
                 className={`
-                  w-full group relative p-4 sm:p-8 text-left transition-all duration-300
+                  w-full group relative p-4 sm:p-8 text-left transition-all duration-300 cursor-pointer
                   border bg-gradient-to-br from-white/[0.03] to-transparent
                   rounded-lg rounded-br-none
                   ${
@@ -1042,7 +1044,7 @@ function FeaturesStep({
               </div>
               <button
                 onClick={onChangePackage}
-                className="px-3 py-1.5 text-xs sm:text-sm text-zinc-400 hover:text-white border border-white/10 hover:border-white/20 rounded transition-colors"
+                className="px-3 py-1.5 text-xs sm:text-sm text-zinc-400 hover:text-white border border-white/10 hover:border-white/20 rounded transition-colors cursor-pointer"
               >
                 {t.changePackage || "Vaihda"}
               </button>
@@ -1078,8 +1080,8 @@ function FeaturesStep({
                       !isAllowed
                         ? "border-white/5 opacity-40 cursor-not-allowed"
                         : isSelected
-                        ? "border-[#ff8a3c]/50"
-                        : "border-white/5 hover:border-[#ff8a3c]/20"
+                        ? "border-[#ff8a3c]/50 cursor-pointer"
+                        : "border-white/5 hover:border-[#ff8a3c]/20 cursor-pointer"
                     }
                   `}
                 >

@@ -3,10 +3,11 @@
 import React, { useMemo, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { useGSAP } from "@gsap/react";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 }
 
 type ContentSection = {
@@ -64,102 +65,124 @@ export default function ProjectContent({ sections }: ProjectContentProps) {
       const q = gsap.utils.selector(root);
 
       const lasers = gsap.utils.toArray<HTMLElement>(q(".content-laser"));
-      const cards = gsap.utils.toArray<HTMLElement>(q(".content-card"));
-      const iconsEls = gsap.utils.toArray<HTMLElement>(q(".content-icon"));
+      const frame = (q(".content-frame")[0] as HTMLElement | undefined) ?? null;
+
+      const modules = gsap.utils.toArray<HTMLElement>(q(".content-module"));
+      const iconWraps = gsap.utils.toArray<HTMLElement>(q(".content-iconWrap"));
       const titles = gsap.utils.toArray<HTMLElement>(q(".content-title"));
       const bodies = gsap.utils.toArray<HTMLElement>(q(".content-body"));
-      const accents = gsap.utils.toArray<HTMLElement>(q(".content-accent"));
 
-      // Hover (GSAP instead of clunky CSS transitions)
+      const circuitPaths = gsap.utils.toArray<SVGPathElement>(q(".content-circuitPath"));
+      const circuitNodes = gsap.utils.toArray<SVGCircleElement>(q(".content-circuitNode"));
+      const circuitNodeGlows = gsap.utils.toArray<SVGCircleElement>(q(".content-circuitNodeGlow"));
+
       const cleanupHover: Array<() => void> = [];
 
       const bindHover = () => {
-        cards.forEach((card) => {
-          const grid = card.querySelector<HTMLElement>(".content-grid");
-          const corners = card.querySelector<HTMLElement>(".content-corners");
-          const iconWrap = card.querySelector<HTMLElement>(".content-icon");
-          const accent = card.querySelector<HTMLElement>(".content-accent");
+        modules.forEach((mod) => {
+          const glow = mod.querySelector<HTMLElement>(".module-glow");
+          const chip = mod.querySelector<HTMLElement>(".module-chip");
+          const idx = mod.getAttribute("data-index") ?? "";
 
-          gsap.set([grid, corners], { opacity: 0 });
-          gsap.set(accent, { scaleX: 0.35, opacity: 0.35, transformOrigin: "50% 50%" });
+          // highlight matching node (desktop or mobile rail)
+          const node = root.querySelector<SVGCircleElement>(`.content-circuitNode[data-index="${idx}"]`);
+          const nodeGlow = root.querySelector<SVGCircleElement>(
+            `.content-circuitNodeGlow[data-index="${idx}"]`
+          );
+
+          gsap.set(glow, { opacity: 0 });
+          if (nodeGlow) gsap.set(nodeGlow, { opacity: 0 });
 
           const onEnter = () => {
-            gsap.to(card, { y: -4, scale: 1.01, duration: 0.18, ease: "power3.out" });
-            gsap.to(card, {
-              boxShadow: "0 0 0 1px rgba(255,138,60,0.14), 0 16px 45px rgba(0,0,0,0.18)",
-              duration: 0.18,
-              ease: "power3.out",
-            });
-            gsap.to(grid, { opacity: 0.9, duration: 0.22, ease: "power2.out" });
-            gsap.to(corners, { opacity: 1, duration: 0.18, ease: "power2.out" });
-            gsap.to(accent, { scaleX: 1, opacity: 1, duration: 0.22, ease: "power2.out" });
-            gsap.to(iconWrap, { scale: 1.08, duration: 0.18, ease: "back.out(2.2)" });
+            gsap.to(mod, { y: -2, duration: 0.18, ease: "power3.out" });
+            gsap.to(chip, { scale: 1.03, duration: 0.18, ease: "power3.out" });
+            gsap.to(glow, { opacity: 1, duration: 0.2, ease: "power2.out" });
+
+            if (node) gsap.to(node, { r: 6, duration: 0.18, ease: "power2.out" });
+            if (nodeGlow) gsap.to(nodeGlow, { opacity: 0.9, duration: 0.2, ease: "power2.out" });
           };
 
           const onLeave = () => {
-            gsap.to(card, { y: 0, scale: 1, duration: 0.2, ease: "power3.out" });
-            gsap.to(card, { boxShadow: "none", duration: 0.2, ease: "power3.out" });
-            gsap.to(grid, { opacity: 0, duration: 0.2, ease: "power2.out" });
-            gsap.to(corners, { opacity: 0, duration: 0.2, ease: "power2.out" });
-            gsap.to(accent, { scaleX: 0.35, opacity: 0.35, duration: 0.2, ease: "power2.out" });
-            gsap.to(iconWrap, { scale: 1, duration: 0.2, ease: "power2.out" });
+            gsap.to(mod, { y: 0, duration: 0.2, ease: "power3.out" });
+            gsap.to(chip, { scale: 1, duration: 0.2, ease: "power3.out" });
+            gsap.to(glow, { opacity: 0, duration: 0.2, ease: "power2.out" });
+
+            if (node) gsap.to(node, { r: 4.8, duration: 0.2, ease: "power2.out" });
+            if (nodeGlow) gsap.to(nodeGlow, { opacity: 0, duration: 0.2, ease: "power2.out" });
           };
 
-          card.addEventListener("mouseenter", onEnter);
-          card.addEventListener("mouseleave", onLeave);
+          mod.addEventListener("mouseenter", onEnter);
+          mod.addEventListener("mouseleave", onLeave);
 
           cleanupHover.push(() => {
-            card.removeEventListener("mouseenter", onEnter);
-            card.removeEventListener("mouseleave", onLeave);
+            mod.removeEventListener("mouseenter", onEnter);
+            mod.removeEventListener("mouseleave", onLeave);
           });
         });
       };
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
         gsap.set(lasers, { scaleX: 1, opacity: 1 });
-        gsap.set(cards, { opacity: 1, y: 0, scale: 1, rotateX: 0 });
-        gsap.set(iconsEls, { opacity: 1, scale: 1 });
-        gsap.set(titles, { opacity: 1, y: 0 });
-        gsap.set(bodies, { opacity: 1, y: 0 });
-        gsap.set(accents, { scaleX: 1, opacity: 0.6 });
+        if (frame) gsap.set(frame, { opacity: 1, y: 0 });
+
+        gsap.set(modules, { opacity: 1, y: 0 });
+        gsap.set(iconWraps, { opacity: 1, scale: 1 });
+        gsap.set(titles, { opacity: 1, y: 0, filter: "blur(0px)" });
+        gsap.set(bodies, { opacity: 1, y: 0, filter: "blur(0px)" });
+
+        gsap.set(circuitPaths, { opacity: 1, drawSVG: "100%" as any });
+        gsap.set(circuitNodes, { opacity: 1, scale: 1, transformOrigin: "50% 50%" });
+        gsap.set(circuitNodeGlows, { opacity: 0 });
+
         bindHover();
         return () => cleanupHover.forEach((fn) => fn());
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // Initial states
+        // initial
         gsap.set(lasers, { scaleX: 0, opacity: 0, transformOrigin: "50% 50%" });
+        if (frame) gsap.set(frame, { opacity: 0, y: 10, willChange: "transform, opacity" });
 
-        gsap.set(cards, {
-          opacity: 0,
-          y: 16,
-          scale: 0.985,
-          rotateX: 7,
-          transformOrigin: "50% 100%",
-          willChange: "transform, opacity",
-        });
+        gsap.set(modules, { opacity: 0, y: 12, willChange: "transform, opacity" });
+        gsap.set(iconWraps, { opacity: 0, scale: 0.9 });
+        gsap.set(titles, { opacity: 0, y: 10, filter: "blur(10px)" });
+        gsap.set(bodies, { opacity: 0, y: 12, filter: "blur(8px)" });
 
-        gsap.set(iconsEls, { opacity: 0, scale: 0.88 });
-        gsap.set(titles, { opacity: 0, y: 8, filter: "blur(8px)" });
-        gsap.set(bodies, { opacity: 0, y: 10, filter: "blur(6px)" });
-        gsap.set(accents, { scaleX: 0.2, opacity: 0.25, transformOrigin: "50% 50%" });
+        gsap.set(circuitPaths, { opacity: 0.75, drawSVG: "0%" as any });
+        gsap.set(circuitNodes, { opacity: 0, scale: 0.82, transformOrigin: "50% 50%" });
+        gsap.set(circuitNodeGlows, { opacity: 0 });
 
         const tl = gsap.timeline({ paused: true });
 
-        // Laser ignite + micro “pulse”
-        tl.to(lasers, { scaleX: 1, opacity: 1, duration: 0.55, ease: "power2.out", stagger: 0.08 }, 0)
-          .to(
-            lasers,
-            { opacity: (i) => (i === 2 ? 0.95 : 0.55), duration: 0.22, ease: "sine.inOut", yoyo: true, repeat: 1, stagger: 0.06 },
-            0.22
-          );
+        // lasers
+        tl.to(lasers, { scaleX: 1, opacity: 1, duration: 0.55, ease: "power2.out", stagger: 0.08 }, 0).to(
+          lasers,
+          {
+            opacity: (i) => (i === 2 ? 0.95 : 0.55),
+            duration: 0.22,
+            ease: "sine.inOut",
+            yoyo: true,
+            repeat: 1,
+            stagger: 0.06,
+          },
+          0.18
+        );
 
-        // Cards + title + body (readable pace)
-        tl.to(cards, { opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 0.55, ease: "power3.out", stagger: 0.12 }, 0.22)
-          .to(iconsEls, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)", stagger: 0.12 }, 0.34)
-          .to(titles, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out", stagger: 0.12 }, 0.36)
-          .to(bodies, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out", stagger: 0.12 }, 0.42)
-          .to(accents, { scaleX: 1, opacity: 0.6, duration: 0.45, ease: "power2.out", stagger: 0.12 }, 0.48);
+        // frame
+        if (frame) tl.to(frame, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.18);
+
+        // circuit
+        tl.to(circuitPaths, { drawSVG: "100%" as any, duration: 0.75, ease: "power2.out" }, 0.22).to(
+          circuitNodes,
+          { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)", stagger: 0.12 },
+          0.34
+        );
+
+        // modules
+        tl.to(modules, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out", stagger: 0.12 }, 0.28)
+          .to(iconWraps, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)", stagger: 0.12 }, 0.36)
+          .to(titles, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.48, ease: "power3.out", stagger: 0.12 }, 0.38)
+          .to(bodies, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.52, ease: "power3.out", stagger: 0.12 }, 0.44);
 
         const st = ScrollTrigger.create({
           trigger: root,
@@ -193,66 +216,160 @@ export default function ProjectContent({ sections }: ProjectContentProps) {
         <div className="content-laser absolute h-[1px] w-2/3 max-w-3xl bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-90" />
       </div>
 
-      {/* Keep background “light” (minimal change) */}
+      {/* same background + thin grid */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#ff8a3c]/[0.02] to-transparent" />
-        {/* a tiny touch of tech texture, still light */}
-        <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(to_right,#00000012_1px,transparent_1px),linear-gradient(to_bottom,#00000012_1px,transparent_1px)] bg-[size:56px_56px]" />
+        <div className="absolute inset-0 opacity-[0.09] bg-[linear-gradient(to_right,#00000010_1px,transparent_1px),linear-gradient(to_bottom,#00000010_1px,transparent_1px)] bg-[size:72px_72px]" />
+        <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.22)_0%,transparent_55%)]" />
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
-          {validSections.map((item, index) => (
-            <div
-              key={`${item.icon}-${index}`}
-              className="content-card group relative overflow-hidden rounded-sm border border-black/10 bg-white/[0.03] p-6 lg:p-8"
-            >
-              {/* Blueprint grid (GSAP hover) */}
-              <div
-                className="content-grid absolute inset-0 opacity-0 pointer-events-none"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(to right, rgba(255,138,60,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,138,60,0.12) 1px, transparent 1px)",
-                  backgroundSize: "24px 24px",
-                }}
+        {/* ONE coherent frame */}
+        <div className="content-frame relative overflow-hidden rounded-md border border-white/10 bg-white/[0.02]">
+          {/* subtle inner tech texture */}
+          <div className="absolute inset-0 pointer-events-none opacity-[0.10] bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:28px_28px]" />
+
+          {/* ===== Desktop connector rail (separate band, NOT over content) ===== */}
+          <div className="relative hidden lg:block">
+            <div className="pointer-events-none absolute inset-0 opacity-60">
+              <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            </div>
+
+            <div className="relative px-10 pt-7 pb-6">
+              <svg className="h-10 w-full" viewBox="0 0 1000 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  className="content-circuitPath"
+                  d="M140 40 H860"
+                  stroke="rgba(255,138,60,0.45)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  className="content-circuitPath"
+                  d="M140 40 H860"
+                  stroke="rgba(255,232,214,0.35)"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                />
+
+                {/* centers of 3 columns: ~1/6, 3/6, 5/6 */}
+                {[166, 500, 834].map((x, i) => (
+                  <g key={i}>
+                    <circle
+                      className="content-circuitNodeGlow"
+                      data-index={String(i)}
+                      cx={x}
+                      cy="40"
+                      r="16"
+                      fill="rgba(255,138,60,0.18)"
+                    />
+                    <circle
+                      className="content-circuitNode"
+                      data-index={String(i)}
+                      cx={x}
+                      cy="40"
+                      r="4.8"
+                      fill="rgba(255,138,60,0.95)"
+                    />
+                  </g>
+                ))}
+              </svg>
+            </div>
+          </div>
+
+          {/* ===== Mobile left rail (in a gutter) ===== */}
+          <div className="pointer-events-none absolute left-6 top-10 bottom-10 lg:hidden">
+            <svg className="h-full w-10" viewBox="0 0 80 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                className="content-circuitPath"
+                d="M40 40 V860"
+                stroke="rgba(255,138,60,0.45)"
+                strokeWidth="2"
+                strokeLinecap="round"
               />
+              <path
+                className="content-circuitPath"
+                d="M40 40 V860"
+                stroke="rgba(255,232,214,0.35)"
+                strokeWidth="1"
+                strokeLinecap="round"
+              />
+              {[140, 450, 760].map((y, i) => (
+                <g key={i}>
+                  <circle
+                    className="content-circuitNodeGlow"
+                    data-index={String(i)}
+                    cx="40"
+                    cy={y}
+                    r="18"
+                    fill="rgba(255,138,60,0.16)"
+                  />
+                  <circle
+                    className="content-circuitNode"
+                    data-index={String(i)}
+                    cx="40"
+                    cy={y}
+                    r="5"
+                    fill="rgba(255,138,60,0.95)"
+                  />
+                </g>
+              ))}
+            </svg>
+          </div>
 
-              {/* Corners (GSAP hover) */}
-              <div className="content-corners absolute inset-0 pointer-events-none opacity-0">
-                <div className="absolute top-0 left-0 h-4 w-4 border-l border-t border-[#ff8a3c]" />
-                <div className="absolute top-0 right-0 h-4 w-4 border-r border-t border-[#ff8a3c]" />
-                <div className="absolute bottom-0 left-0 h-4 w-4 border-l border-b border-[#ff8a3c]" />
-                <div className="absolute bottom-0 right-0 h-4 w-4 border-r border-b border-[#ff8a3c]" />
-              </div>
+          {/* ===== Modules ===== */}
+          <div className="grid lg:grid-cols-3">
+            {validSections.map((item, index) => (
+              <article
+                key={`${item.icon}-${index}`}
+                data-index={index}
+                className="content-module relative px-6 py-8 lg:px-10 lg:py-10"
+              >
+                {/* desktop separators */}
+                {index !== 0 && (
+                  <div className="pointer-events-none absolute left-0 top-8 bottom-8 hidden lg:block w-px bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+                )}
 
-              {/* Index */}
-              <span className="pointer-events-none absolute top-3 right-4 text-2xl font-bold text-black/10">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-
-              <div className="relative z-10 space-y-4">
-                <div className="flex items-center gap-4">
-                  <span className="content-icon flex h-10 w-10 items-center justify-center rounded-sm border border-black/10 bg-[#ff8a3c]/10 text-[#ff8a3c]">
-                    {icons[item.icon]}
-                  </span>
-
-                  <h2
-                    className="content-title text-xl font-bold text-white"
-                    style={{ fontFamily: "var(--font-goldman)" }}
-                  >
-                    {item.title}
-                  </h2>
+                {/* hover glow */}
+                <div className="module-glow pointer-events-none absolute inset-0 opacity-0">
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,138,60,0.14)_0%,transparent_55%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,138,60,0.06),transparent_55%)]" />
                 </div>
 
-                <p className="content-body text-zinc-300/80 leading-relaxed">
-                  {item.content}
-                </p>
-              </div>
+                {/* mobile gutter padding so rail never crosses text */}
+                <div className="module-chip relative z-10 pl-10 lg:pl-0">
+                  <div className="flex items-center gap-4">
+                    <span className="content-iconWrap flex h-12 w-12 items-center justify-center rounded-sm border border-white/10 bg-[#ff8a3c]/10 text-[#ff8a3c]">
+                      {icons[item.icon]}
+                    </span>
 
-              {/* Bottom accent (animated) */}
-              <div className="content-accent pointer-events-none absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent opacity-60" />
-            </div>
-          ))}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-3">
+                        <h2
+                          className="content-title text-2xl lg:text-3xl font-bold text-white"
+                          style={{ fontFamily: "var(--font-goldman)" }}
+                        >
+                          {item.title}
+                        </h2>
+
+                        <span className="select-none text-[10px] uppercase tracking-[0.22em] text-[#ff8a3c]/70">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                      </div>
+
+                      <div className="mt-2 h-px w-16 bg-gradient-to-r from-[#ff8a3c]/60 to-transparent opacity-70" />
+                    </div>
+                  </div>
+
+                  <p className="content-body mt-5 text-[15px] lg:text-[16px] text-zinc-300/80 leading-relaxed">
+                    {item.content}
+                  </p>
+
+                  <div className="pointer-events-none mt-6 h-[2px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c]/70 to-transparent opacity-60" />
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

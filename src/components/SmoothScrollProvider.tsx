@@ -28,10 +28,17 @@ export default function SmoothScrollProvider({
 
     const isMobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
-    ScrollSmoother.get()?.kill();
+    // Kill existing smoother first
+    const existingSmoother = ScrollSmoother.get();
+    if (existingSmoother) {
+      existingSmoother.scrollTop(0);
+      existingSmoother.kill();
+    }
 
     // Force scroll to top on route change to prevent starting midway
     window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
 
     if (!wrapperRef.current || !contentRef.current) return;
 
@@ -48,7 +55,7 @@ export default function SmoothScrollProvider({
       normalizeScroll: false,
     });
 
-    // Ensure we start at the top
+    // Ensure we start at the top (unless there's a hash)
     if (!window.location.hash) {
       smoother.scrollTop(0);
     }

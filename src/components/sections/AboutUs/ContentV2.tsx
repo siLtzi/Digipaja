@@ -87,14 +87,67 @@ export default function AboutUsContent({
     () => {
       if (typeof window === "undefined") return;
 
-      // Check if mobile for earlier trigger points
       const isMobile = window.innerWidth < 768;
 
-      // Hero animations - trigger earlier on mobile
+      if (isMobile) {
+        // MOBILE: Sequential animations on load, no scroll trigger waiting
+        // Everything animates immediately when component mounts
+        const mobileTl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          delay: 0.3, // <-- Adjust this value to make animations start later (in seconds)
+        });
+
+        // 1. Laser beams appear first (quick)
+        mobileTl
+          .fromTo(
+            ".laser-beam",
+            { scaleX: 0, opacity: 0 },
+            { scaleX: 1, opacity: 1, duration: 0.3, stagger: 0.05, ease: "expo.out" }
+          )
+          // 2. Hero content (text) appears
+          .fromTo(
+            ".hero-content",
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4 },
+            "-=0.1"
+          )
+          // 3. Team photo appears
+          .fromTo(
+            ".team-photo-group",
+            { y: 30, opacity: 0, scale: 0.98 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.4 },
+            "-=0.2"
+          )
+          // 4. Team container expands
+          .fromTo(
+            ".team-container",
+            { scaleX: 0, opacity: 0 },
+            { scaleX: 1, opacity: 1, duration: 0.35, ease: "power2.inOut" },
+            "-=0.1"
+          )
+          // 5. Container laser beams
+          .fromTo(
+            [".container-laser-blur", ".container-laser-line", ".container-laser-highlight"],
+            { scaleX: 0, opacity: 0 },
+            { scaleX: 1, opacity: 1, duration: 0.25, stagger: 0.03, ease: "expo.out" },
+            "-=0.2"
+          )
+          // 6. Team content fades in
+          .fromTo(
+            ".team-content",
+            { y: 10, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.3, stagger: 0.04 },
+            "-=0.1"
+          );
+
+        return;
+      }
+
+      // DESKTOP: Original scroll-triggered animations
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".about-hero",
-          start: isMobile ? "top 98%" : "top 90%",
+          start: "top 90%",
           toggleActions: "play none none reverse",
         },
         defaults: { ease: "power3.out" },
@@ -123,7 +176,7 @@ export default function AboutUsContent({
       const teamTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".team-container",
-          start: isMobile ? "top 100%" : "top 98%",
+          start: "top 98%",
           toggleActions: "play none none reverse",
         },
         defaults: { ease: "power3.out" },
