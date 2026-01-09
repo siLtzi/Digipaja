@@ -87,11 +87,14 @@ export default function AboutUsContent({
     () => {
       if (typeof window === "undefined") return;
 
-      // Hero animations
+      // Check if mobile for earlier trigger points
+      const isMobile = window.innerWidth < 768;
+
+      // Hero animations - trigger earlier on mobile
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".about-hero",
-          start: "top 85%",
+          start: isMobile ? "top 98%" : "top 90%",
           toggleActions: "play none none reverse",
         },
         defaults: { ease: "power3.out" },
@@ -101,26 +104,26 @@ export default function AboutUsContent({
         .fromTo(
           ".laser-beam:nth-child(1)",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 0.4, duration: 0.3, ease: "expo.out" }
+          { scaleX: 1, opacity: 0.4, duration: 0.25, ease: "expo.out" }
         )
         .fromTo(
           ".laser-beam:nth-child(2)",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 0.3, ease: "expo.out" },
-          "-=0.25"
+          { scaleX: 1, opacity: 1, duration: 0.25, ease: "expo.out" },
+          "-=0.2"
         )
         .fromTo(
           ".laser-beam:nth-child(3)",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 0.6, duration: 0.3, ease: "expo.out" },
-          "-=0.25"
+          { scaleX: 1, opacity: 0.6, duration: 0.25, ease: "expo.out" },
+          "-=0.2"
         );
 
       // Team section timeline - container expands first, then header + image pop up together
       const teamTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".team-container",
-          start: "top 95%",
+          start: isMobile ? "top 100%" : "top 98%",
           toggleActions: "play none none reverse",
         },
         defaults: { ease: "power3.out" },
@@ -131,47 +134,47 @@ export default function AboutUsContent({
         .fromTo(
           ".team-container",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 0.5, ease: "power2.inOut" }
+          { scaleX: 1, opacity: 1, duration: 0.4, ease: "power2.inOut" }
         )
         // Laser beam glow animates in
         .fromTo(
           ".container-laser-blur",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 0.4, duration: 0.4, ease: "expo.out" },
-          "-=0.3"
+          { scaleX: 1, opacity: 0.4, duration: 0.3, ease: "expo.out" },
+          "-=0.25"
         )
         .fromTo(
           ".container-laser-line",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 0.4, ease: "expo.out" },
-          "-=0.35"
+          { scaleX: 1, opacity: 1, duration: 0.3, ease: "expo.out" },
+          "-=0.25"
         )
         .fromTo(
           ".container-laser-highlight",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 0.6, duration: 0.4, ease: "expo.out" },
-          "-=0.35"
+          { scaleX: 1, opacity: 0.6, duration: 0.3, ease: "expo.out" },
+          "-=0.25"
         )
         // Header text pops up from the left
         .fromTo(
           ".hero-content",
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.2)" },
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.2)" },
           "-=0.1"
         )
         // Image rises up from the right at the same time
         .fromTo(
           ".team-photo-group",
-          { y: 100, opacity: 0, scale: 0.92 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.2)" },
+          { y: 60, opacity: 0, scale: 0.95 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.2)" },
           "<" // same time as header
         )
         // Team content fades in after
         .fromTo(
           ".team-content",
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.35, stagger: 0.08 },
-          "-=0.25"
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.3, stagger: 0.06 },
+          "-=0.2"
         );
     },
     { scope: containerRef }

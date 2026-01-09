@@ -238,6 +238,10 @@ export const pricingSettingsQuery = `
     "tiers_fi": tiers[] {
       "name": name.fi,
       "price": price.fi,
+      "monthlyLabel": monthlyPayment.label_fi,
+      "monthlyValue": monthlyPayment.value_fi,
+      "monthlyIncluded": monthlyPayment.included_fi,
+      "monthlyExcluded": monthlyPayment.excluded_fi,
       "description": description.fi,
       "features": features.fi,
       "cta": cta.fi,
@@ -249,6 +253,10 @@ export const pricingSettingsQuery = `
     "tiers_en": tiers[] {
       "name": name.en,
       "price": price.en,
+      "monthlyLabel": monthlyPayment.label_en,
+      "monthlyValue": monthlyPayment.value_en,
+      "monthlyIncluded": monthlyPayment.included_en,
+      "monthlyExcluded": monthlyPayment.excluded_en,
       "description": description.en,
       "features": features.en,
       "cta": cta.en,

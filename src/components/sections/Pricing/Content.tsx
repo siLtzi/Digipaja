@@ -17,6 +17,10 @@ if (typeof window !== "undefined") {
 type PricingTier = {
   name: string;
   price: string;
+  monthlyLabel?: string;
+  monthlyValue?: string;
+  monthlyIncluded?: string[];
+  monthlyExcluded?: string[];
   description: string;
   features: string[] | null;
   cta: string;
@@ -139,7 +143,6 @@ export type { PricingTier };
 
 export function PricingCard({ tier, index }: { tier: PricingTier; index: number }) {
   const isHighlight = tier.highlight;
-  const tierId = `SYS.0${index + 1}`;
 
   const cardRef = useRef<HTMLElement>(null);
   const priceRef = useRef<HTMLSpanElement>(null);
@@ -272,15 +275,98 @@ export function PricingCard({ tier, index }: { tier: PricingTier; index: number 
               {tier.name}
             </h3>
           </div>
-          <div
-            className={`rounded border px-1.5 py-0.5 text-[9px] font-mono tracking-widest ${
-              isHighlight
-                ? "border-[#ff8a3c]/30 text-[#ff8a3c]"
-                : "border-white/10 text-zinc-600 group-hover:text-[#ff8a3c] group-hover:border-[#ff8a3c]/30"
-            }`}
-          >
-            {tierId}
-          </div>
+          {tier.monthlyValue && (
+            <div className="flex items-center gap-2">
+              {/* Info icon with tooltip - positioned on the left */}
+              <div className="relative group/tooltip">
+                <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[11px] font-bold cursor-help transition-all duration-300 shrink-0 ${
+                  isHighlight
+                    ? "border-[#ff8a3c]/50 text-[#ff8a3c]/70 hover:bg-[#ff8a3c] hover:border-[#ff8a3c] hover:text-black hover:scale-110 hover:shadow-[0_0_15px_rgba(255,138,60,0.5)]"
+                    : "border-zinc-600 text-zinc-500 group-hover:border-[#ff8a3c]/50 group-hover:text-[#ff8a3c]/70 hover:bg-[#ff8a3c] hover:border-[#ff8a3c] hover:text-black hover:scale-110 hover:shadow-[0_0_15px_rgba(255,138,60,0.5)]"
+                }`}>
+                  i
+                </div>
+                
+                {/* Tooltip - appears from the info icon */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-72 opacity-0 invisible translate-y-2 group-hover/tooltip:opacity-100 group-hover/tooltip:visible group-hover/tooltip:translate-y-0 transition-all duration-300 ease-out z-50">
+                  <div className="relative bg-gradient-to-b from-[#111113] to-[#0a0a0c] border border-[#ff8a3c]/30 rounded-xl p-5 shadow-2xl shadow-black/60 backdrop-blur-xl">
+                    {/* Arrow */}
+                    <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111113] border-l border-t border-[#ff8a3c]/30 rotate-45" />
+                    
+                    {/* Glow effect */}
+                    <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none" />
+                    
+                    {tier.monthlyIncluded && tier.monthlyIncluded.length > 0 && (
+                      <div className="relative">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]" />
+                          <div className="text-[10px] uppercase tracking-[0.2em] text-[#ff8a3c] font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
+                            Sisältö
+                          </div>
+                        </div>
+                        <ul className="space-y-2 mb-5 pl-1">
+                          {tier.monthlyIncluded.map((item, i) => (
+                            <li key={i} className="flex items-start gap-2.5 text-[12px] text-zinc-300 leading-relaxed">
+                              <svg className="w-3.5 h-3.5 text-[#ff8a3c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {tier.monthlyExcluded && tier.monthlyExcluded.length > 0 && (
+                      <div className="relative pt-4 border-t border-white/5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
+                          <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
+                            Ei sisällä
+                          </div>
+                        </div>
+                        <ul className="space-y-2 pl-1">
+                          {tier.monthlyExcluded.map((item, i) => (
+                            <li key={i} className="flex items-start gap-2.5 text-[12px] text-zinc-500 leading-relaxed">
+                              <svg className="w-3.5 h-3.5 text-zinc-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Badge */}
+              <div
+                className={`rounded border px-3 py-1.5 text-right ${
+                  isHighlight
+                    ? "border-[#ff8a3c]/30 bg-[#ff8a3c]/5"
+                    : "border-white/10 group-hover:border-[#ff8a3c]/30 group-hover:bg-[#ff8a3c]/5"
+                }`}
+                style={{ fontFamily: "var(--font-goldman)" }}
+              >
+                <div className={`text-[9px] font-medium tracking-wider uppercase ${
+                  isHighlight
+                    ? "text-[#ff8a3c]/70"
+                    : "text-zinc-600 group-hover:text-[#ff8a3c]/70"
+                }`}>
+                  {tier.monthlyLabel || "YLLÄPITO"}
+                </div>
+                <div className={`text-sm font-bold tracking-wide ${
+                  isHighlight
+                    ? "text-[#ff8a3c]"
+                    : "text-zinc-400 group-hover:text-[#ff8a3c]"
+                }`}>
+                  {tier.monthlyValue}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="mb-4 sm:mb-8 relative h-px w-full">

@@ -25,6 +25,66 @@ export const pricingTier = defineType({
       ],
     }),
     defineField({
+      name: "monthlyPayment",
+      title: "Monthly Payment",
+      description: "The monthly maintenance/hosting fee shown on the card",
+      type: "object",
+      fields: [
+        { 
+          name: "label_fi", 
+          type: "string", 
+          title: "Label (FI)", 
+          description: "e.g. 'YLLÄPITO' or 'KK-MAKSU'",
+          initialValue: "YLLÄPITO"
+        },
+        { 
+          name: "label_en", 
+          type: "string", 
+          title: "Label (EN)", 
+          description: "e.g. 'MAINTENANCE' or 'MONTHLY'",
+          initialValue: "MAINTENANCE"
+        },
+        { 
+          name: "value_fi", 
+          type: "string", 
+          title: "Value (FI)", 
+          description: "e.g. '150 €/kk' or 'Sisältyy'" 
+        },
+        { 
+          name: "value_en", 
+          type: "string", 
+          title: "Value (EN)", 
+          description: "e.g. '150 €/mo' or 'Included'" 
+        },
+        {
+          name: "included_fi",
+          type: "array",
+          title: "Included Items (FI)",
+          description: "What's included in maintenance (shown in tooltip)",
+          of: [{ type: "string" }],
+        },
+        {
+          name: "included_en",
+          type: "array",
+          title: "Included Items (EN)",
+          of: [{ type: "string" }],
+        },
+        {
+          name: "excluded_fi",
+          type: "array",
+          title: "Excluded Items (FI)",
+          description: "What's NOT included (shown in tooltip)",
+          of: [{ type: "string" }],
+        },
+        {
+          name: "excluded_en",
+          type: "array",
+          title: "Excluded Items (EN)",
+          of: [{ type: "string" }],
+        },
+      ],
+    }),
+    defineField({
       name: "description",
       title: "Description",
       type: "object",
