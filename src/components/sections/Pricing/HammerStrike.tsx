@@ -21,13 +21,14 @@ export const HammerStrike = forwardRef<HammerStrikeHandle, HammerStrikeProps>(
     const rootRef = useRef<HTMLDivElement>(null);
     const hammerRef = useRef<HTMLDivElement>(null);
     const sparksRef = useRef<HTMLDivElement>(null);
+    const isStrikingRef = useRef(false);
 
     const { contextSafe } = useGSAP({ scope: rootRef });
 
     const show = useCallback(() => {
       contextSafe(() => {
         const el = hammerRef.current;
-        if (!el) return;
+        if (!el || isStrikingRef.current) return;
 
         gsap.killTweensOf(el);
         gsap.to(el, {
@@ -44,7 +45,8 @@ export const HammerStrike = forwardRef<HammerStrikeHandle, HammerStrikeProps>(
     const hide = useCallback(() => {
       contextSafe(() => {
         const el = hammerRef.current;
-        if (!el) return;
+        // Don't hide if a strike animation is in progress
+        if (!el || isStrikingRef.current) return;
 
         gsap.killTweensOf(el);
         gsap.to(el, {
@@ -68,12 +70,17 @@ export const HammerStrike = forwardRef<HammerStrikeHandle, HammerStrikeProps>(
           const targetEl = targetRef.current;
 
           if (!hammerEl || !sparksEl || !targetEl) return;
-          if (gsap.isTweening(hammerEl)) return;
+          if (isStrikingRef.current) return; // Already striking
+          
+          // Mark that we're striking - prevents hide() from interrupting
+          isStrikingRef.current = true;
 
           gsap.set(hammerEl, { transformOrigin: "90% 10%" });
 
           const tl = gsap.timeline({
             onComplete: () => {
+              // Clear the striking flag when animation completes
+              isStrikingRef.current = false;
               safeOpts?.onComplete?.();
             },
           });

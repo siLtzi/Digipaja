@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import ConversationalContactForm from "@/components/contact/ConversationalContactForm";
 import type { Translations, Package, Feature } from "@/components/contact/ConversationalContactForm";
 import { getPricingTiers } from "@/components/sections/Pricing/data";
@@ -303,5 +304,9 @@ export default async function ContactPage({
     features: FEATURES_EN,
   };
 
-  return <ConversationalContactForm t={translations} />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#050609]" />}>
+      <ConversationalContactForm t={translations} />
+    </Suspense>
+  );
 }

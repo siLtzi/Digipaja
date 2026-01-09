@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
-  SelectablePricingCard,
+  ExpandablePricingCards,
   type PricingTier,
 } from "@/components/sections/Pricing/Content";
 
@@ -964,6 +964,9 @@ function PackageStep({
     monthlyExcluded: pkg.monthlyExcluded,
   });
 
+  const tiers = packages.map(packageToTier);
+  const packageIds = ["kipina", "hehku", "roihu"] as const;
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <div>
@@ -980,19 +983,13 @@ function PackageStep({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
-        {packages.map((pkg, index) => (
-          <div key={pkg.id} className="anim-item">
-              <SelectablePricingCard
-                tier={packageToTier(pkg)}
-                index={index}
-                totalTiers={packages.length}
-                isSelected={value === pkg.id}
-                onSelect={() => onChange(pkg.id)}
-                compact
-              />
-          </div>
-        ))}
+      <div className="anim-item">
+        <ExpandablePricingCards
+          tiers={tiers}
+          selectedId={value}
+          onSelect={(id) => onChange(id as "kipina" | "hehku" | "roihu")}
+          packageToId={(index) => packageIds[index]}
+        />
       </div>
     </div>
   );
