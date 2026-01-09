@@ -184,21 +184,13 @@ export default function ServicesContent({
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 lg:mb-20">
-          <div
+          <span
             data-header-eyebrow
-            className="inline-flex items-center gap-3 mb-6"
+            style={{ fontFamily: "var(--font-goldman)" }}
+            className="text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold mb-6"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ff8a3c] opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ff8a3c]" />
-            </span>
-            <span
-              style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-xs uppercase tracking-[0.25em] text-[#ff8a3c]"
-            >
-              {eyebrow}
-            </span>
-          </div>
+            [ {eyebrow} ]
+          </span>
 
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
             <h2
@@ -293,13 +285,13 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
   // Filter just images for cycling
   const allImages = allMedia.filter(m => m.type === "image").map(m => m.url);
   
-  // Cycle through images for gallery
+  // Cycle through images for gallery - longer interval to reduce re-renders
   useEffect(() => {
     if (allImages.length <= 1) return;
     
     const interval = setInterval(() => {
       setCurrentImageIndex(prev => (prev + 1) % allImages.length);
-    }, 3000);
+    }, 5000);
     
     return () => clearInterval(interval);
   }, [allImages.length]);
@@ -341,6 +333,8 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
                   transform: "rotateX(55deg)",
                   transformOrigin: "center 15%",
                   transformStyle: "preserve-3d",
+                  willChange: "transform",
+                  backfaceVisibility: "hidden",
                 }}
               >
                 <Image

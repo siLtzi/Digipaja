@@ -454,19 +454,13 @@ export default function LighthouseScores({ mobile, desktop, title }: LighthouseS
 
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="mb-12 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <span className="flex h-2 w-2 items-center justify-center">
-              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
-            </span>
-            <span
-              ref={eyebrowRef}
-              style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
-            >
-              [ Lighthouse Scores ]
-            </span>
-          </div>
+          <span
+            ref={eyebrowRef}
+            style={{ fontFamily: "var(--font-goldman)" }}
+            className="text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold mb-4"
+          >
+            [ Lighthouse Scores ]
+          </span>
 
           <h2
             ref={titleRef}

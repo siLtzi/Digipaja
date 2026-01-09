@@ -351,15 +351,9 @@ export default function KeyFeatures({ features, title }: KeyFeaturesProps) {
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Header (condensed) */}
         <div className="features-header mb-8 flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-3 mb-2">
-            <span className="flex h-2 w-2 items-center justify-center">
-              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
-            </span>
-            <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]">
-              [ Key Features ]
-            </span>
-          </div>
+          <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold mb-2">
+            [ Key Features ]
+          </span>
 
           <h2 className="features-title text-2xl sm:text-3xl lg:text-4xl font-bold text-white" style={{ fontFamily: "var(--font-goldman)" }}>
             {title}

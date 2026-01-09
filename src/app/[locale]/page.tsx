@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import AboutUs from "@/components/sections/AboutUs";
+import CTA from "@/components/sections/CTA";
 import Services from "@/components/sections/Services";
 import References from "@/components/sections/References"; 
 import Process from "@/components/sections/Process";
@@ -251,6 +252,7 @@ export default async function HomePage({
         <div className="relative z-10">
           <Hero locale={locale} />
           <AboutUs locale={locale} />
+          <CTA locale={locale} />
           <Services locale={locale} />
           <References locale={locale} />
           <Process locale={locale} />    

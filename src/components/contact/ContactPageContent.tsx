@@ -146,18 +146,12 @@ export default function ContactPageContent({
         {/* Hero Section */}
         <div className="mb-16 lg:mb-20 text-center max-w-3xl mx-auto">
           {/* Eyebrow */}
-          <div className="hero-animate inline-flex items-center gap-3 mb-6 opacity-0">
-            <span className="flex h-2 w-2 items-center justify-center">
-              <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
-            </span>
-            <span
-              style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-[10px] sm:text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
-            >
-              [ {eyebrow} ]
-            </span>
-          </div>
+          <span
+            style={{ fontFamily: "var(--font-goldman)" }}
+            className="hero-animate text-[#ff8a3c] text-[10px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold mb-6 opacity-0"
+          >
+            [ {eyebrow} ]
+          </span>
 
           {/* Title */}
           <h1

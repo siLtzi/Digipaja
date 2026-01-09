@@ -321,18 +321,12 @@ export default function ProjectHero({
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Left content */}
           <div className="space-y-6">
-            <div className="hero-eyebrow inline-flex items-center gap-3">
-              <span className="flex h-2 w-2 items-center justify-center">
-                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
-              </span>
-              <span
-                style={{ fontFamily: "var(--font-goldman)" }}
-                className="text-[12px] uppercase tracking-[0.2em] text-[#ff8a3c]"
-              >
-                [ {category || "Project"} {projectYear && `• ${projectYear}`} ]
-              </span>
-            </div>
+            <span
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="hero-eyebrow text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold"
+            >
+              [ {category || "Project"} {projectYear && `• ${projectYear}`} ]
+            </span>
 
             <h1
               style={{ fontFamily: "var(--font-goldman)" }}

@@ -5,7 +5,6 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -100,30 +99,24 @@ export default function AboutUsContent({
 
       heroTl
         .fromTo(
-          ".laser-beam",
+          ".laser-beam:nth-child(1)",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 0.8, ease: "expo.out", stagger: 0.2 }
+          { scaleX: 1, opacity: 0.4, duration: 0.3, ease: "expo.out" }
         )
         .fromTo(
-          ".hero-eyebrow",
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6 },
-          "-=0.4"
+          ".laser-beam:nth-child(2)",
+          { scaleX: 0, opacity: 0 },
+          { scaleX: 1, opacity: 1, duration: 0.3, ease: "expo.out" },
+          "-=0.25"
         )
         .fromTo(
-          ".hero-title",
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8 },
-          "-=0.4"
-        )
-        .fromTo(
-          ".hero-text",
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, stagger: 0.1 },
-          "-=0.6"
+          ".laser-beam:nth-child(3)",
+          { scaleX: 0, opacity: 0 },
+          { scaleX: 1, opacity: 0.6, duration: 0.3, ease: "expo.out" },
+          "-=0.25"
         );
 
-      // Team section timeline - container expands first, then image rises up from behind
+      // Team section timeline - container expands first, then header + image pop up together
       const teamTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".team-container",
@@ -144,7 +137,7 @@ export default function AboutUsContent({
         .fromTo(
           ".container-laser-blur",
           { scaleX: 0, opacity: 0 },
-          { scaleX: 1, opacity: 1, duration: 0.4, ease: "expo.out" },
+          { scaleX: 1, opacity: 0.4, duration: 0.4, ease: "expo.out" },
           "-=0.3"
         )
         .fromTo(
@@ -153,45 +146,33 @@ export default function AboutUsContent({
           { scaleX: 1, opacity: 1, duration: 0.4, ease: "expo.out" },
           "-=0.35"
         )
-        // Image rises up dramatically from behind - starts much lower
+        .fromTo(
+          ".container-laser-highlight",
+          { scaleX: 0, opacity: 0 },
+          { scaleX: 1, opacity: 0.6, duration: 0.4, ease: "expo.out" },
+          "-=0.35"
+        )
+        // Header text pops up from the left
+        .fromTo(
+          ".hero-content",
+          { y: 60, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.2)" },
+          "-=0.1"
+        )
+        // Image rises up from the right at the same time
         .fromTo(
           ".team-photo-group",
-          { 
-            y: 180, 
-            opacity: 0, 
-            scale: 0.88,
-          },
-          { 
-            y: 0, 
-            opacity: 1, 
-            scale: 1, 
-            duration: 0.7, 
-            ease: "back.out(1.4)"
-          },
-          "-=0.15"
+          { y: 100, opacity: 0, scale: 0.92 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.2)" },
+          "<" // same time as header
         )
         // Team content fades in after
         .fromTo(
           ".team-content",
           { y: 20, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.35, stagger: 0.08 },
-          "-=0.35"
+          "-=0.25"
         );
-      
-      // CTA Button
-       gsap.fromTo(
-        ".cta-button",
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          scrollTrigger: {
-            trigger: ".cta-wrapper",
-            start: "top 95%",
-          },
-        }
-      );
     },
     { scope: containerRef }
   );
@@ -210,12 +191,13 @@ export default function AboutUsContent({
     <section
       ref={containerRef}
       id="about-us"
-      className="relative overflow-hidden bg-[#050609] py-24 lg:py-32"
+      className="relative overflow-hidden bg-[#050609] pt-24 lg:pt-32 pb-0"
     >
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
-        <div className="laser-beam h-1 w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0" />
-        <div className="laser-beam absolute top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0" />
+        <div className="laser-beam h-[4px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0 scale-x-0" />
+        <div className="laser-beam absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
        {/* Background Grid */}
@@ -231,56 +213,62 @@ export default function AboutUsContent({
       />
 
 
-      {/* === HEADER SECTION === */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 about-hero text-center mb-8">
-        <span
-          style={goldmanStyle}
-          className="hero-eyebrow text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold inline-block"
-        >
-          [ {eyebrow} ]
-        </span>
-        
-        <h2
-          style={goldmanStyle}
-          className="hero-title text-balance text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mt-6"
-        >
-          {title}
-        </h2>
+      {/* === HERO SECTION: Text Left, Image Right === */}
+      <div className="relative z-10 mx-auto max-w-7xl px-6 about-hero">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4 items-center">
+          
+          {/* LEFT: Text Content */}
+          <div className="hero-content flex flex-col gap-4">
+            <span
+              style={goldmanStyle}
+              className="text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold"
+            >
+              [ {eyebrow} ]
+            </span>
+            
+            <h2
+              style={goldmanStyle}
+              className="text-balance text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.05]"
+            >
+              {title}
+            </h2>
 
-        <div className="hero-text max-w-3xl mx-auto mt-8 space-y-4 text-zinc-300 text-lg sm:text-xl leading-relaxed">
-          <p>{subtitle}</p>
-        </div>
-      </div>
+            <p className="text-zinc-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl">
+              {subtitle}
+            </p>
+          </div>
 
-      {/* === TEAM PHOTO - CENTERED === */}
-      <div className="team-photo-group relative z-10 w-full flex justify-center overflow-visible -mb-1">
-        <div
-          className="relative w-full max-w-[850px] h-[380px] sm:h-[440px] lg:h-[500px] overflow-visible"
-          style={{
-            filter:
-              "drop-shadow(0 0 5px rgba(255,138,60,0.9)) drop-shadow(0 0 12px rgba(255,138,60,0.6)) drop-shadow(0 0 24px rgba(255,138,60,0.3))",
-          }}
-        >
-          {/* Inner container - NO bottom fade since container will cover it */}
-          <div className="relative w-full h-full">
-            <Image 
-              src="/image/joukojasamuli5.png" 
-              alt="Jouko ja Samuli"
-              fill
-              className="object-contain object-bottom"
-              sizes="(max-width: 768px) 100vw, 850px"
-              priority
-            />
+          {/* RIGHT: Team Photo */}
+          <div className="team-photo-group relative w-full flex justify-center lg:justify-end overflow-visible">
+            <div
+              className="relative w-full max-w-[600px] h-[320px] sm:h-[380px] lg:h-[420px] overflow-visible"
+              style={{
+                filter:
+                  "drop-shadow(0 0 5px rgba(255,138,60,0.9)) drop-shadow(0 0 12px rgba(255,138,60,0.6)) drop-shadow(0 0 24px rgba(255,138,60,0.3))",
+              }}
+            >
+              <div className="relative w-full h-full">
+                <Image 
+                  src="/image/joukojasamuli5.png" 
+                  alt="Jouko ja Samuli"
+                  fill
+                  className="object-contain object-bottom"
+                  sizes="(max-width: 768px) 100vw, 600px"
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* === FULL-WIDTH TEAM INFO CONTAINER === */}
       <div className="team-container relative z-20 w-full origin-center" style={{ transformOrigin: 'center center' }}>
-        {/* Top edge laser separator - clean sharp line */}
+        {/* Top edge laser separator */}
         <div className="absolute -top-[2px] left-0 right-0 z-30 flex flex-col items-center">
-          <div className="container-laser-blur h-1 w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md origin-center" />
-          <div className="container-laser-line absolute top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent origin-center" />
+          <div className="container-laser-blur h-[4px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md origin-center" />
+          <div className="container-laser-line absolute top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] origin-center" />
+          <div className="container-laser-highlight absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen origin-center" />
         </div>
         
         {/* Container background */}
@@ -301,20 +289,17 @@ export default function AboutUsContent({
                   <div className="pl-6">
                     <h3
                       style={goldmanStyle}
-                      className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase text-[#ff8a3c] tracking-[0.12em] mb-1"
+                      className="text-3xl sm:text-4xl lg:text-5xl font-bold uppercase text-[#ff8a3c] tracking-[0.12em] mb-2"
                     >
                       {jouko.name}
                     </h3>
-                    <span className="text-white/60 font-medium text-base lg:text-lg tracking-wide block mb-4">
-                      {jouko.role}
-                    </span>
                   
                     {joukoTitle ? (
-                      <p style={goldmanStyle} className="text-white font-semibold text-lg lg:text-xl mb-3">
+                      <p style={goldmanStyle} className="text-white/70 font-semibold text-xl lg:text-2xl mb-4">
                         {joukoTitle}
                       </p>
                     ) : null}
-                    <p className="text-gray-400 leading-relaxed text-base lg:text-lg">
+                    <p className="text-gray-400 leading-relaxed text-lg lg:text-xl">
                       {jouko.bio}
                     </p>
                   </div>
@@ -330,20 +315,17 @@ export default function AboutUsContent({
                   <div className="pl-6">
                     <h3
                       style={goldmanStyle}
-                      className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase text-[#ff8a3c] tracking-[0.12em] mb-1"
+                      className="text-3xl sm:text-4xl lg:text-5xl font-bold uppercase text-[#ff8a3c] tracking-[0.12em] mb-2"
                     >
                       {samuli.name}
                     </h3>
-                    <span className="text-white/60 font-medium text-base lg:text-lg tracking-wide block mb-4">
-                      {samuli.role}
-                    </span>
 
                     {samuliTitle ? (
-                      <p style={goldmanStyle} className="text-white font-semibold text-lg lg:text-xl mb-3">
+                      <p style={goldmanStyle} className="text-white/70 font-semibold text-xl lg:text-2xl mb-4">
                         {samuliTitle}
                       </p>
                     ) : null}
-                    <p className="text-gray-400 leading-relaxed text-base lg:text-lg">
+                    <p className="text-gray-400 leading-relaxed text-lg lg:text-xl">
                       {samuli.bio}
                     </p>
                   </div>
@@ -353,46 +335,16 @@ export default function AboutUsContent({
 
             {/* Additional info row */}
             <div className="team-content mt-14 pt-10 border-t border-white/[0.06] text-center max-w-3xl mx-auto">
-              <p className="text-gray-300 text-base lg:text-lg leading-relaxed">{description2}</p>
+              <p className="text-gray-300 text-lg lg:text-xl leading-relaxed">{description2}</p>
               <div className="flex items-center justify-center gap-4 mt-6">
                 <span className="w-10 h-px bg-gradient-to-r from-transparent to-[#ff8a3c]/50" />
-                <span className="text-[#ff8a3c] text-sm">✓</span>
-                <p className="text-gray-200 font-medium italic text-base lg:text-lg">{bulletPoint}</p>
+                <span className="text-[#ff8a3c] text-base">✓</span>
+                <p className="text-gray-200 font-medium italic text-lg lg:text-xl">{bulletPoint}</p>
                 <span className="w-10 h-px bg-gradient-to-l from-transparent to-[#ff8a3c]/50" />
               </div>
             </div>
           </div>
-
-          {/* Bottom subtle line */}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
         </div>
-      </div>
-
-      {/* === CTA BUTTON === */}
-      <div className="cta-wrapper relative z-10 flex justify-center mt-12 lg:mt-14 px-6">
-         <Link 
-           href="/yhteydenotto" 
-           style={goldmanStyle}
-           className="cta-button group/btn relative flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] transition-all duration-300 text-[#ff8a3c] hover:text-white hover:shadow-[0_0_25px_rgba(255,138,60,0.2)]"
-         >
-            {/* Corner brackets */}
-            <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-            <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-            <span className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-            <span className="pointer-events-none absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-            
-            {/* Background hover effect */}
-            <span className="pointer-events-none absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
-
-            <span className="relative z-10">{ctaText}</span>
-            <svg
-              className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1"
-              viewBox="0 0 12 12"
-              fill="none"
-            >
-              <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-         </Link>
       </div>
     </section>
   );

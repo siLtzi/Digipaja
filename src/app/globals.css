@@ -129,15 +129,17 @@ body {
 /* ===== Services Card - Scrolling Code Animation ===== */
 @keyframes scroll-code {
   0% {
-    transform: rotateX(55deg) translateY(0);
+    transform: rotateX(55deg) translate3d(0, 0, 0);
   }
   100% {
-    transform: rotateX(55deg) translateY(-75%);
+    transform: rotateX(55deg) translate3d(0, -75%, 0);
   }
 }
 
 .animate-scroll-code {
   animation: scroll-code 30s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* ===== Contact Form Animations ===== */

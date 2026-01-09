@@ -564,17 +564,12 @@ export default function ServicesOverviewContent({
 
           {/* Header */}
           <div className="mb-20 flex flex-col items-center text-center">
-            <div className="eyebrow inline-flex items-center gap-3 mb-6">
-              <span className="flex h-2 w-2 items-center justify-center">
-                <span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-[#ff8a3c] opacity-75"></span>
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]"></span>
-              </span>
-              <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[11px] uppercase tracking-[0.2em] text-[#ff8a3c] flex items-center gap-2">
-                <span className="h-px w-3 bg-[#ff8a3c]" />
-                {eyebrow}
-                <span className="h-px w-3 bg-[#ff8a3c]" />
-              </span>
-            </div>
+            <span
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="eyebrow text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold mb-6"
+            >
+              [ {eyebrow} ]
+            </span>
             <h1 className="max-w-3xl text-balance text-4xl font-bold leading-none sm:text-5xl lg:text-[4rem]" style={{ fontFamily: "var(--font-goldman)" }}>
               {title}
             </h1>
