@@ -281,14 +281,14 @@ export default function ServicesOverviewContent({
       gsap.from(card, {
         scrollTrigger: {
           trigger: card,
-          start: "top 80%",
-          end: "top 30%",
-          scrub: 1,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
         },
         opacity: 0,
-        scale: 0.92,
-        rotateX: isEven ? 5 : -5,
-        y: 60,
+        scale: 0.96,
+        rotateX: isEven ? 3 : -3,
+        y: 40,
+        duration: 0.6,
         ease: "power2.out",
       });
 
@@ -364,14 +364,14 @@ export default function ServicesOverviewContent({
         gsap.from(icon, {
           scrollTrigger: {
             trigger: card,
-            start: "top 75%",
+            start: "top 85%",
             toggleActions: "play none none reverse",
           },
           scale: 0,
           opacity: 0,
-          rotation: -45,
-          duration: 0.8,
-          ease: "back.out(1.7)",
+          rotation: -30,
+          duration: 0.5,
+          ease: "back.out(1.5)",
         });
       }
 
@@ -382,15 +382,15 @@ export default function ServicesOverviewContent({
         gsap.from(splitTitle.chars, {
           scrollTrigger: {
             trigger: card,
-            start: "top 75%",
+            start: "top 85%",
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          y: 20,
-          rotateY: isEven ? 90 : -90,
-          stagger: 0.015,
-          duration: 0.6,
-          delay: 0.2,
+          y: 15,
+          rotateY: isEven ? 45 : -45,
+          stagger: 0.01,
+          duration: 0.4,
+          delay: 0.1,
           ease: "power2.out",
         });
       }
@@ -402,13 +402,13 @@ export default function ServicesOverviewContent({
         gsap.from(splitDesc.lines, {
           scrollTrigger: {
             trigger: card,
-            start: "top 75%",
+            start: "top 85%",
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          x: isEven ? -20 : 20,
-          stagger: 0.08,
-          duration: 0.5,
+          x: isEven ? -15 : 15,
+          stagger: 0.05,
+          duration: 0.35,
           ease: "power2.out",
         });
       }
@@ -419,13 +419,13 @@ export default function ServicesOverviewContent({
         gsap.from(features, {
           scrollTrigger: {
             trigger: card,
-            start: "top 70%",
+            start: "top 85%",
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          x: isEven ? -30 : 30,
-          stagger: 0.08,
-          duration: 0.5,
+          x: isEven ? -20 : 20,
+          stagger: 0.05,
+          duration: 0.35,
           ease: "power2.out",
         });
       }
@@ -436,14 +436,14 @@ export default function ServicesOverviewContent({
         gsap.from(benefits, {
           scrollTrigger: {
             trigger: card,
-            start: "top 70%",
+            start: "top 85%",
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          x: isEven ? -30 : 30,
-          stagger: 0.08,
-          duration: 0.5,
-          delay: 0.2,
+          x: isEven ? -20 : 20,
+          stagger: 0.05,
+          duration: 0.35,
+          delay: 0.1,
           ease: "power2.out",
         });
       }
@@ -455,13 +455,13 @@ export default function ServicesOverviewContent({
       gsap.from(ctaSection, {
         scrollTrigger: {
           trigger: ctaSection,
-          start: "top 85%",
-          end: "top 50%",
-          scrub: 1,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
         },
         opacity: 0,
-        scale: 0.95,
-        y: 50,
+        scale: 0.97,
+        y: 30,
+        duration: 0.5,
         ease: "power2.out",
       });
 
@@ -473,16 +473,16 @@ export default function ServicesOverviewContent({
         gsap.from(splitCtaTitle.chars, {
           scrollTrigger: {
             trigger: ctaSection,
-            start: "top 80%",
+            start: "top 90%",
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          scale: 0,
-          y: 30,
-          rotation: 45,
-          stagger: 0.02,
-          duration: 0.5,
-          ease: "back.out(2)",
+          scale: 0.5,
+          y: 20,
+          rotation: 30,
+          stagger: 0.015,
+          duration: 0.35,
+          ease: "back.out(1.5)",
         });
       }
 
@@ -491,14 +491,14 @@ export default function ServicesOverviewContent({
         gsap.from(splitCtaText.words, {
           scrollTrigger: {
             trigger: ctaSection,
-            start: "top 80%",
+            start: "top 90%",
             toggleActions: "play none none reverse",
           },
           opacity: 0,
-          y: 15,
-          stagger: 0.02,
-          duration: 0.4,
-          delay: 0.3,
+          y: 10,
+          stagger: 0.015,
+          duration: 0.3,
+          delay: 0.2,
           ease: "power2.out",
         });
       }

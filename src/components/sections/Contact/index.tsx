@@ -101,16 +101,6 @@ export default async function Contact({ locale }: { locale: "fi" | "en" }) {
     ? cms.ctaText_fi || m.ctaText 
     : cms.ctaText_en || m.ctaText;
 
-  // Form Labels & Text
-  const formTitle = isFi ? cms.formTitle_fi || m.formTitle : cms.formTitle_en || m.formTitle;
-  const formSubtitle = isFi ? cms.formSubtitle_fi || m.formSubtitle : cms.formSubtitle_en || m.formSubtitle;
-  const formCta = isFi ? cms.formCta_fi || m.formCta : cms.formCta_en || m.formCta;
-  
-  const formNameLabel = isFi ? cms.formNameLabel_fi || m.formNameLabel : cms.formNameLabel_en || m.formNameLabel;
-  const formEmailLabel = isFi ? cms.formEmailLabel_fi || m.formEmailLabel : cms.formEmailLabel_en || m.formEmailLabel;
-  const formCompanyLabel = isFi ? cms.formCompanyLabel_fi || m.formCompanyLabel : cms.formCompanyLabel_en || m.formCompanyLabel;
-  const formMessageLabel = isFi ? cms.formMessageLabel_fi || m.formMessageLabel : cms.formMessageLabel_en || m.formMessageLabel;
-
   // Non-localized fallbacks (hardcoded if CMS is empty)
   const email = cms.email || "info@digipajaoulu.fi";
   const phone = cms.phone || "+358 40 123 4567";
@@ -126,13 +116,6 @@ export default async function Contact({ locale }: { locale: "fi" | "en" }) {
         email={email}
         phone={phone}
         ctaText={ctaText}
-        formNameLabel={formNameLabel}
-        formEmailLabel={formEmailLabel}
-        formCompanyLabel={formCompanyLabel}
-        formMessageLabel={formMessageLabel}
-        formTitle={formTitle}
-        formSubtitle={formSubtitle}
-        formCta={formCta}
       />
     </Suspense>
   );

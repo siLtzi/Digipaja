@@ -7,9 +7,11 @@ import References from "@/components/sections/References";
 import Process from "@/components/sections/Process";
 import WhyUs from "@/components/sections/WhyUs";
 import Pricing from "@/components/sections/Pricing"
-import Contact from "@/components/sections/Contact";
 
 const BASE_URL = "https://digipajaoulu.fi";
+
+// Disable caching for this page to always fetch fresh Sanity data
+export const dynamic = 'force-dynamic';
 
 // --- DYNAMIC METADATA GENERATION ---
 export async function generateMetadata({
@@ -258,7 +260,6 @@ export default async function HomePage({
           <Process locale={locale} />    
           <WhyUs locale={locale} />
           <Pricing locale={locale} />
-          <Contact locale={locale} />
         </div>
       </article>
     </>

@@ -1,22 +1,20 @@
 import type { Metadata } from "next";
 import ConversationalContactForm from "@/components/contact/ConversationalContactForm";
 import type { Translations, Package, Feature } from "@/components/contact/ConversationalContactForm";
+import { getPricingTiers } from "@/components/sections/Pricing/data";
 
 const BASE_URL = "https://digipajaoulu.fi";
 
-// Package definitions with feature restrictions
-const PACKAGES_FI: Package[] = [
+// Package feature restrictions (logic only - display data comes from Sanity)
+type PackageRestrictions = {
+  id: "kipina" | "hehku" | "roihu";
+  maxPages: number;
+  allowedFeatures: string[];
+};
+
+const PACKAGE_RESTRICTIONS: PackageRestrictions[] = [
   {
     id: "kipina",
-    name: "Kipinä",
-    price: "alkaen 1 800 €",
-    description: "Kompakti verkkosivusto pienyrityksille ja aloittaville yrittäjille.",
-    features: [
-      "1–3 sivua",
-      "Responsiivinen design",
-      "Yhteydenottolomake",
-      "Perus-SEO",
-    ],
     maxPages: 3,
     allowedFeatures: [
       "responsive",
@@ -28,16 +26,6 @@ const PACKAGES_FI: Package[] = [
   },
   {
     id: "hehku",
-    name: "Hehku",
-    price: "alkaen 3 500 €",
-    description: "Monipuolinen sivusto kasvavalle yritykselle, joka haluaa erottua.",
-    features: [
-      "4–8 sivua",
-      "CMS-sisällönhallinta",
-      "Blogi / Uutiset",
-      "Edistynyt SEO",
-      "Animaatiot",
-    ],
     maxPages: 8,
     allowedFeatures: [
       "responsive",
@@ -55,15 +43,6 @@ const PACKAGES_FI: Package[] = [
   },
   {
     id: "roihu",
-    name: "Roihu",
-    price: "alkaen 6 500 €",
-    description: "Täysimittainen räätälöity ratkaisu vaativiin tarpeisiin.",
-    features: [
-      "Rajaton sivumäärä",
-      "Verkkokauppa",
-      "API-integraatiot",
-      "Kaikki ominaisuudet",
-    ],
     maxPages: 999,
     allowedFeatures: [
       "responsive",
@@ -84,84 +63,12 @@ const PACKAGES_FI: Package[] = [
   },
 ];
 
-const PACKAGES_EN: Package[] = [
-  {
-    id: "kipina",
-    name: "Kipinä",
-    price: "from €1,800",
-    description: "Compact website for small businesses and startups.",
-    features: [
-      "1–3 pages",
-      "Responsive design",
-      "Contact form",
-      "Basic SEO",
-    ],
-    maxPages: 3,
-    allowedFeatures: [
-      "responsive",
-      "contact-form",
-      "basic-seo",
-      "analytics",
-      "multilingual",
-    ],
-  },
-  {
-    id: "hehku",
-    name: "Hehku",
-    price: "from €3,500",
-    description: "Versatile site for growing businesses that want to stand out.",
-    features: [
-      "4–8 pages",
-      "CMS content management",
-      "Blog / News",
-      "Advanced SEO",
-      "Animations",
-    ],
-    maxPages: 8,
-    allowedFeatures: [
-      "responsive",
-      "contact-form",
-      "basic-seo",
-      "analytics",
-      "multilingual",
-      "cms",
-      "blog",
-      "seo-advanced",
-      "animations",
-      "booking",
-      "user-accounts",
-    ],
-  },
-  {
-    id: "roihu",
-    name: "Roihu",
-    price: "from €6,500",
-    description: "Full-scale custom solution for demanding needs.",
-    features: [
-      "Unlimited pages",
-      "E-commerce",
-      "API integrations",
-      "All features",
-    ],
-    maxPages: 999,
-    allowedFeatures: [
-      "responsive",
-      "contact-form",
-      "basic-seo",
-      "analytics",
-      "multilingual",
-      "cms",
-      "blog",
-      "seo-advanced",
-      "animations",
-      "booking",
-      "user-accounts",
-      "ecommerce",
-      "api-integrations",
-      "live-chat",
-    ],
-  },
-];
+// Map package names to IDs
+const PACKAGE_NAME_TO_ID: Record<string, "kipina" | "hehku" | "roihu"> = {
+  "Kipinä": "kipina",
+  "Hehku": "hehku",
+  "Roihu": "roihu",
+};
 
 // Feature definitions
 const FEATURES_FI: Feature[] = [
@@ -238,6 +145,32 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
 
+  // Fetch pricing tiers from Sanity
+  const pricingTiers = await getPricingTiers(locale);
+  
+  // Merge Sanity display data with form restrictions
+  const packages: Package[] = pricingTiers.map((tier) => {
+    const id = PACKAGE_NAME_TO_ID[tier.name] || "kipina";
+    const restrictions = PACKAGE_RESTRICTIONS.find(r => r.id === id) || PACKAGE_RESTRICTIONS[0];
+    
+    return {
+      id,
+      name: tier.name,
+      price: tier.price,
+      description: tier.description,
+      features: tier.features || [],
+      maxPages: restrictions.maxPages,
+      allowedFeatures: restrictions.allowedFeatures,
+      // PricingTier display fields
+      monthlyLabel: tier.monthlyLabel,
+      monthlyValue: tier.monthlyValue,
+      monthlyIncluded: tier.monthlyIncluded,
+      monthlyExcluded: tier.monthlyExcluded,
+      cta: tier.cta,
+      highlight: tier.highlight,
+    };
+  });
+
   const translations: Translations = locale === "fi" ? {
     steps: {
       contactInfo: {
@@ -270,6 +203,8 @@ export default async function ContactPage({
         title: "Mitä ominaisuuksia tarvitset?",
         subtitle: "Valitse kaikki mitä sivustollasi tulisi olla.",
         limitWarning: "{package}-paketissa on rajoituksia joihinkin ominaisuuksiin.",
+        selectedPackage: "Valittu paketti",
+        changePackage: "Vaihda",
       },
       message: {
         title: "Kerro lisää projektistasi",
@@ -299,7 +234,7 @@ export default async function ContactPage({
       message: "Olemme vastaanottaneet viestisi ja palaamme asiaan pian.",
       backHome: "Takaisin etusivulle",
     },
-    packages: PACKAGES_FI,
+    packages: packages,
     features: FEATURES_FI,
   } : {
     steps: {
@@ -333,6 +268,8 @@ export default async function ContactPage({
         title: "What features do you need?",
         subtitle: "Select everything your website should have.",
         limitWarning: "Some features are limited in the {package} package.",
+        selectedPackage: "Selected package",
+        changePackage: "Change",
       },
       message: {
         title: "Tell us more about your project",
@@ -362,7 +299,7 @@ export default async function ContactPage({
       message: "We've received your message and will get back to you soon.",
       backHome: "Back to home",
     },
-    packages: PACKAGES_EN,
+    packages: packages,
     features: FEATURES_EN,
   };
 

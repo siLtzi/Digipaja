@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, forwardRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -21,13 +20,6 @@ type ContactProps = {
   email: string;
   phone: string;
   ctaText: string;
-  formNameLabel: string;
-  formEmailLabel: string;
-  formCompanyLabel: string;
-  formMessageLabel: string;
-  formTitle: string;
-  formSubtitle: string;
-  formCta: string;
 };
 
 export default function ContactContent(props: ContactProps) {
@@ -70,7 +62,7 @@ export default function ContactContent(props: ContactProps) {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden bg-[#050609] py-24 lg:py-32 text-zinc-100"
+      className="relative overflow-hidden bg-[#050609] py-20 lg:py-24 text-zinc-100"
     >
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
@@ -119,324 +111,128 @@ function ContactInner({
   email,
   phone,
   ctaText,
-  formNameLabel,
-  formEmailLabel,
-  formCompanyLabel,
-  formMessageLabel,
-  formTitle,
-  formSubtitle,
-  formCta,
 }: ContactProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const searchParams = useSearchParams();
-  const urlPackage = searchParams.get("package") || "";
-  const [selectedPackage, setSelectedPackage] = useState(urlPackage);
-
-  useEffect(() => {
-    // Listen for package selection events from pricing section
-    const handlePackageSelected = (e: CustomEvent) => {
-      if (e.detail?.package) {
-        setSelectedPackage(e.detail.package);
-        // Scroll to contact form after state update
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            const contactSection = document.getElementById('contact');
-            if (contactSection) {
-              const yOffset = -100; // Offset for fixed header
-              const y = contactSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-              window.scrollTo({ top: y, behavior: 'smooth' });
-            }
-          }, 200);
-        });
-      }
-    };
-
-    window.addEventListener('packageSelected', handlePackageSelected as EventListener);
-    
-    return () => {
-      window.removeEventListener('packageSelected', handlePackageSelected as EventListener);
-    };
-  }, []);
-
-  // Only handle URL-based package selection for scroll
-  useEffect(() => {
-    if (urlPackage && containerRef.current) {
-      setTimeout(() => {
-        containerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 100);
-    }
-  }, [urlPackage]);
 
   return (
     <div ref={containerRef} className="w-full">
         
-        <div className="mb-20 flex flex-col items-center text-center">
-          <span
-            style={{ fontFamily: "var(--font-goldman)" }}
-            className="eyebrow text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold mb-6"
-          >
-            [ {eyebrow} ]
-          </span>
-          <h2 className="max-w-3xl text-balance text-4xl font-bold leading-none sm:text-5xl lg:text-[4rem]" style={{ fontFamily: "var(--font-goldman)" }}>
-            {title}
-          </h2>
-          <p className="mt-6 max-w-2xl text-base text-zinc-300 sm:text-lg leading-relaxed">
+        {/* Header - inline layout */}
+        <div className="mb-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 lg:gap-8">
+          <div className="flex-1">
+            <span
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="eyebrow text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold mb-4 block"
+            >
+              [ {eyebrow} ]
+            </span>
+            <h2 className="text-4xl font-bold leading-none sm:text-5xl lg:text-[3.5rem]" style={{ fontFamily: "var(--font-goldman)" }}>
+              {title}
+            </h2>
+          </div>
+          <p className="lg:max-w-lg text-base text-zinc-400 lg:text-right">
             {subtitle}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_0.9fr] items-start">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 items-start">
             
-            <ContactForm 
-                initialPackage={selectedPackage}
-                formTitle={formTitle}
-                formSubtitle={formSubtitle}
-                formCta={formCta}
-                formNameLabel={formNameLabel}
-                formEmailLabel={formEmailLabel}
-                formCompanyLabel={formCompanyLabel}
-                formMessageLabel={formMessageLabel}
-            />
-            
-            <div className="space-y-10 lg:pt-6">
-                <div className="relative group overflow-hidden rounded-lg border border-[#ff8a3c]/20 bg-[#0a0a0a]/60 p-8 backdrop-blur-sm transition-all duration-500 hover:border-[#ff8a3c]/40 hover:bg-[#0f0f12]/80">
-                  <div className="absolute top-0 left-0 h-4 w-4 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-6 group-hover:w-6" />
-                  <div className="absolute bottom-0 right-0 h-4 w-4 border-r-2 border-b-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-6 group-hover:w-6" />
-                  
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#ff8a3c]/5 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  
-                  <div className="relative space-y-6">
-                    <div className="space-y-3">
-                      <h3 style={{ fontFamily: "var(--font-goldman)" }} className="text-2xl font-bold text-white">
-                        {contactTitle}
-                      </h3>
-                      <p className="text-sm leading-relaxed text-zinc-300">{contactSubtitle}</p>
-                    </div>
-                    
-                    <div className="space-y-4 pt-4">
-                      <ContactDetail link={`mailto:${email}`} label="Email" value={email} />
-                      <ContactDetail link={`tel:${phone}`} label="Puhelin" value={phone} />
-                    </div>
-                  </div>
+            {/* Contact Info Card */}
+            <div className="relative group overflow-hidden rounded-lg border border-[#ff8a3c]/20 bg-[#0a0b10]/90 p-8 backdrop-blur-sm transition-all duration-500 hover:border-[#ff8a3c]/40">
+              <div className="absolute top-0 left-0 h-5 w-5 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-7 group-hover:w-7" />
+              <div className="absolute bottom-0 right-0 h-5 w-5 border-r-2 border-b-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-7 group-hover:w-7" />
+              
+              <div className="relative space-y-6">
+                <div className="space-y-3">
+                  <h3 style={{ fontFamily: "var(--font-goldman)" }} className="text-2xl font-bold text-white">
+                    {contactTitle}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-zinc-400">{contactSubtitle}</p>
                 </div>
-
+                
                 <div className="space-y-4">
-                  <div className="group relative overflow-hidden rounded-lg border border-white/5 bg-[#0a0a0a]/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-[#ff8a3c]/20 hover:bg-[#0f0f12]/60">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff8a3c]/10 transition-all duration-300 group-hover:bg-[#ff8a3c]/20">
-                        <svg className="h-5 w-5 text-[#ff8a3c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-white mb-1">
-                          Nopea vastaus
-                        </h4>
-                        <p className="text-xs text-zinc-400">Vastaamme 24 tunnin sisällä</p>
-                      </div>
+                  <ContactDetail link={`mailto:${email}`} label="Email" value={email} />
+                  <ContactDetail link={`tel:${phone}`} label="Puhelin" value={phone} />
+                </div>
+
+                {/* Info badges */}
+                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff8a3c]/10">
+                      <svg className="h-5 w-5 text-[#ff8a3c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-white">Nopea vastaus</h4>
+                      <p className="text-xs text-zinc-500">24h sisällä</p>
                     </div>
                   </div>
-
-                  <div className="group relative overflow-hidden rounded-lg border border-white/5 bg-[#0a0a0a]/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-[#ff8a3c]/20 hover:bg-[#0f0f12]/60">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff8a3c]/10 transition-all duration-300 group-hover:bg-[#ff8a3c]/20">
-                        <svg className="h-5 w-5 text-[#ff8a3c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-white mb-1">
-                          Luottamuksellista
-                        </h4>
-                        <p className="text-xs text-zinc-400">NDA-sopimus pyynnöstä</p>
-                      </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ff8a3c]/10">
+                      <svg className="h-5 w-5 text-[#ff8a3c]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-white">Luottamuksellista</h4>
+                      <p className="text-xs text-zinc-500">NDA pyynnöstä</p>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                {/* Link to detailed contact form */}
+            {/* CTA Card */}
+            <div className="relative group overflow-hidden rounded-lg border border-[#ff8a3c]/30 bg-gradient-to-br from-[#ff8a3c]/10 to-[#ff8a3c]/5 p-8 backdrop-blur-sm transition-all duration-500 hover:border-[#ff8a3c]/50">
+              <div className="absolute top-0 left-0 h-5 w-5 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-7 group-hover:w-7" />
+              <div className="absolute bottom-0 right-0 h-5 w-5 border-r-2 border-b-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-7 group-hover:w-7" />
+              
+              <div className="relative flex flex-col items-center text-center space-y-6">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#ff8a3c]/20 ring-2 ring-[#ff8a3c]/30">
+                  <svg className="h-8 w-8 text-[#ff8a3c]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+                  </svg>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 style={{ fontFamily: "var(--font-goldman)" }} className="text-2xl font-bold text-white">
+                    Aloitetaan projekti?
+                  </h3>
+                  <p className="text-sm text-zinc-400 max-w-sm">
+                    Kerro projektistasi ja saat tarjouksen 24 tunnin sisällä. Konsultaatio on aina ilmainen.
+                  </p>
+                </div>
+
                 <Link
                   href="/fi/yhteydenotto"
-                  className="group/link flex items-center justify-between gap-4 rounded-lg border border-[#ff8a3c]/30 bg-[#ff8a3c]/5 p-5 transition-all duration-300 hover:border-[#ff8a3c]/50 hover:bg-[#ff8a3c]/10"
+                  style={{ fontFamily: "var(--font-goldman)" }}
+                  className="group/btn relative flex items-center justify-center gap-3 px-10 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white cursor-pointer"
                 >
-                  <div>
-                    <h4 style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold text-[#ff8a3c] mb-1">
-                      Tarvitsetko tarkemman tarjouksen?
-                    </h4>
-                    <p className="text-xs text-zinc-400">Täytä laajempi projektilomake →</p>
-                  </div>
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#ff8a3c]/30 transition-all duration-300 group-hover/link:border-[#ff8a3c] group-hover/link:bg-[#ff8a3c]/20">
-                    <svg className="h-4 w-4 text-[#ff8a3c] transition-transform duration-300 group-hover/link:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
+                  <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                  <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                  <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                  <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                  <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
+                  
+                  <span className="relative z-10">{ctaText}</span>
+                  <svg className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
                 </Link>
+              </div>
             </div>
         </div>
     </div>
   );
 }
 
-function ContactForm({ 
-    initialPackage,
-    formTitle, 
-    formSubtitle, 
-    formCta,
-    formNameLabel,
-    formEmailLabel,
-    formCompanyLabel,
-    formMessageLabel,
-}: {
-    initialPackage: string;
-    formTitle: string;
-    formSubtitle: string;
-    formCta: string;
-    formNameLabel: string;
-    formEmailLabel: string;
-    formCompanyLabel: string;
-    formMessageLabel: string;
-}) {
-    return (
-        <article className="group relative isolate flex flex-col justify-between rounded-lg border border-[#ff8a3c]/20 bg-[#0a0b10]/90 p-8 shadow-2xl backdrop-blur-sm transition-all duration-500 hover:border-[#ff8a3c]/40 hover:shadow-[0_0_60px_-10px_rgba(255,138,60,0.2)]">
-            <div className="absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-            
-            <header className="mb-8 space-y-3">
-                <div className="flex items-center gap-3">
-                  <span className="h-[1px] w-6 bg-gradient-to-r from-[#ff8a3c] to-transparent" />
-                  <h3 style={{ fontFamily: "var(--font-goldman)" }} className="text-lg font-bold uppercase tracking-wider text-[#ff8a3c]">
-                      {formTitle}
-                  </h3>
-                </div>
-                <p className="text-sm leading-relaxed text-zinc-400">{formSubtitle}</p>
-            </header>
-
-            <form className="relative z-10 space-y-5">
-                
-                {initialPackage && (
-                    <div className="mb-4 flex items-center justify-between rounded-lg border border-[#ff8a3c]/40 bg-gradient-to-br from-[#ff8a3c]/10 to-[#ff8a3c]/5 p-5 backdrop-blur-sm shadow-[0_0_20px_rgba(255,138,60,0.1)]">
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[10px] uppercase tracking-wider text-[#ff8a3c]/90">Valittu Paketti</span>
-                            <span style={{ fontFamily: "var(--font-goldman)" }} className="text-lg font-bold text-white tracking-wide">
-                                {decodeURIComponent(initialPackage)}
-                            </span>
-                        </div>
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#ff8a3c]/20 text-[#ff8a3c] shadow-[0_0_20px_rgba(255,138,60,0.3)]">
-                            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </div>
-                        <input type="hidden" name="package" value={initialPackage} />
-                    </div>
-                )}
-
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <FormInput label={formNameLabel} type="text" placeholder="Matti Meikäläinen" />
-                    <FormInput label={formCompanyLabel} type="text" placeholder="Yritys Oy" />
-                </div>
-                
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <FormInput label={formEmailLabel} type="email" placeholder="matti@esimerkki.fi" />
-                    <FormInput label="Puhelinnumero (Valinnainen)" type="tel" placeholder="+358 40..." />
-                </div>
-
-                <FormSelect 
-                    label="Toivottu yhteydenottotapa"
-                    options={["Sähköposti", "Puhelinsoitto", "WhatsApp"]}
-                    defaultValue="Sähköposti"
-                />
-
-                <FormTextarea 
-                    label={formMessageLabel} 
-                    placeholder={initialPackage 
-                        ? `Olen kiinnostunut ${decodeURIComponent(initialPackage)} -paketista...`
-                        : "Kerro lyhyesti projektistasi..."
-                    } 
-                />
-                
-                <div className="pt-2">
-                    <button
-                        type="submit"
-                        style={{ fontFamily: "var(--font-goldman)" }}
-                        className="group/btn relative flex w-full items-center justify-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] cursor-pointer"
-                    >
-                        <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-                        <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-                        <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-                        <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
-                        
-                        <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
-                        
-                        <span className="relative z-10">{formCta}</span>
-                        <svg className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1" viewBox="0 0 12 12" fill="none">
-                            <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-            </form>
-
-            <div className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-[#ff8a3c]/30 transition-all duration-500 group-hover:h-6 group-hover:w-6 group-hover:border-[#ff8a3c]/60" />
-            <div className="absolute top-0 left-0 h-4 w-4 border-t-2 border-l-2 border-[#ff8a3c]/30 transition-all duration-500 group-hover:h-6 group-hover:w-6 group-hover:border-[#ff8a3c]/60" />
-        </article>
-    )
-}
-
-function FormInput({ label, type, placeholder }: { label: string, type: string, placeholder: string }) {
-    return (
-        <div className="group/input relative">
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-zinc-500 transition-colors duration-300 group-focus-within/input:text-[#ff8a3c]">{label}</label>
-            <input
-                type={type}
-                placeholder={placeholder}
-                className="w-full rounded-md border border-zinc-800 bg-[#050609] px-4 py-3 text-sm text-white placeholder-zinc-600 transition-all duration-300 focus:border-[#ff8a3c] focus:bg-[#0a0b10] focus:shadow-[0_0_20px_rgba(255,138,60,0.1)] focus:ring-0 focus:outline-none"
-            />
-        </div>
-    );
-}
-
-function FormSelect({ label, options, defaultValue }: { label: string, options: string[], defaultValue?: string }) {
-    const safeDefault = options.includes(defaultValue || "") ? defaultValue : "";
-    return (
-        <div className="group/input relative">
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-zinc-500 transition-colors duration-300 group-focus-within/input:text-[#ff8a3c]">{label}</label>
-            <div className="relative">
-                <select
-                    defaultValue={safeDefault}
-                    className="w-full appearance-none rounded-md border border-zinc-800 bg-[#050609] px-4 py-3 text-sm text-white transition-all duration-300 focus:border-[#ff8a3c] focus:bg-[#0a0b10] focus:shadow-[0_0_20px_rgba(255,138,60,0.1)] focus:ring-0 focus:outline-none"
-                >
-                    <option value="" disabled>Valitse...</option>
-                    {options.map((opt) => (
-                        <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                </select>
-                <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors duration-300 group-focus-within/input:text-[#ff8a3c]">
-                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M1 1L5 5L9 1" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function FormTextarea({ label, placeholder }: { label: string, placeholder: string }) {
-    return (
-        <div className="group/input relative">
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-zinc-500 transition-colors duration-300 group-focus-within/input:text-[#ff8a3c]">{label}</label>
-            <textarea
-                placeholder={placeholder}
-                rows={5}
-                className="w-full rounded-md border border-zinc-800 bg-[#050609] px-4 py-3 text-sm text-white placeholder-zinc-600 transition-all duration-300 focus:border-[#ff8a3c] focus:bg-[#0a0b10] focus:shadow-[0_0_20px_rgba(255,138,60,0.1)] focus:ring-0 focus:outline-none resize-none"
-            />
-        </div>
-    );
-}
-
 function ContactDetail({ link, label, value }: { link: string, label: string, value: string }) {
     return (
-        <Link href={link} className="group relative flex items-center justify-between overflow-hidden rounded-md border border-white/5 bg-[#050609]/50 px-4 py-4 transition-all duration-300 hover:border-[#ff8a3c]/30 hover:bg-[#0a0a0a]/80 hover:shadow-[0_0_20px_rgba(255,138,60,0.1)]">
+        <Link href={link} className="group relative flex items-center justify-between overflow-hidden rounded-md border border-white/5 bg-[#050609]/50 px-4 py-3.5 transition-all duration-300 hover:border-[#ff8a3c]/30 hover:bg-[#0a0a0a]/80">
             <div className="absolute left-0 top-0 h-full w-1 bg-[#ff8a3c] scale-y-0 transition-transform duration-300 origin-top group-hover:scale-y-100" />
             <span className="text-[10px] uppercase tracking-wider text-zinc-600 transition-colors duration-300 group-hover:text-zinc-500">{label}</span>
-            <span style={{ fontFamily: "var(--font-goldman)" }} className="text-base font-bold text-white transition-all duration-300 group-hover:text-[#ff8a3c] group-hover:translate-x-1">
+            <span style={{ fontFamily: "var(--font-goldman)" }} className="text-base font-bold text-white transition-all duration-300 group-hover:text-[#ff8a3c]">
                 {value}
             </span>
         </Link>

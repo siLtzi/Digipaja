@@ -2,13 +2,13 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
-  HammerStrike,
-  type HammerStrikeHandle,
-} from "@/components/sections/Pricing/HammerStrike";
+  SelectablePricingCard,
+  type PricingTier,
+} from "@/components/sections/Pricing/Content";
 
 // ============ TYPES ============
 type FormData = {
@@ -86,6 +86,13 @@ export type Package = {
   features: string[];
   maxPages: number;
   allowedFeatures: string[];
+  // PricingTier fields for display
+  monthlyLabel?: string;
+  monthlyValue?: string;
+  monthlyIncluded?: string[];
+  monthlyExcluded?: string[];
+  cta?: string;
+  highlight?: boolean;
 };
 
 export type Feature = {
@@ -120,6 +127,8 @@ export type Translations = {
       title: string;
       subtitle: string;
       limitWarning: string;
+      changePackage: string;
+      selectedPackage: string;
     };
     message: {
       title: string;
@@ -197,17 +206,27 @@ function StepIndicator({ currentStep, totalSteps }: { currentStep: number; total
 
 const TOTAL_STEPS = 6;
 
+// Map package names to IDs
+const PACKAGE_NAME_TO_ID: Record<string, "kipina" | "hehku" | "roihu"> = {
+  "Kipinä": "kipina",
+  "Hehku": "hehku",
+  "Roihu": "roihu",
+};
+
 // ============ MAIN COMPONENT ============
 export default function ConversationalContactForm({ t }: { t: Translations }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [preSelectedPackage, setPreSelectedPackage] = useState<string | null>(null);
+  const [showPackageSelector, setShowPackageSelector] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const locale = pathname?.startsWith("/en") ? "en" : "fi";
 
   const [formData, setFormData] = useState<FormData>({
@@ -224,6 +243,18 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
     referralSource: "",
     budget: "",
   });
+
+  // Handle URL param for pre-selected package
+  useEffect(() => {
+    const packageParam = searchParams.get("package");
+    if (packageParam) {
+      const packageId = PACKAGE_NAME_TO_ID[packageParam];
+      if (packageId) {
+        setPreSelectedPackage(packageParam);
+        setFormData(prev => ({ ...prev, selectedPackage: packageId }));
+      }
+    }
+  }, [searchParams]);
 
   const updateFormData = <K extends keyof FormData>(field: K, value: FormData[K]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -310,17 +341,38 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
     }
   }, [currentStep, formData]);
 
+  // Check if we should skip the package step (step 2) because it was pre-selected
+  const shouldSkipPackageStep = useCallback(() => {
+    return preSelectedPackage !== null && !showPackageSelector;
+  }, [preSelectedPackage, showPackageSelector]);
+
   const nextStep = useCallback(() => {
     if (currentStep < TOTAL_STEPS - 1 && !isAnimating && canProceed()) {
-      animateTransition(1, () => setCurrentStep((prev) => prev + 1));
+      // If we're on step 1 (contact method) and package is pre-selected, skip to step 3 (features)
+      if (currentStep === 1 && shouldSkipPackageStep()) {
+        animateTransition(1, () => setCurrentStep(3));
+      } else {
+        animateTransition(1, () => setCurrentStep((prev) => prev + 1));
+      }
     }
-  }, [currentStep, isAnimating, animateTransition, canProceed]);
+  }, [currentStep, isAnimating, animateTransition, canProceed, shouldSkipPackageStep]);
 
   const prevStep = () => {
     if (currentStep > 0 && !isAnimating) {
-      animateTransition(-1, () => setCurrentStep((prev) => prev - 1));
+      // If we're on step 3 (features) and package was pre-selected, go back to step 1
+      if (currentStep === 3 && shouldSkipPackageStep()) {
+        animateTransition(-1, () => setCurrentStep(1));
+      } else {
+        animateTransition(-1, () => setCurrentStep((prev) => prev - 1));
+      }
     }
   };
+
+  // Handler to show package selector from features step
+  const handleChangePackage = useCallback(() => {
+    setShowPackageSelector(true);
+    animateTransition(-1, () => setCurrentStep(2));
+  }, [animateTransition]);
 
   const handleSubmit = useCallback(async () => {
     if (!canProceed()) return;
@@ -512,7 +564,6 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
               t={t.steps.package}
               packages={t.packages}
               value={formData.selectedPackage}
-              locale={locale}
               onChange={(v) => {
                 updateFormData("selectedPackage", v);
                 // Clear features that aren't allowed in new package
@@ -542,6 +593,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
               selectedPackage={formData.selectedPackage}
               packages={t.packages}
               onToggle={toggleFeature}
+              onChangePackage={handleChangePackage}
             />
           )}
 
@@ -892,14 +944,26 @@ function PackageStep({
   packages,
   value,
   onChange,
-  locale,
 }: {
   t: Translations["steps"]["package"];
   packages: Package[];
   value: string;
   onChange: (value: "kipina" | "hehku" | "roihu") => void;
-  locale: string;
 }) {
+  // Convert Package to PricingTier for SelectablePricingCard
+  const packageToTier = (pkg: Package): PricingTier => ({
+    name: pkg.name,
+    price: pkg.price,
+    description: pkg.description,
+    features: pkg.features,
+    cta: pkg.cta || "Valitse",
+    highlight: pkg.highlight,
+    monthlyLabel: pkg.monthlyLabel,
+    monthlyValue: pkg.monthlyValue,
+    monthlyIncluded: pkg.monthlyIncluded,
+    monthlyExcluded: pkg.monthlyExcluded,
+  });
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <div>
@@ -920,274 +984,17 @@ function PackageStep({
         {packages.map((pkg, index) => (
           <div key={pkg.id} className="anim-item">
               <SelectablePricingCard
-                pkg={pkg}
+                tier={packageToTier(pkg)}
                 index={index}
+                totalTiers={packages.length}
                 isSelected={value === pkg.id}
                 onSelect={() => onChange(pkg.id)}
-                locale={locale}
+                compact
               />
           </div>
         ))}
       </div>
     </div>
-  );
-}
-
-// Selectable Pricing Card with Hammer Animation
-function SelectablePricingCard({
-  pkg,
-  index,
-  isSelected,
-  onSelect,
-  locale,
-}: {
-  pkg: Package;
-  index: number;
-  isSelected: boolean;
-  onSelect: () => void;
-  locale: string;
-}) {
-  const isHighlight = index === 1; // Middle card is highlighted
-  const tierId = `SYS.0${index + 1}`;
-
-  const cardRef = useRef<HTMLElement>(null);
-  const priceRef = useRef<HTMLSpanElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const strikeRef = useRef<HammerStrikeHandle>(null);
-
-  const { contextSafe } = useGSAP({ scope: cardRef });
-
-  const handleSelectPackage = useCallback(() => {
-    contextSafe(() => {
-      const onDone = () => {
-        onSelect();
-      };
-
-      if (strikeRef.current) {
-        strikeRef.current.strike({ onComplete: onDone });
-      } else {
-        onDone();
-      }
-    })();
-  }, [contextSafe, onSelect]);
-
-  const handleMouseEnter = useCallback(() => {
-    contextSafe(() => {
-      if (priceRef.current) {
-        gsap.to(priceRef.current, {
-          textShadow:
-            "0 0 20px rgba(255,138,60,0.8), 0 0 40px rgba(255,138,60,0.4)",
-          scale: 1.05,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-
-      strikeRef.current?.show();
-    })();
-  }, [contextSafe]);
-
-  const handleMouseLeave = useCallback(() => {
-    contextSafe(() => {
-      if (priceRef.current) {
-        gsap.to(priceRef.current, {
-          textShadow: "0 0 0px rgba(255,138,60,0)",
-          scale: 1,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-
-      strikeRef.current?.hide();
-    })();
-  }, [contextSafe]);
-
-  useGSAP(() => {
-    if (!isHighlight || !cardRef.current) return;
-    gsap.to(cardRef.current, {
-      boxShadow: "0 0 50px rgba(255,138,60,0.15)",
-      repeat: -1,
-      yoyo: true,
-      duration: 2,
-      ease: "sine.inOut",
-    });
-  }, [isHighlight]);
-
-  const cornerColor = isSelected
-    ? "border-[#ff8a3c]"
-    : isHighlight
-    ? "border-[#ff8a3c]"
-    : "border-zinc-700 group-hover:border-[#ff8a3c]";
-
-  return (
-    <article
-      ref={cardRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={`group relative flex flex-col justify-between rounded-lg p-5 sm:p-6 backdrop-blur-sm transition-all duration-500 border ${
-        isSelected
-          ? "bg-gradient-to-b from-[#0a0a0a] to-[#050609] border-[#ff8a3c]/50 shadow-[0_0_40px_rgba(255,138,60,0.2)] -translate-y-1"
-          : isHighlight
-          ? "bg-gradient-to-b from-[#0a0a0a] to-[#050609] border-[#ff8a3c]/30 shadow-[0_0_40px_rgba(255,138,60,0.15)] hover:-translate-y-1"
-          : "bg-gradient-to-b from-[#0a0a0a]/80 to-[#050609]/60 border-white/5 hover:border-[#ff8a3c]/20 hover:-translate-y-1"
-      }`}
-    >
-      {/* Corner brackets */}
-      <span
-        className={`absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 transition-all duration-500 group-hover:h-6 group-hover:w-6 ${cornerColor}`}
-      />
-      <span
-        className={`absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 transition-all duration-500 group-hover:h-6 group-hover:w-6 ${cornerColor}`}
-      />
-      <span
-        className={`absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 transition-all duration-500 group-hover:h-6 group-hover:w-6 ${cornerColor}`}
-      />
-      <span
-        className={`absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 transition-all duration-500 group-hover:h-6 group-hover:w-6 ${cornerColor}`}
-      />
-
-      {/* Gradient overlay */}
-      <div
-        className={`absolute inset-0 pointer-events-none rounded-lg bg-gradient-to-b from-white/[0.02] to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100 ${
-          isHighlight || isSelected ? "opacity-100" : ""
-        }`}
-      />
-      
-      {isHighlight && (
-        <div className="absolute inset-0 pointer-events-none rounded-lg bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.05),transparent_60%)] opacity-60" />
-      )}
-
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="mb-4 flex items-start justify-between">
-          <div className="flex flex-col">
-            <div className="mb-1 flex items-center gap-2">
-              <span
-                className={`text-[9px] font-bold tracking-widest uppercase ${
-                  isSelected || isHighlight
-                    ? "text-[#ff8a3c]"
-                    : "text-zinc-600 group-hover:text-[#ff8a3c]"
-                }`}
-                style={{ fontFamily: "var(--font-goldman)" }}
-              >
-                {isHighlight ? "POPULAR" : "STANDARD"}
-              </span>
-            </div>
-            <h3
-              className={`text-lg sm:text-xl font-bold uppercase transition-colors ${
-                isSelected || isHighlight
-                  ? "text-white"
-                  : "text-white group-hover:text-[#ff8a3c]"
-              }`}
-              style={{ fontFamily: "var(--font-goldman)" }}
-            >
-              {pkg.name}
-            </h3>
-          </div>
-          <div
-            className={`rounded border px-1 py-0.5 text-[8px] font-mono tracking-widest ${
-              isSelected || isHighlight
-                ? "border-[#ff8a3c]/30 text-[#ff8a3c]"
-                : "border-white/10 text-zinc-600 group-hover:text-[#ff8a3c] group-hover:border-[#ff8a3c]/30"
-            }`}
-          >
-            {tierId}
-          </div>
-        </div>
-
-        {/* Divider line */}
-        <div className="mb-4 relative h-px w-full">
-          <div className={`absolute inset-0 transition-all duration-500 ${
-            isSelected || isHighlight
-              ? "bg-gradient-to-r from-[#ff8a3c] via-[#ff8a3c]/50 to-transparent shadow-[0_0_8px_rgba(255,138,60,0.4)]"
-              : "bg-gradient-to-r from-white/10 to-transparent group-hover:from-[#ff8a3c]/30 group-hover:shadow-[0_0_6px_rgba(255,138,60,0.3)]"
-          }`} />
-        </div>
-
-        {/* Price */}
-        <div className="mb-3 flex items-baseline gap-1">
-          <span
-            ref={priceRef}
-            style={{ fontFamily: "var(--font-goldman)" }}
-            className={`text-2xl sm:text-3xl font-bold inline-block ${
-              isSelected || isHighlight ? "text-[#ff8a3c]" : "text-white"
-            }`}
-          >
-            {pkg.price}
-          </span>
-        </div>
-
-        {/* Description */}
-        <p className="mb-4 text-xs leading-relaxed text-zinc-400">
-          {pkg.description}
-        </p>
-
-        {/* Features */}
-        <ul className="space-y-2 mb-4">
-          {pkg.features.slice(0, 4).map((feature, i) => (
-            <li
-              key={i}
-              className="flex items-center gap-2 text-xs text-zinc-400"
-            >
-              <div
-                className={`h-1 w-1 rounded-sm transition-all duration-300 shrink-0 ${
-                  isSelected || isHighlight
-                    ? "bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]"
-                    : "bg-zinc-700 shadow-[0_0_4px_rgba(113,113,122,0.5)] group-hover:bg-[#ff8a3c] group-hover:shadow-[0_0_8px_rgba(255,138,60,0.8)]"
-                }`}
-              />
-              <span className="leading-tight">{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Select button with hammer */}
-      <div className="mt-auto relative z-10 pt-2 w-full">
-        <button
-          ref={buttonRef}
-          type="button"
-          onClick={handleSelectPackage}
-          style={{ fontFamily: "var(--font-goldman)" }}
-          className={`group/btn relative flex w-full items-center justify-center gap-2 overflow-hidden px-4 py-3 text-[10px] font-bold uppercase tracking-[0.16em] transition-all cursor-pointer duration-300 ${
-            isSelected
-              ? "text-white bg-[#ff8a3c]/20"
-              : "text-[#ff8a3c] hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
-          }`}
-        >
-          {/* Corner brackets */}
-          <span className={`pointer-events-none absolute left-0 top-0 h-2 w-2 border-l-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isSelected || isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-          <span className={`pointer-events-none absolute right-0 top-0 h-2 w-2 border-r-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isSelected || isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-          <span className={`pointer-events-none absolute bottom-0 right-0 h-2 w-2 border-b-2 border-r-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isSelected || isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-          <span className={`pointer-events-none absolute bottom-0 left-0 h-2 w-2 border-b-2 border-l-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${isSelected || isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-          
-          {/* Background hover effect */}
-          <span className="pointer-events-none absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
-
-          <span className="relative z-10">
-            {isSelected 
-              ? (locale === "fi" ? "Valittu ✓" : "Selected ✓") 
-              : (locale === "fi" ? "Valitse" : "Select")
-            }
-          </span>
-          {!isSelected && (
-            <svg
-              className="relative z-10 h-2.5 w-2.5 transition-transform duration-300 group-hover/btn:translate-x-1"
-              viewBox="0 0 12 12"
-              fill="none"
-            >
-              <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          )}
-        </button>
-
-        <HammerStrike
-          ref={strikeRef}
-          targetRef={buttonRef}
-          className="absolute inset-0"
-        />
-      </div>
-    </article>
   );
 }
 
@@ -1200,6 +1007,7 @@ function FeaturesStep({
   selectedPackage,
   packages,
   onToggle,
+  onChangePackage,
 }: {
   t: Translations["steps"]["features"];
   features: Feature[];
@@ -1208,6 +1016,7 @@ function FeaturesStep({
   selectedPackage: string;
   packages: Package[];
   onToggle: (featureId: string) => void;
+  onChangePackage: () => void;
 }) {
   const pkg = packages.find((p) => p.id === selectedPackage);
 
@@ -1225,6 +1034,25 @@ function FeaturesStep({
         <div className="overflow-hidden mt-2 sm:mt-3">
           <p className="anim-item text-sm sm:text-base text-zinc-400">{t.subtitle}</p>
         </div>
+        
+        {/* Show selected package with change button */}
+        {pkg && (
+          <div className="overflow-hidden mt-3 sm:mt-4">
+            <div className="anim-item flex items-center gap-3 p-3 bg-white/[0.03] border border-white/10 rounded-lg">
+              <div className="flex-1">
+                <span className="text-xs text-zinc-500">{t.selectedPackage || "Valittu paketti"}</span>
+                <p className="text-sm sm:text-base font-medium text-[#ff8a3c]">{pkg.name}</p>
+              </div>
+              <button
+                onClick={onChangePackage}
+                className="px-3 py-1.5 text-xs sm:text-sm text-zinc-400 hover:text-white border border-white/10 hover:border-white/20 rounded transition-colors"
+              >
+                {t.changePackage || "Vaihda"}
+              </button>
+            </div>
+          </div>
+        )}
+        
         {pkg && (
           <div className="overflow-hidden mt-1 sm:mt-2">
             <p className="anim-item text-xs sm:text-sm text-[#ff8a3c]">

@@ -44,64 +44,26 @@ export const aboutUsSettingsQuery = groq`
     aboutUsTitle_en,
     aboutUsSubtitle_fi,
     aboutUsSubtitle_en,
+    
+    // Footer
     aboutUsDescription2_fi,
     aboutUsDescription2_en,
     aboutUsBulletPoint_fi,
     aboutUsBulletPoint_en,
-    aboutUsCta_fi,
-    aboutUsCta_en,
-    
-    // Mission & Values
-    missionTitle_fi,
-    missionTitle_en,
-    missionText_fi,
-    missionText_en,
-    valuesTitle_fi,
-    valuesTitle_en,
-    values_fi,
-    values_en,
-    
-    // Statistics
-    statsTitle_fi,
-    statsTitle_en,
-    stat1Value,
-    stat1Label_fi,
-    stat1Label_en,
-    stat2Value,
-    stat2Label_fi,
-    stat2Label_en,
-    stat3Value,
-    stat3Label_fi,
-    stat3Label_en,
-    stat4Value,
-    stat4Label_fi,
-    stat4Label_en,
     
     // Team - Samuli
+    samuliName,
     aboutUsTechTitle_fi,
     aboutUsTechTitle_en,
     aboutUsTechBody_fi,
     aboutUsTechBody_en,
-    samuliRole_fi,
-    samuliRole_en,
-    samuliQuote_fi,
-    samuliQuote_en,
-    "samuliPhoto": samuliPhoto.asset->url,
     
     // Team - Jouko
+    joukoName,
     aboutUsBizTitle_fi,
     aboutUsBizTitle_en,
     aboutUsBizBody_fi,
-    aboutUsBizBody_en,
-    joukoRole_fi,
-    joukoRole_en,
-    joukoQuote_fi,
-    joukoQuote_en,
-    "joukoPhoto": joukoPhoto.asset->url,
-    
-    // Footer
-    aboutUsNote_fi,
-    aboutUsNote_en
+    aboutUsBizBody_en
   }
 `;
 export const servicesSettingsQuery = groq`
