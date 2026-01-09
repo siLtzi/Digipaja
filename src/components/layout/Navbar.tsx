@@ -276,8 +276,8 @@ export default function Navbar({ locale }: NavbarProps) {
         {/* RIGHT: Language Switcher, CTA & Mobile Toggle */}
         <div className="flex items-center gap-4 shrink-0">
           
-          {/* LANGUAGE SWITCHER */}
-          <div className="flex items-center gap-1">
+          {/* LANGUAGE SWITCHER - Hidden on mobile, shown in dropdown instead */}
+          <div className="hidden md:flex items-center gap-1">
             <LanguageButton
               isActive={locale === "fi"}
               onClick={() => switchLocale("fi")}

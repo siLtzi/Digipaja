@@ -12,13 +12,51 @@
     "metricsFootnote": "Real project figures – we measure every site before handover."
   },
   "aboutUs": {
-    "eyebrow": "Who We Are",
-    "title": "Two Brothers Building Modern Web",
-    "subtitle": "Digipaja is a studio from Oulu run by two brothers, focusing on fast and sustainable websites.",
-    "techTitle": "Tech & Quality",
-    "techBody": "Built with React, Next.js, Sanity, and Vercel – a pure modern stack.",
-    "bizTitle": "Business & Growth",
-    "bizBody": "Helping local businesses with visibility, branding, and online reliability.",
+    "eyebrow": "WHO WE ARE",
+    "title": "Your project doesn't go to a team – it goes to us.",
+    "subtitle": "When you buy from us, you always know who is doing the work, who is responsible, and who is involved from start to finish.",
+    "description2": "Most of our clients come to us because they are tired of agencies where accountability disappears.",
+    "bulletPoint": "with us, you always know who does the work, who is responsible, and who answers the phone.",
+    "missionTitle": "Why do we do this?",
+    "missionText": "We believe every business deserves a website that loads lightning-fast, looks professional, and delivers real results. We don't make generic template-based sites – we build every project from scratch with modern technology, because we know it pays off in the long run.",
+    "valuesTitle": "Our Values",
+    "values": [
+      {
+        "title": "Quality over quantity",
+        "description": "We'd rather do fewer projects better than many mediocrely."
+      },
+      {
+        "title": "Open communication",
+        "description": "We keep you informed at every stage of the project."
+      },
+      {
+        "title": "Long-term thinking",
+        "description": "We build sites to last years, not just until the next update."
+      },
+      {
+        "title": "Honest pricing",
+        "description": "No hidden costs. You always know what you're paying for."
+      }
+    ],
+    "stat1Value": "100%",
+    "stat1Label": "Satisfied customers",
+    "stat2Value": "< 1s",
+    "stat2Label": "Average load time",
+    "stat3Value": "90+",
+    "stat3Label": "Lighthouse score",
+    "stat4Value": "24h",
+    "stat4Label": "Response time",
+    "samuliName": "SAMULI",
+    "samuliRole": "Technical & Quality",
+    "samuliTitle": "I ensure it works 3 years from now.",
+    "samuliBio": "If the site breaks during an update or slows down, it's my responsibility – not yours.",
+    "samuliQuote": "Good code is like good design – when it works perfectly, you don't even notice it.",
+    "joukoName": "JOUKO",
+    "joukoRole": "Business & Growth",
+    "joukoTitle": "I ensure the site brings in business.",
+    "joukoBio": "If the site doesn't bring you more leads, I haven't done my job right.",
+    "joukoQuote": "A website should be an investment, not an expense. We help make it profitable.",
+    "cta": "Let's discuss your project",
     "note": "Content updates in real-time via Sanity."
   },
   "services": {

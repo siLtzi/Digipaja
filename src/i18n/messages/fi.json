@@ -13,13 +13,51 @@
   },
 
   "aboutUs": {
-    "eyebrow": "Keitä me olemme",
-    "title": "Kaksi veljestä rakentamassa moderneja sivuja",
-    "subtitle": "Digipaja on Oulusta lähtöisin oleva kahden veljeksen studio, joka keskittyy nopeisiin ja kestäviin verkkosivuihin.",
-    "techTitle": "Tekniikka & Laatu",
-    "techBody": "Rakennamme sivut Reactilla, Next.js:llä, Sanityllä ja Vercelillä – puhtaasti modernilla stackilla.",
-    "bizTitle": "Yritykset & Kasvu",
-    "bizBody": "Autamme paikallisia yrityksiä näkyvyydessä, brändissä ja verkon luotettavuudessa.",
+    "eyebrow": "KETÄ ME OLEMME",
+    "title": "Projektisi ei mene tiimille – se menee meille.",
+    "subtitle": "Kun ostat meiltä, tiedät aina kuka tekee, kuka vastaa ja kuka on mukana alusta loppuun.",
+    "description2": "Useimmat asiakkaamme tulevat meille, koska he ovat kyllästyneet toimistoihin, joissa vastuu katoaa.",
+    "bulletPoint": "meillä tiedät aina kuka tekee, kuka vastaa ja kuka vastaa puhelimeen.",
+    "missionTitle": "Miksi teemme tätä?",
+    "missionText": "Uskomme, että jokainen yritys ansaitsee verkkosivut, jotka latautuvat salamannopeasti, näyttävät ammattimaisilta ja tuovat konkreettisia tuloksia. Emme tee geneerisiä teemapohjaisia sivustoja – rakennamme jokaisen projektin alusta asti modernilla teknologialla, koska tiedämme että pitkällä aikavälillä se kannattaa.",
+    "valuesTitle": "Arvomme",
+    "values": [
+      {
+        "title": "Laatu ennen määrää",
+        "description": "Teemme mieluummin vähemmän projekteja paremmin kuin paljon keskinkertaisesti."
+      },
+      {
+        "title": "Avoin kommunikaatio",
+        "description": "Pidämme sinut ajan tasalla projektin jokaisessa vaiheessa."
+      },
+      {
+        "title": "Pitkäjänteisyys",
+        "description": "Rakennamme sivustot kestämään vuosia, ei vain seuraavaa päivitystä."
+      },
+      {
+        "title": "Rehellinen hinnoittelu",
+        "description": "Ei piilokustannuksia. Tiedät aina mitä maksat ja miksi."
+      }
+    ],
+    "stat1Value": "100%",
+    "stat1Label": "Tyytyväisiä asiakkaita",
+    "stat2Value": "< 1s",
+    "stat2Label": "Keskimääräinen latausaika",
+    "stat3Value": "90+",
+    "stat3Label": "Lighthouse-pisteet",
+    "stat4Value": "24h",
+    "stat4Label": "Vastausaika",
+    "samuliName": "SAMULI",
+    "samuliRole": "Tekniikka & Laatu",
+    "samuliTitle": "Pidän huolen, että se toimii 3 vuoden päästäkin.",
+    "samuliBio": "Jos sivusto hajoaa päivityksessä tai hidastuu, se on minun vastuullani – ei teidän.",
+    "samuliQuote": "Hyvä koodi on kuin hyvä design – kun se toimii täydellisesti, sitä ei edes huomaa.",
+    "joukoName": "JOUKO",
+    "joukoRole": "Yritykset & kasvu",
+    "joukoTitle": "Pidän huolen, että sivusto tuo kauppaa.",
+    "joukoBio": "Jos sivusto ei tuo teille lisää yhteydenottoja, en ole tehnyt työtäni oikein.",
+    "joukoQuote": "Verkkosivujen pitäisi olla investointi, ei kulu. Me autamme tekemään siitä kannattavan.",
+    "cta": "Jutellaan projektista",
     "note": "Sisältö päivittyy reaaliaikaisesti Sanityn kautta."
   },
 

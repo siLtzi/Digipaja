@@ -166,7 +166,7 @@ function StepIndicator({ currentStep, totalSteps }: { currentStep: number; total
             {/* Step dot */}
             <div
               className={`
-                relative w-3 h-3 rounded-full transition-all duration-500
+                relative w-2.5 h-2.5 rounded-full transition-all duration-500
                 ${isCurrent 
                   ? "bg-[#ff8a3c] shadow-[0_0_12px_rgba(255,138,60,0.6)]" 
                   : isCompleted 
@@ -183,7 +183,7 @@ function StepIndicator({ currentStep, totalSteps }: { currentStep: number; total
             {index < totalSteps - 1 && (
               <div
                 className={`
-                  w-px h-16 transition-all duration-500
+                  w-px h-12 transition-all duration-500
                   ${isCompleted ? "bg-[#ff8a3c]/40" : "bg-white/10"}
                 `}
               />
@@ -451,18 +451,18 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
       />
 
       {/* Mobile step indicator - top */}
-      <div className="sm:hidden fixed top-0 left-0 right-0 pt-24 pb-4 px-6 z-20 bg-gradient-to-b from-[#050609] via-[#050609] to-transparent">
-        <div className="flex items-center justify-center gap-2">
+      <div className="sm:hidden fixed top-0 left-0 right-0 pt-20 pb-3 px-6 z-20 bg-gradient-to-b from-[#050609] via-[#050609]/95 to-transparent">
+        <div className="flex items-center justify-center gap-1.5">
           {Array.from({ length: TOTAL_STEPS }).map((_, index) => (
             <div
               key={index}
               className={`
                 h-1 rounded-full transition-all duration-500
                 ${index === currentStep 
-                  ? "w-8 bg-[#ff8a3c]" 
+                  ? "w-6 bg-[#ff8a3c]" 
                   : index < currentStep 
-                    ? "w-4 bg-[#ff8a3c]/50" 
-                    : "w-4 bg-white/10"
+                    ? "w-3 bg-[#ff8a3c]/50" 
+                    : "w-3 bg-white/10"
                 }
               `}
             />
@@ -471,8 +471,8 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
       </div>
 
       {/* Main content with step indicator on the left */}
-      <main className="flex-1 flex items-center justify-center px-6 py-8 relative z-10 min-h-screen">
-        <div className="flex items-center gap-12 max-w-5xl w-full">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 pt-28 sm:pt-8 pb-6 sm:py-8 relative z-10 min-h-screen">
+        <div className="flex items-center gap-8 sm:gap-12 max-w-5xl w-full">
           {/* Step indicator - desktop only */}
           <div className="hidden sm:flex items-center">
             <StepIndicator currentStep={currentStep} totalSteps={TOTAL_STEPS} />
@@ -565,7 +565,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
           )}
 
           {/* Navigation buttons */}
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
             {/* Back button */}
             <div className="order-2 sm:order-1">
               {currentStep > 0 ? (
@@ -645,17 +645,17 @@ function ContactInfoStep({
   updateFormData: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }) {
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 sm:space-y-8">
       <div className="overflow-hidden">
         <h1
           style={{ fontFamily: "var(--font-goldman)" }}
-          className="anim-item text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
+          className="anim-item text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
         >
           {t.title}
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         <div className="overflow-hidden">
           <div className="anim-item">
             <InputField
@@ -777,24 +777,24 @@ function ContactMethodStep({
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 sm:space-y-8">
       <div className="overflow-hidden">
         <h1
           style={{ fontFamily: "var(--font-goldman)" }}
-          className="anim-item text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
+          className="anim-item text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
         >
           {t.title}
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 p-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
         {options.map((option) => (
           <div key={option.id} className="overflow-hidden">
             <div className="anim-item">
               <button
                 onClick={() => onChange(option.id)}
                 className={`
-                  w-full group relative p-6 sm:p-8 text-left transition-all duration-300
+                  w-full group relative p-4 sm:p-8 text-left transition-all duration-300
                   border bg-gradient-to-br from-white/[0.03] to-transparent
                   rounded-lg rounded-br-none
                   ${
@@ -819,10 +819,10 @@ function ContactMethodStep({
                 />
 
                 {/* Icon */}
-                <div className="relative z-10 mb-4">
+                <div className="relative z-10 mb-2 sm:mb-4">
                   {option.id === "email" ? (
                     <svg
-                      className={`w-8 h-8 transition-colors duration-300 ${
+                      className={`w-6 h-6 sm:w-8 sm:h-8 transition-colors duration-300 ${
                         value === option.id ? "text-[#ff8a3c]" : "text-zinc-500 group-hover:text-[#ff8a3c]"
                       }`}
                       fill="none"
@@ -834,7 +834,7 @@ function ContactMethodStep({
                     </svg>
                   ) : (
                     <svg
-                      className={`w-8 h-8 transition-colors duration-300 ${
+                      className={`w-6 h-6 sm:w-8 sm:h-8 transition-colors duration-300 ${
                         value === option.id ? "text-[#ff8a3c]" : "text-zinc-500 group-hover:text-[#ff8a3c]"
                       }`}
                       fill="none"
@@ -850,7 +850,7 @@ function ContactMethodStep({
                 <div className="relative z-10">
                   <span
                     style={{ fontFamily: "var(--font-goldman)" }}
-                    className={`text-xl sm:text-2xl font-medium transition-colors ${
+                    className={`text-lg sm:text-2xl font-medium transition-colors ${
                       value === option.id
                         ? "text-[#ff8a3c]"
                         : "text-zinc-300 group-hover:text-white"
@@ -858,21 +858,21 @@ function ContactMethodStep({
                   >
                     {option.label}
                   </span>
-                  <p className="mt-2 text-sm text-zinc-500 group-hover:text-zinc-400 transition-colors">
+                  <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-zinc-500 group-hover:text-zinc-400 transition-colors">
                     {option.description}
                   </p>
                 </div>
 
                 {/* Selected indicator */}
                 <div
-                  className={`absolute top-6 right-6 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                  className={`absolute top-4 right-4 sm:top-6 sm:right-6 w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center transition-all ${
                     value === option.id
                       ? "border-[#ff8a3c]"
                       : "border-zinc-600 group-hover:border-zinc-400"
                   }`}
                 >
                   <div
-                    className={`w-2.5 h-2.5 rounded-full bg-[#ff8a3c] transition-transform ${
+                    className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ff8a3c] transition-transform ${
                       value === option.id ? "scale-100" : "scale-0"
                     }`}
                   />
@@ -901,22 +901,22 @@ function PackageStep({
   locale: string;
 }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
         <div className="overflow-hidden">
           <h1
             style={{ fontFamily: "var(--font-goldman)" }}
-            className="anim-item text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
+            className="anim-item text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
           >
             {t.title}
           </h1>
         </div>
-        <div className="overflow-hidden mt-3">
-          <p className="anim-item text-base text-zinc-400">{t.subtitle}</p>
+        <div className="overflow-hidden mt-2 sm:mt-3">
+          <p className="anim-item text-sm sm:text-base text-zinc-400">{t.subtitle}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
         {packages.map((pkg, index) => (
           <div key={pkg.id} className="anim-item">
               <SelectablePricingCard
@@ -1212,29 +1212,29 @@ function FeaturesStep({
   const pkg = packages.find((p) => p.id === selectedPackage);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div>
         <div className="overflow-hidden">
           <h1
             style={{ fontFamily: "var(--font-goldman)" }}
-            className="anim-item text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
+            className="anim-item text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
           >
             {t.title}
           </h1>
         </div>
-        <div className="overflow-hidden mt-3">
-          <p className="anim-item text-base text-zinc-400">{t.subtitle}</p>
+        <div className="overflow-hidden mt-2 sm:mt-3">
+          <p className="anim-item text-sm sm:text-base text-zinc-400">{t.subtitle}</p>
         </div>
         {pkg && (
-          <div className="overflow-hidden mt-2">
-            <p className="anim-item text-sm text-[#ff8a3c]">
+          <div className="overflow-hidden mt-1 sm:mt-2">
+            <p className="anim-item text-xs sm:text-sm text-[#ff8a3c]">
               {t.limitWarning.replace("{package}", pkg.name)}
             </p>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
         {features.map((feature) => {
           const isAllowed = allowedFeatures.includes(feature.id);
           const isSelected = selectedFeatures.includes(feature.id);
@@ -1246,7 +1246,7 @@ function FeaturesStep({
                   onClick={() => isAllowed && onToggle(feature.id)}
                   disabled={!isAllowed}
                   className={`
-                    w-full group relative p-4 text-left transition-all duration-300
+                    w-full group relative p-3 sm:p-4 text-left transition-all duration-300
                     border bg-gradient-to-br from-white/[0.03] to-transparent
                     rounded-lg rounded-br-none
                     ${
@@ -1271,11 +1271,11 @@ function FeaturesStep({
                       isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                     }`}
                   />
-                  <div className="relative z-10 flex items-start justify-between gap-3">
-                    <div>
+                  <div className="relative z-10 flex items-start justify-between gap-2">
+                    <div className="min-w-0">
                       <span
                         style={{ fontFamily: "var(--font-goldman)" }}
-                        className={`text-sm font-medium transition-colors ${
+                        className={`text-xs sm:text-sm font-medium transition-colors line-clamp-2 ${
                           isSelected
                             ? "text-[#ff8a3c]"
                             : isAllowed
@@ -1286,7 +1286,7 @@ function FeaturesStep({
                         {feature.label}
                       </span>
                       <p
-                        className={`mt-1 text-xs ${
+                        className={`mt-0.5 sm:mt-1 text-[10px] sm:text-xs hidden sm:block ${
                           isAllowed ? "text-zinc-500" : "text-zinc-700"
                         }`}
                       >
@@ -1296,7 +1296,7 @@ function FeaturesStep({
 
                     {/* Checkbox */}
                     <div
-                      className={`shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
+                      className={`shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-all ${
                         isSelected
                           ? "border-[#ff8a3c] bg-[#ff8a3c]"
                           : isAllowed
@@ -1306,7 +1306,7 @@ function FeaturesStep({
                     >
                       {isSelected && (
                         <svg
-                          className="w-3.5 h-3.5 text-white"
+                          className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -1344,11 +1344,11 @@ function MessageStep({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="overflow-hidden">
         <h1
           style={{ fontFamily: "var(--font-goldman)" }}
-          className="anim-item text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
+          className="anim-item text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
         >
           {t.title}
         </h1>
@@ -1362,9 +1362,9 @@ function MessageStep({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder={t.placeholder}
-            rows={5}
+            rows={4}
             autoFocus
-            className="w-full bg-transparent text-lg text-white placeholder-zinc-600 pb-4 border-none outline-none focus:ring-0 resize-none"
+            className="w-full bg-transparent text-base sm:text-lg text-white placeholder-zinc-600 pb-4 border-none outline-none focus:ring-0 resize-none"
           />
           <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10">
             <div
@@ -1392,17 +1392,17 @@ function AdditionalInfoStep({
   updateFormData: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="overflow-hidden">
         <h1
           style={{ fontFamily: "var(--font-goldman)" }}
-          className="anim-item text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
+          className="anim-item text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight"
         >
           {t.title}
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         <div className="overflow-hidden">
           <div className="anim-item">
             <InputField
