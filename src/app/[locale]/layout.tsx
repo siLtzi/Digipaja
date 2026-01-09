@@ -1,9 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CookieConsent from "@/components/ui/CookieConsent";
@@ -67,12 +65,8 @@ export default async function LocaleLayout({
         {/* Navbar is fixed → floats over content, no padding needed */}
         <Navbar locale={locale} />
 
-        <Suspense fallback={null}>
-          <SmoothScrollProvider>
-            <main>{children}</main>
-            <Footer locale={locale} />
-          </SmoothScrollProvider>
-        </Suspense>
+        <main>{children}</main>
+        <Footer locale={locale} />
         
         {/* GDPR Cookie Consent Banner */}
         <CookieConsent locale={locale} />
