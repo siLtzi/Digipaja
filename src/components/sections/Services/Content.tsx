@@ -6,6 +6,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ServiceVisual } from "./ServiceVisuals";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -251,6 +252,9 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const cardRef = useRef<HTMLAnchorElement>(null);
   
+  // Check if this service has a custom visual component
+  const hasCustomVisual = ["raataloidyt-kotisivut", "custom-websites", "tekninen-toteutus", "technical-implementation", "hakukoneoptimointi", "seo", "search-engine-optimization", "verkkokaupat", "ecommerce", "e-commerce"].includes(service.slug || "");
+  
   // Get all media from gallery or single image/video - more permissive matching
   const allMedia = React.useMemo(() => {
     const media: { type: "image" | "video"; url: string }[] = [];
@@ -287,35 +291,37 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
   
   // Cycle through images for gallery - longer interval to reduce re-renders
   useEffect(() => {
-    if (allImages.length <= 1) return;
+    if (allImages.length <= 1 || hasCustomVisual) return;
     
     const interval = setInterval(() => {
       setCurrentImageIndex(prev => (prev + 1) % allImages.length);
     }, 5000);
     
     return () => clearInterval(interval);
-  }, [allImages.length]);
+  }, [allImages.length, hasCustomVisual]);
 
-  // Special animation for "tekninen-toteutus" - scrolling code effect
-  const isCodeCard = service.slug === "tekninen-toteutus";
-  
   // Check if has media - use allMedia array which includes gallery items
-  const hasVideo = !!service.videoUrl || allMedia.some(m => m.type === "video");
+  const hasVideo = !hasCustomVisual && (!!service.videoUrl || allMedia.some(m => m.type === "video"));
   const firstVideo = service.videoUrl || allMedia.find(m => m.type === "video")?.url;
-  const hasImages = allImages.length > 0;
-  const hasMedia = hasVideo || hasImages;
+  const hasImages = !hasCustomVisual && allImages.length > 0;
+  const hasMedia = hasCustomVisual || hasVideo || hasImages;
 
   return (
     <Link
       ref={cardRef}
       href={`/${locale}/services`}
       data-service-card={idx}
-      className="group relative block rounded-lg rounded-br-none border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent p-6 lg:p-8 transition-all duration-500 hover:border-[#ff8a3c]/20 overflow-hidden"
+      className={`group relative block rounded-lg rounded-br-none border border-white/5 bg-[#050609] transition-all duration-500 hover:border-[#ff8a3c]/20 overflow-hidden ${
+        hasCustomVisual ? "min-h-[280px] sm:min-h-[320px] lg:min-h-[360px]" : "p-6 lg:p-8"
+      }`}
     >
       {/* Full card background media */}
       {hasMedia && (
         <div className="absolute inset-0 z-0">
-          {hasVideo && firstVideo ? (
+          {/* Custom visual components for specific services - NO overlay */}
+          {hasCustomVisual ? (
+            <ServiceVisual slug={service.slug} title={service.title} />
+          ) : hasVideo && firstVideo ? (
             <video
               src={firstVideo}
               autoPlay
@@ -324,31 +330,6 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
               playsInline
               className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-500"
             />
-          ) : isCodeCard && allImages[0] ? (
-            // Special 3D scrolling animation for code image - "gliding over code"
-            <div className="absolute inset-0 overflow-hidden" style={{ perspective: "600px" }}>
-              <div 
-                className="absolute inset-x-[-30%] h-[400%] animate-scroll-code"
-                style={{
-                  transform: "rotateX(55deg)",
-                  transformOrigin: "center 15%",
-                  transformStyle: "preserve-3d",
-                  willChange: "transform",
-                  backfaceVisibility: "hidden",
-                }}
-              >
-                <Image
-                  src={allImages[0]}
-                  alt={service.title}
-                  fill
-                  className="object-cover object-top transition-opacity duration-500"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              {/* Light vignette only at very edges for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-b from-[#050609]/40 via-transparent to-[#050609]/60" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#050609]/30 via-transparent to-[#050609]/30" />
-            </div>
           ) : (
             // Regular image or gallery
             <>
@@ -370,9 +351,13 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
             </>
           )}
           
-          {/* Gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050609] via-[#050609]/70 to-[#050609]/50" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#050609]/30 to-transparent" />
+          {/* Gradient overlay for text readability - only for non-custom visuals */}
+          {!hasCustomVisual && (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050609] via-[#050609]/70 to-[#050609]/50" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#050609]/30 to-transparent" />
+            </>
+          )}
         </div>
       )}
 
@@ -382,44 +367,65 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
       {/* Top border accent */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#ff8a3c]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[1]" />
 
-      {/* Content */}
-      <div className="relative z-10">
-        {/* Number & Title Row */}
-        <div className="flex items-start gap-3 sm:gap-4 mb-4">
-          <span
-            data-card-number
-            style={{ fontFamily: "var(--font-goldman)" }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ff8a3c]/15 leading-none select-none transition-colors duration-300 shrink-0"
-          >
-            {String(idx + 1).padStart(2, "0")}
-          </span>
-          
-          <div className="flex-1 pt-2 min-w-0">
+      {/* Hover overlay with title for custom visual cards */}
+      {hasCustomVisual && (
+        <div className="absolute inset-0 z-20 flex items-end p-4 lg:p-6 bg-gradient-to-t from-[#050609] via-[#050609]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="flex items-start gap-3">
+            <span
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#ff8a3c]/30 leading-none select-none shrink-0"
+            >
+              {String(idx + 1).padStart(2, "0")}
+            </span>
             <h3
               style={{ fontFamily: "var(--font-goldman)" }}
-              className="text-base sm:text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300"
+              className="text-base sm:text-lg lg:text-xl font-bold text-white uppercase tracking-wide pt-1"
             >
-              {service.title.split(' ').map((word, i, arr) => (
-                <span key={i}>
-                  {word}
-                  {i < arr.length - 1 && (
-                    <><span className="hidden sm:inline"> </span><br className="sm:hidden" /></>
-                  )}
-                </span>
-              ))}
+              {service.title}
             </h3>
           </div>
         </div>
+      )}
 
-        {/* Description */}
-        <p className="text-sm lg:text-base text-zinc-300 leading-relaxed mb-4">
-          {service.body}
-        </p>
+      {/* Content - only show for non-visual cards */}
+      {!hasCustomVisual && (
+        <div className="relative z-10">
+          {/* Number & Title Row */}
+          <div className="flex items-start gap-3 sm:gap-4 mb-4">
+            <span
+              data-card-number
+              style={{ fontFamily: "var(--font-goldman)" }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ff8a3c]/15 leading-none select-none transition-colors duration-300 shrink-0"
+            >
+              {String(idx + 1).padStart(2, "0")}
+            </span>
+            
+            <div className="flex-1 pt-2 min-w-0">
+              <h3
+                style={{ fontFamily: "var(--font-goldman)" }}
+                className="text-base sm:text-xl lg:text-2xl font-bold text-white uppercase tracking-wide group-hover:text-[#ff8a3c] transition-colors duration-300"
+              >
+                {service.title.split(' ').map((word, i, arr) => (
+                  <span key={i}>
+                    {word}
+                    {i < arr.length - 1 && (
+                      <><span className="hidden sm:inline"> </span><br className="sm:hidden" /></>
+                    )}
+                  </span>
+                ))}
+              </h3>
+            </div>
+          </div>
 
-      </div>
+          {/* Description */}
+          <p className="text-sm lg:text-base text-zinc-300 leading-relaxed mb-4">
+            {service.body}
+          </p>
+        </div>
+      )}
 
       {/* Gallery dots indicator */}
-      {allImages.length > 1 && !isCodeCard && (
+      {allImages.length > 1 && !hasCustomVisual && (
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
           {allImages.map((_, i) => (
             <div 

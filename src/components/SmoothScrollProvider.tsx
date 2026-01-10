@@ -34,11 +34,21 @@ export default function SmoothScrollProvider({
       existingSmoother.scrollTop(0);
       existingSmoother.kill();
     }
+    
+    // Kill all ScrollTriggers to prevent stale positions
+    ScrollTrigger.getAll().forEach((st) => st.kill());
 
-    // Force scroll to top on route change to prevent starting midway
-    window.scrollTo(0, 0);
+    // Force scroll to top on route change - multiple approaches for reliability
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+    
+    // Also reset using requestAnimationFrame to catch any late renders
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
 
     if (!wrapperRef.current || !contentRef.current) return;
 
@@ -58,6 +68,10 @@ export default function SmoothScrollProvider({
     // Ensure we start at the top (unless there's a hash)
     if (!window.location.hash) {
       smoother.scrollTop(0);
+      // Double-tap to ensure it takes effect
+      requestAnimationFrame(() => {
+        smoother.scrollTop(0);
+      });
     }
 
     // 🔥 FIX: ResizeObserver forces refresh if content height changes (e.g. form appearing)

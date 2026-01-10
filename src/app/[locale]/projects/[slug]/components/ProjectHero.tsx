@@ -1,15 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useLayoutEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { useGSAP } from "@gsap/react";
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother);
 }
 
 type ProjectHeroProps = {
@@ -47,6 +48,20 @@ export default function ProjectHero({
   const sectionRef = useRef<HTMLElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const imageInnerRef = useRef<HTMLDivElement>(null);
+
+  // Force scroll to top when this component mounts (project page loads)
+  useLayoutEffect(() => {
+    // Reset scroll position immediately
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Also reset ScrollSmoother if it exists
+    const smoother = ScrollSmoother.get();
+    if (smoother) {
+      smoother.scrollTop(0);
+    }
+  }, []);
 
   useGSAP(
     () => {

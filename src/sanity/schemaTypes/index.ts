@@ -9,6 +9,10 @@ import contactSettings from "./contactSettings";
 import contactPageSettings from "./contactPageSettings";
 import service from './service';
 import servicesOverview from './servicesOverview';
+import whyUsSettings from "./whyUsSettings";
+import siteSettings from "./siteSettings";
+import ctaSettings from "./ctaSettings";
+import speechDeckSettings from "./speechDeckSettings";
 
 export const schemaTypes = [
   heroSettings,
@@ -23,4 +27,8 @@ export const schemaTypes = [
   contactPageSettings,
   service,
   servicesOverview,
+  whyUsSettings,
+  siteSettings,
+  ctaSettings,
+  speechDeckSettings,
 ];

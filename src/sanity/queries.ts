@@ -28,11 +28,27 @@ export const servicesOverviewQuery = groq`
 export const heroSettingsQuery = groq`
 *[_type == "heroSettings"][0]{
   heroEyebrow_fi,
-  heroTitle_fi,
-  heroHighlight_fi,
+  heroEyebrow_en,
+  heroTitleStart_fi,
+  heroTitleStart_en,
+  heroTitleAccent_fi,
+  heroTitleAccent_en,
+  heroTitleEnd_fi,
+  heroTitleEnd_en,
   heroSubtitle_fi,
+  heroSubtitle_en,
+  heroPrimaryCta_fi,
+  heroPrimaryCta_en,
+  heroSecondaryCta_fi,
+  heroSecondaryCta_en,
   "heroDesktopVideo": heroDesktopVideo.asset->url,
-  "heroMobileVideo": heroMobileVideo.asset->url
+  "heroMobileVideo": heroMobileVideo.asset->url,
+  "metricsLabel_fi": metricsLabel.fi,
+  "metricsLabel_en": metricsLabel.en,
+  "metricsSubtitle_fi": metricsSubtitle.fi,
+  "metricsSubtitle_en": metricsSubtitle.en,
+  "metricsFootnote_fi": metricsFootnote.fi,
+  "metricsFootnote_en": metricsFootnote.en
 }
 `;
 export const aboutUsSettingsQuery = groq`
@@ -50,20 +66,51 @@ export const aboutUsSettingsQuery = groq`
     aboutUsDescription2_en,
     aboutUsBulletPoint_fi,
     aboutUsBulletPoint_en,
+    "cta_fi": cta.fi,
+    "cta_en": cta.en,
     
     // Team - Samuli
     samuliName,
+    samuliRole_fi,
+    samuliRole_en,
     aboutUsTechTitle_fi,
     aboutUsTechTitle_en,
     aboutUsTechBody_fi,
     aboutUsTechBody_en,
+    samuliQuote_fi,
+    samuliQuote_en,
     
     // Team - Jouko
     joukoName,
+    joukoRole_fi,
+    joukoRole_en,
     aboutUsBizTitle_fi,
     aboutUsBizTitle_en,
     aboutUsBizBody_fi,
-    aboutUsBizBody_en
+    aboutUsBizBody_en,
+    joukoQuote_fi,
+    joukoQuote_en,
+    
+    // Stats
+    stats[]{
+      value,
+      label_fi,
+      label_en
+    },
+    
+    // Values & Mission
+    "missionTitle_fi": missionTitle.fi,
+    "missionTitle_en": missionTitle.en,
+    "missionText_fi": missionText.fi,
+    "missionText_en": missionText.en,
+    "valuesTitle_fi": valuesTitle.fi,
+    "valuesTitle_en": valuesTitle.en,
+    values[]{
+      title_fi,
+      title_en,
+      description_fi,
+      description_en
+    }
   }
 `;
 export const servicesSettingsQuery = groq`
@@ -365,5 +412,96 @@ export const contactPageSettingsQuery = `
     success,
     sidebar,
     popularBadge
+  }
+`;
+
+// ==================== SITE SETTINGS ====================
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0]{
+    companyName,
+    businessId,
+    location,
+    email,
+    phone,
+    socialLinks[]{
+      platform,
+      url
+    },
+    navItems[]{
+      id,
+      label_fi,
+      label_en
+    },
+    "footerTagline_fi": footerTagline.fi,
+    "footerTagline_en": footerTagline.en,
+    "footerDescription_fi": footerDescription.fi,
+    "footerDescription_en": footerDescription.en,
+    footerCta{
+      "badge_fi": badge.fi,
+      "badge_en": badge.en,
+      "title_fi": title.fi,
+      "title_en": title.en,
+      "description_fi": description.fi,
+      "description_en": description.en,
+      "buttonText_fi": buttonText.fi,
+      "buttonText_en": buttonText.en
+    },
+    footerSectionTitles{
+      "navigation_fi": navigation.fi,
+      "navigation_en": navigation.en,
+      "social_fi": social.fi,
+      "social_en": social.en,
+      "contact_fi": contact.fi,
+      "contact_en": contact.en
+    },
+    footerLabels{
+      "email_fi": email.fi,
+      "email_en": email.en,
+      "phone_fi": phone.fi,
+      "phone_en": phone.en,
+      "businessId_fi": businessId.fi,
+      "businessId_en": businessId.en,
+      "location_fi": location.fi,
+      "location_en": location.en
+    },
+    footerLinks[]{
+      label_fi,
+      label_en,
+      href
+    },
+    legalLinks[]{
+      label_fi,
+      label_en,
+      href
+    }
+  }
+`;
+
+// ==================== CTA SETTINGS ====================
+export const ctaSettingsQuery = groq`
+  *[_type == "ctaSettings"][0]{
+    "ctaText_fi": ctaText.fi,
+    "ctaText_en": ctaText.en,
+    ctaLink
+  }
+`;
+
+// ==================== SPEECH DECK SETTINGS ====================
+export const speechDeckSettingsQuery = groq`
+  *[_type == "speechDeckSettings"][0]{
+    items[]{
+      id,
+      "title_fi": title.fi,
+      "title_en": title.en,
+      "body_fi": body.fi,
+      "body_en": body.en,
+      svgType
+    },
+    cta{
+      "title_fi": title.fi,
+      "title_en": title.en,
+      "body_fi": body.fi,
+      "body_en": body.en
+    }
   }
 `;

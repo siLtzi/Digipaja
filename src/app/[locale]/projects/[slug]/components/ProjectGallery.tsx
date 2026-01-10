@@ -86,10 +86,10 @@ export default function ProjectGallery({ images, projectTitle, title }: ProjectG
   return (
     <section ref={sectionRef} className="relative py-16 lg:py-24 overflow-hidden">
       {/* Laser beam separator at top */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
-        <div className="gallery-laser h-[4px] w-full max-w-5xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-40 scale-x-0" />
-        <div className="gallery-laser absolute h-[2px] w-3/4 max-w-4xl bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] scale-x-0" />
-        <div className="gallery-laser absolute h-[1px] w-2/3 max-w-3xl bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-90 scale-x-0" />
+      <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
+        <div className="gallery-laser h-[4px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 scale-x-0" />
+        <div className="gallery-laser absolute top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)] opacity-0 scale-x-0" />
+        <div className="gallery-laser absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
       {/* Background grid */}
