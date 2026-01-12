@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -44,7 +45,7 @@ function useIsMobile() {
   return isMobile;
 }
 
-// Info Modal Component - Full screen overlay for mobile
+// Info Modal Component - Uses Portal to render at document root
 function InfoModal({ 
   tier, 
   isOpen, 
@@ -54,48 +55,44 @@ function InfoModal({
   isOpen: boolean; 
   onClose: () => void;
 }) {
-  // Prevent body scroll when modal is open
+  const [mounted, setMounted] = useState(false);
+  
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+    setMounted(true);
+  }, []);
 
-  if (!isOpen) return null;
+  if (!mounted || !isOpen) return null;
 
-  return (
+  const modalContent = (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-      onClick={onClose}
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: 2147483647 }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+      <div 
+        className="absolute inset-0 bg-black/95"
+        onClick={onClose}
+      />
       
       {/* Modal */}
       <div 
-        className="relative w-full max-w-sm bg-linear-to-b from-[#111113] to-[#0a0a0c] border border-[#ff8a3c]/30 rounded-2xl p-6 shadow-2xl shadow-black/60"
-        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-sm bg-[#0a0a0c] border-2 border-[#ff8a3c]/50 rounded-xl overflow-hidden"
+        style={{ maxHeight: '85vh' }}
       >
-        {/* Close button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 hover:border-[#ff8a3c]/30 transition-all"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
         {/* Header */}
-        <div className="mb-5 pr-8">
+        <div className="bg-[#0a0a0c] p-4 border-b border-[#ff8a3c]/30">
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
           <h3 
-            className="text-lg font-bold text-white uppercase tracking-wide"
+            className="text-lg font-bold text-white uppercase pr-10"
             style={{ fontFamily: "var(--font-goldman)" }}
           >
             {tier.name}
@@ -104,24 +101,21 @@ function InfoModal({
             {tier.monthlyLabel || "Ylläpito"}: {tier.monthlyValue}
           </p>
         </div>
-
-        {/* Glow effect */}
-        <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none" />
         
         {/* Content */}
-        <div className="relative max-h-[60vh] overflow-y-auto">
+        <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(85vh - 100px)' }}>
           {tier.monthlyIncluded && tier.monthlyIncluded.length > 0 && (
-            <div className="mb-5">
+            <div className="mb-4">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]" />
-                <div className="text-[10px] uppercase tracking-[0.2em] text-[#ff8a3c] font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
+                <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c]" />
+                <div className="text-[10px] uppercase tracking-widest text-[#ff8a3c] font-bold">
                   Sisältö
                 </div>
               </div>
-              <ul className="space-y-2.5 pl-1">
+              <ul className="space-y-2">
                 {tier.monthlyIncluded.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-[13px] text-zinc-300 leading-relaxed">
-                    <svg className="w-4 h-4 text-[#ff8a3c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <li key={i} className="flex items-start gap-2 text-sm text-zinc-200">
+                    <svg className="w-4 h-4 text-[#ff8a3c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                     {item}
@@ -132,17 +126,17 @@ function InfoModal({
           )}
           
           {tier.monthlyExcluded && tier.monthlyExcluded.length > 0 && (
-            <div className="pt-4 border-t border-white/5">
+            <div className="pt-4 border-t border-white/10">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
-                <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
+                <div className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
+                <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold">
                   Ei sisällä
                 </div>
               </div>
-              <ul className="space-y-2.5 pl-1">
+              <ul className="space-y-2">
                 {tier.monthlyExcluded.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-[13px] text-zinc-500 leading-relaxed">
-                    <svg className="w-4 h-4 text-zinc-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <li key={i} className="flex items-start gap-2 text-sm text-zinc-400">
+                    <svg className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     {item}
@@ -155,6 +149,8 @@ function InfoModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 
 // Info Button with hover tooltip (desktop) and click modal (mobile)
