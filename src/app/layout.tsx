@@ -129,14 +129,7 @@ export const metadata: Metadata = {
     },
   },
   category: "technology",
-  icons: {
-    icon: [
-      { url: "/Digipaja.svg", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/Digipaja.svg" },
-    ],
-  },
+  // Icons are auto-detected from /app/favicon.ico and /app/icon.png if present
   manifest: "/manifest.json",
 };
 
