@@ -62,7 +62,7 @@ export default function ContactContent(props: ContactProps) {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative overflow-hidden bg-[#050609] py-20 lg:py-24 text-zinc-100"
+      className="relative overflow-hidden bg-[#08090C] py-20 lg:py-24 text-zinc-100"
     >
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
@@ -71,28 +71,16 @@ export default function ContactContent(props: ContactProps) {
         <div className="laser-beam absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
-      <div className="absolute inset-0 z-0 pointer-events-none select-none">
-         <div className="absolute inset-0 z-0 opacity-20"> 
-            <Image
-              src="/image/BG4.webp"
-              alt="Contact Background"
-              fill
-              className="object-cover object-center"
-              quality={100}
-              priority
-            />
-         </div>
-
-         <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#050609] via-[#050609]/70 to-[#050609]/40" />
-         
-         <div className="absolute inset-0 z-20 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]" />
-         
-         <div
-           className="absolute left-1/2 top-1/2 h-[800px] w-[1200px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-           style={{
-             background: "radial-gradient(ellipse at center, rgba(255,138,60,0.08) 0%, rgba(255,138,60,0.02) 40%, transparent 70%)",
-           }}
-         />
+      {/* === LIGHT GRID BACKGROUND === */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#08090C] via-transparent to-[#08090C]" />
+        <div
+          className="absolute left-1/2 top-1/2 h-[800px] w-[1200px] -translate-x-1/2 -translate-y-1/2"
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(255,138,60,0.08) 0%, rgba(255,138,60,0.02) 40%, transparent 70%)",
+          }}
+        />
       </div>
 
       <div className="relative z-20 mx-auto max-w-7xl px-6">

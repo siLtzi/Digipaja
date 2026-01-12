@@ -247,7 +247,7 @@ export default function AboutUsContent({
     <section
       ref={containerRef}
       id="about-us"
-      className="relative overflow-hidden bg-[#050609] pt-24 lg:pt-32 pb-0"
+      className="relative overflow-hidden bg-[#08090C] pt-24 lg:pt-32 pb-0"
     >
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
@@ -256,8 +256,11 @@ export default function AboutUsContent({
         <div className="laser-beam absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
-       {/* Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+      {/* === LIGHT GRID BACKGROUND === */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#08090C] via-transparent to-[#08090C]" />
+      </div>
 
       {/* Main Glow */}
       <div

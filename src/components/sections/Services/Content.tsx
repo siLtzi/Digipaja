@@ -167,10 +167,11 @@ export default function ServicesContent({
       id="services"
       className="relative w-full py-24 lg:py-32 bg-[#050609] text-zinc-100 overflow-hidden"
     >
-
-
-      {/* Subtle grid pattern */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:48px_48px] opacity-50" />
+      {/* === DARK GRID BACKGROUND === */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050609] via-transparent to-[#050609]" />
+      </div>
 
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
@@ -211,16 +212,22 @@ export default function ServicesContent({
           </div>
         </div>
 
-        {/* Services Grid */}
+        {/* Services Grid - Bento layout */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
-          {services.map((service, idx) => (
-            <ServiceCard 
-              key={service.slug ?? `${service.title}-${idx}`}
-              service={service}
-              idx={idx}
-              locale={locale}
-            />
-          ))}
+          {services.map((service, idx) => {
+            // First card and last card are full width (hero/foundation)
+            const isFullWidth = idx === 0 || idx === services.length - 1;
+            
+            return (
+              <ServiceCard 
+                key={service.slug ?? `${service.title}-${idx}`}
+                service={service}
+                idx={idx}
+                locale={locale}
+                isFullWidth={isFullWidth}
+              />
+            );
+          })}
         </div>
 
         {/* Bottom CTA */}
@@ -248,7 +255,7 @@ export default function ServicesContent({
 }
 
 // Separate component for service card with gallery support
-function ServiceCard({ service, idx, locale }: { service: Service; idx: number; locale: string }) {
+function ServiceCard({ service, idx, locale, isFullWidth = false }: { service: Service; idx: number; locale: string; isFullWidth?: boolean }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const cardRef = useRef<HTMLAnchorElement>(null);
   
@@ -312,7 +319,13 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
       href={`/${locale}/services${service.slug ? `#${service.slug}` : ''}`}
       data-service-card={idx}
       className={`group relative block rounded-lg rounded-br-none border border-[#ff8a3c]/20 bg-[#050609] transition-all duration-500 hover:border-[#ff8a3c]/50 overflow-hidden ${
-        hasCustomVisual ? "min-h-[280px] sm:min-h-[320px] lg:min-h-[360px]" : "p-6 lg:p-8"
+        isFullWidth ? "md:col-span-2" : ""
+      } ${
+        hasCustomVisual 
+          ? isFullWidth 
+            ? "min-h-[320px] sm:min-h-[380px] lg:min-h-[420px]" 
+            : "min-h-[280px] sm:min-h-[320px] lg:min-h-[360px]" 
+          : "p-6 lg:p-8"
       }`}
     >
       {/* Full card background media */}

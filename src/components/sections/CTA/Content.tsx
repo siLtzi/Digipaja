@@ -69,6 +69,11 @@ export default function CTAContent({ ctaText, ctaLink = "/yhteydenotto" }: CTAPr
       id="cta"
       className="cta-section relative overflow-hidden bg-[#050609] py-16 lg:py-20"
     >
+      {/* === DARK GRID BACKGROUND (subtle) === */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px] opacity-50" />
+      </div>
+
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
         <div className="cta-laser-blur h-[4px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-0 origin-center scale-x-0" />

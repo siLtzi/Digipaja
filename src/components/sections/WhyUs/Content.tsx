@@ -111,7 +111,7 @@ export default function WhyUsContent({
     <section
       ref={containerRef}
       id="why-us"
-      className="relative bg-[#050609] overflow-hidden"
+      className="relative bg-[#08090C] overflow-hidden"
     >
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
@@ -120,28 +120,11 @@ export default function WhyUsContent({
         <div className="absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-90" />
       </div>
 
-      {/* === BACKGROUND LAYERS === */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0">
-          <Image
-            src="/image/BGWhyUs2.png"
-            alt="Background"
-            fill
-            className="object-cover object-center opacity-20 mix-blend-screen"
-            priority
-          />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050609] via-[#050609]/85 to-[#050609]" />
-        
-        {/* Active Scanline Grid */}
-        <div 
-            className="absolute inset-0 opacity-20 pointer-events-none"
-            style={{
-                backgroundImage: `linear-gradient(to right, #ffffff05 1px, transparent 1px), linear-gradient(to bottom, #ffffff05 1px, transparent 1px)`,
-                backgroundSize: '40px 40px',
-                maskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)'
-            }}
-        />
+      {/* === LIGHT GRID BACKGROUND === */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#08090C] via-transparent to-[#08090C]" />
+        <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ff8a3c]/5 blur-[100px]" />
       </div>
 
       {/* === HORIZONTAL SCROLL CONTAINER === */}

@@ -190,6 +190,7 @@ export default function ProcessContent({
 
   return (
     <section
+      ref={containerRef}
       id="process"
       className="relative overflow-hidden bg-[#050609] py-24 lg:py-32"
     >
@@ -200,9 +201,11 @@ export default function ProcessContent({
         <div className="laser-beam absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
-      {/* Background Decor */}
+      {/* === DARK GRID BACKGROUND === */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-         <div className="absolute right-0 top-0 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/2 rounded-full bg-[#ff8a3c]/5 blur-[100px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050609] via-transparent to-[#050609]" />
+        <div className="absolute right-0 top-0 h-[500px] w-[500px] -translate-y-1/2 translate-x-1/2 rounded-full bg-[#ff8a3c]/5 blur-[100px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
@@ -235,7 +238,7 @@ export default function ProcessContent({
           </div>
 
           {/* === RIGHT: TIMELINE === */}
-          <div className="lg:col-span-7" ref={containerRef}>
+          <div className="lg:col-span-7">
             <div className="relative pl-8 sm:pl-12">
               
               {/* TIMELINE LINES - Enhanced */}

@@ -89,10 +89,10 @@ export default function PricingContent({
         <div className="laser-beam absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-0 scale-x-0" />
       </div>
 
-      <div className="absolute inset-0 z-0 pointer-events-none select-none">
-        {/* Tech grid pattern */}
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[32px_32px] mask-[radial-gradient(ellipse_80%_60%_at_50%_50%,#000_50%,transparent_100%)]" />
-        
+      {/* === DARK GRID BACKGROUND === */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050609] via-transparent to-[#050609]" />
         {/* Spotlight gradient */}
         <div
           className="absolute left-1/2 top-1/2 h-[900px] w-[1400px] -translate-x-1/2 -translate-y-1/2"
@@ -100,9 +100,6 @@ export default function PricingContent({
             background: "radial-gradient(ellipse at center, rgba(255,138,60,0.10) 0%, rgba(255,138,60,0.03) 40%, transparent 70%)",
           }}
         />
-        
-        {/* Right accent glow */}
-        <div className="absolute right-0 top-0 h-[800px] w-[800px] -translate-y-1/4 translate-x-1/3 bg-[radial-gradient(circle_closest-side,rgba(255,138,60,0.08),transparent)] blur-3xl" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
