@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -27,6 +27,243 @@ type PricingTier = {
   cta: string;
   highlight?: boolean;
 };
+
+// Hook to detect if device is touch-based (mobile)
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  return isMobile;
+}
+
+// Info Modal Component - Full screen overlay for mobile
+function InfoModal({ 
+  tier, 
+  isOpen, 
+  onClose 
+}: { 
+  tier: PricingTier; 
+  isOpen: boolean; 
+  onClose: () => void;
+}) {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+      
+      {/* Modal */}
+      <div 
+        className="relative w-full max-w-sm bg-linear-to-b from-[#111113] to-[#0a0a0c] border border-[#ff8a3c]/30 rounded-2xl p-6 shadow-2xl shadow-black/60"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 hover:border-[#ff8a3c]/30 transition-all"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Header */}
+        <div className="mb-5 pr-8">
+          <h3 
+            className="text-lg font-bold text-white uppercase tracking-wide"
+            style={{ fontFamily: "var(--font-goldman)" }}
+          >
+            {tier.name}
+          </h3>
+          <p className="text-sm text-[#ff8a3c] mt-1" style={{ fontFamily: "var(--font-goldman)" }}>
+            {tier.monthlyLabel || "Ylläpito"}: {tier.monthlyValue}
+          </p>
+        </div>
+
+        {/* Glow effect */}
+        <div className="absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none" />
+        
+        {/* Content */}
+        <div className="relative max-h-[60vh] overflow-y-auto">
+          {tier.monthlyIncluded && tier.monthlyIncluded.length > 0 && (
+            <div className="mb-5">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]" />
+                <div className="text-[10px] uppercase tracking-[0.2em] text-[#ff8a3c] font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
+                  Sisältö
+                </div>
+              </div>
+              <ul className="space-y-2.5 pl-1">
+                {tier.monthlyIncluded.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-[13px] text-zinc-300 leading-relaxed">
+                    <svg className="w-4 h-4 text-[#ff8a3c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          {tier.monthlyExcluded && tier.monthlyExcluded.length > 0 && (
+            <div className="pt-4 border-t border-white/5">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
+                <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
+                  Ei sisällä
+                </div>
+              </div>
+              <ul className="space-y-2.5 pl-1">
+                {tier.monthlyExcluded.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-[13px] text-zinc-500 leading-relaxed">
+                    <svg className="w-4 h-4 text-zinc-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Info Button with hover tooltip (desktop) and click modal (mobile)
+function InfoButton({ 
+  tier, 
+  isHighlight, 
+  compact = false 
+}: { 
+  tier: PricingTier; 
+  isHighlight: boolean;
+  compact?: boolean;
+}) {
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
+  const isMobile = useIsMobile();
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isMobile) {
+      setInfoModalOpen(true);
+    }
+  };
+
+  return (
+    <>
+      <div className="relative group/tooltip">
+        <button
+          type="button"
+          onClick={handleClick}
+          className={`flex items-center justify-center cursor-help transition-all duration-300 shrink-0 ${
+            compact ? "w-4 h-4" : "w-6 h-6"
+          } ${
+            isHighlight
+              ? "text-[#ff8a3c]/70 hover:text-[#ff8a3c] hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.6)]"
+              : "text-zinc-500 group-hover:text-[#ff8a3c]/70 hover:text-[#ff8a3c] hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.6)]"
+          }`}
+        >
+          <img 
+            src="/icons/info.svg" 
+            alt="Info" 
+            className={`opacity-70 hover:opacity-100 transition-opacity ${compact ? "w-3.5 h-3.5" : "w-5 h-5"}`}
+            style={{ filter: isHighlight ? 'invert(60%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(100%)' : 'invert(50%)' }}
+          />
+        </button>
+        
+        {/* Hover tooltip - only shows on desktop (hidden on touch devices via CSS) */}
+        <div className={`absolute top-full mt-3 transition-all duration-300 ease-out z-50 opacity-0 invisible translate-y-2 group-hover/tooltip:opacity-100 group-hover/tooltip:visible group-hover/tooltip:translate-y-0 pointer-events-none group-hover/tooltip:pointer-events-auto hidden md:block ${
+          compact ? "right-0 w-56" : "left-1/2 -translate-x-1/2 w-72"
+        }`}>
+          <div className={`relative bg-linear-to-b from-[#111113] to-[#0a0a0c] border border-[#ff8a3c]/30 rounded-xl shadow-2xl shadow-black/60 backdrop-blur-xl ${
+            compact ? "p-3" : "p-5"
+          }`}>
+            {/* Arrow */}
+            <div className={`absolute left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111113] border-l border-t border-[#ff8a3c]/30 rotate-45 ${
+              compact ? "-top-1.5" : "-top-[6px]"
+            }`} />
+            
+            {/* Glow effect */}
+            <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none" />
+            
+            {tier.monthlyIncluded && tier.monthlyIncluded.length > 0 && (
+              <div className="relative">
+                <div className={`flex items-center gap-2 ${compact ? "mb-2" : "mb-3"}`}>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]" />
+                  <div className={`uppercase tracking-[0.2em] text-[#ff8a3c] font-semibold ${compact ? "text-[8px]" : "text-[10px]"}`} style={{ fontFamily: "var(--font-goldman)" }}>
+                    Sisältö
+                  </div>
+                </div>
+                <ul className={`pl-1 ${compact ? "space-y-1 mb-3" : "space-y-2 mb-5"}`}>
+                  {tier.monthlyIncluded.map((item, i) => (
+                    <li key={i} className={`flex items-start gap-2 text-zinc-300 leading-relaxed ${compact ? "text-[10px]" : "text-[12px]"}`}>
+                      <svg className={`text-[#ff8a3c] shrink-0 mt-0.5 ${compact ? "w-2.5 h-2.5" : "w-3.5 h-3.5"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            {tier.monthlyExcluded && tier.monthlyExcluded.length > 0 && (
+              <div className={`relative border-t border-white/5 ${compact ? "pt-2" : "pt-4"}`}>
+                <div className={`flex items-center gap-2 ${compact ? "mb-2" : "mb-3"}`}>
+                  <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
+                  <div className={`uppercase tracking-[0.2em] text-zinc-500 font-semibold ${compact ? "text-[8px]" : "text-[10px]"}`} style={{ fontFamily: "var(--font-goldman)" }}>
+                    Ei sisällä
+                  </div>
+                </div>
+                <ul className={`pl-1 ${compact ? "space-y-1" : "space-y-2"}`}>
+                  {tier.monthlyExcluded.map((item, i) => (
+                    <li key={i} className={`flex items-start gap-2 text-zinc-500 leading-relaxed ${compact ? "text-[10px]" : "text-[12px]"}`}>
+                      <svg className={`text-zinc-600 shrink-0 mt-0.5 ${compact ? "w-2.5 h-2.5" : "w-3.5 h-3.5"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      
+      {/* Modal for mobile */}
+      <InfoModal tier={tier} isOpen={infoModalOpen} onClose={() => setInfoModalOpen(false)} />
+    </>
+  );
+}
 
 type PricingProps = {
   eyebrow: string;
@@ -279,74 +516,8 @@ export function PricingCard({ tier, index, totalTiers = 3 }: { tier: PricingTier
           </div>
           {tier.monthlyValue && (
             <div className="flex items-center gap-3">
-              {/* Info icon with tooltip - positioned on the left */}
-              <div className="relative group/tooltip">
-                <div className={`w-6 h-6 flex items-center justify-center cursor-help transition-all duration-300 shrink-0 ${
-                  isHighlight
-                    ? "text-[#ff8a3c]/70 hover:text-[#ff8a3c] hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.6)]"
-                    : "text-zinc-500 group-hover:text-[#ff8a3c]/70 hover:text-[#ff8a3c] hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.6)]"
-                }`}>
-                  <img 
-                    src="/icons/info.svg" 
-                    alt="Info" 
-                    className="w-5 h-5 opacity-70 hover:opacity-100 transition-opacity"
-                    style={{ filter: isHighlight ? 'invert(60%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(100%)' : 'invert(50%)' }}
-                  />
-                </div>
-                
-                {/* Tooltip - appears from the info icon */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-72 opacity-0 invisible translate-y-2 group-hover/tooltip:opacity-100 group-hover/tooltip:visible group-hover/tooltip:translate-y-0 transition-all duration-300 ease-out z-50">
-                  <div className="relative bg-gradient-to-b from-[#111113] to-[#0a0a0c] border border-[#ff8a3c]/30 rounded-xl p-5 shadow-2xl shadow-black/60 backdrop-blur-xl">
-                    {/* Arrow */}
-                    <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111113] border-l border-t border-[#ff8a3c]/30 rotate-45" />
-                    
-                    {/* Glow effect */}
-                    <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none" />
-                    
-                    {tier.monthlyIncluded && tier.monthlyIncluded.length > 0 && (
-                      <div className="relative">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]" />
-                          <div className="text-[10px] uppercase tracking-[0.2em] text-[#ff8a3c] font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
-                            Sisältö
-                          </div>
-                        </div>
-                        <ul className="space-y-2 mb-5 pl-1">
-                          {tier.monthlyIncluded.map((item, i) => (
-                            <li key={i} className="flex items-start gap-2.5 text-[12px] text-zinc-300 leading-relaxed">
-                              <svg className="w-3.5 h-3.5 text-[#ff8a3c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                              </svg>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {tier.monthlyExcluded && tier.monthlyExcluded.length > 0 && (
-                      <div className="relative pt-4 border-t border-white/5">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
-                          <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
-                            Ei sisällä
-                          </div>
-                        </div>
-                        <ul className="space-y-2 pl-1">
-                          {tier.monthlyExcluded.map((item, i) => (
-                            <li key={i} className="flex items-start gap-2.5 text-[12px] text-zinc-500 leading-relaxed">
-                              <svg className="w-3.5 h-3.5 text-zinc-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+              {/* Info button with hover tooltip (desktop) and modal (mobile) */}
+              <InfoButton tier={tier} isHighlight={isHighlight ?? false} />
               
               {/* Badge */}
               <div
@@ -701,71 +872,8 @@ function ExpandedPricingCard({
           </div>
           {tier.monthlyValue && (
             <div className="flex items-center gap-3">
-              {/* Info icon with tooltip */}
-              <div className="relative group/tooltip">
-                <div className={`w-6 h-6 flex items-center justify-center cursor-help transition-all duration-300 shrink-0 ${
-                  isHighlight || isSelected
-                    ? "text-[#ff8a3c]/70 hover:text-[#ff8a3c] hover:scale-110"
-                    : "text-zinc-500 hover:text-[#ff8a3c] hover:scale-110"
-                }`}>
-                  <img 
-                    src="/icons/info.svg" 
-                    alt="Info" 
-                    className="w-5 h-5 opacity-70 hover:opacity-100 transition-opacity"
-                    style={{ filter: isHighlight || isSelected ? 'invert(60%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(100%)' : 'invert(50%)' }}
-                  />
-                </div>
-                
-                {/* Tooltip */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-72 opacity-0 invisible translate-y-2 group-hover/tooltip:opacity-100 group-hover/tooltip:visible group-hover/tooltip:translate-y-0 transition-all duration-300 ease-out z-50">
-                  <div className="relative bg-gradient-to-b from-[#111113] to-[#0a0a0c] border border-[#ff8a3c]/30 rounded-xl p-5 shadow-2xl shadow-black/60 backdrop-blur-xl">
-                    <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111113] border-l border-t border-[#ff8a3c]/30 rotate-45" />
-                    <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none" />
-                    
-                    {tier.monthlyIncluded && tier.monthlyIncluded.length > 0 && (
-                      <div className="relative">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]" />
-                          <div className="text-[10px] uppercase tracking-[0.2em] text-[#ff8a3c] font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
-                            Sisältö
-                          </div>
-                        </div>
-                        <ul className="space-y-2 mb-5 pl-1">
-                          {tier.monthlyIncluded.map((item, i) => (
-                            <li key={i} className="flex items-start gap-2.5 text-[12px] text-zinc-300 leading-relaxed">
-                              <svg className="w-3.5 h-3.5 text-[#ff8a3c] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                              </svg>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {tier.monthlyExcluded && tier.monthlyExcluded.length > 0 && (
-                      <div className="relative pt-4 border-t border-white/5">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
-                          <div className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-semibold" style={{ fontFamily: "var(--font-goldman)" }}>
-                            Ei sisällä
-                          </div>
-                        </div>
-                        <ul className="space-y-2 pl-1">
-                          {tier.monthlyExcluded.map((item, i) => (
-                            <li key={i} className="flex items-start gap-2.5 text-[12px] text-zinc-500 leading-relaxed">
-                              <svg className="w-3.5 h-3.5 text-zinc-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+              {/* Info button with hover tooltip (desktop) and modal (mobile) */}
+              <InfoButton tier={tier} isHighlight={isHighlight || isSelected || false} />
               
               {/* Monthly badge */}
               <div
@@ -913,7 +1021,6 @@ export function SelectablePricingCard({
   const strikeRef = useRef<HammerStrikeHandle>(null);
 
   const { contextSafe } = useGSAP({ scope: cardRef });
-
   const handleSelectPackage = useCallback(() => {
     contextSafe(() => {
       const onDone = () => {
@@ -1128,100 +1235,32 @@ export function SelectablePricingCard({
               </div>
               {tier.monthlyValue && (
                 <div className={`flex items-center ${compact ? "gap-1.5" : "gap-3"}`}>
-                  <div className="relative group/tooltip">
-                    <div className={`flex items-center justify-center cursor-help transition-all duration-300 shrink-0 ${
-                      compact ? "w-4 h-4" : "w-6 h-6"
+                  {/* Info button with hover tooltip (desktop) and modal (mobile) */}
+                  <InfoButton tier={tier} isHighlight={isHighlight || isSelected || false} compact={compact} />
+                  
+                  <div className="flex flex-col items-end">
+                    <div className={`uppercase tracking-[0.15em] ${
+                      compact ? "text-[7px]" : "text-[9px]"
                     } ${
                       isHighlight || isSelected
-                        ? "text-[#ff8a3c]/70 hover:text-[#ff8a3c] hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.6)]"
-                        : "text-zinc-500 group-hover:text-[#ff8a3c]/70 hover:text-[#ff8a3c] hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.6)]"
+                        ? "text-[#ff8a3c]/70"
+                        : "text-zinc-500 group-hover:text-[#ff8a3c]/70"
                     }`}>
-                      <img 
-                        src="/icons/info.svg" 
-                        alt="Info" 
-                        className={`opacity-70 hover:opacity-100 transition-opacity ${compact ? "w-3.5 h-3.5" : "w-5 h-5"}`}
-                        style={{ filter: isHighlight || isSelected ? 'invert(60%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(100%)' : 'invert(50%)' }}
-                      />
+                      {tier.monthlyLabel || "Kuukausimaksu"}
                     </div>
-                    
-                    <div className={`absolute top-full mt-3 opacity-0 invisible translate-y-2 group-hover/tooltip:opacity-100 group-hover/tooltip:visible group-hover/tooltip:translate-y-0 transition-all duration-300 ease-out z-50 ${
-                      compact ? "right-0 w-56" : "left-1/2 -translate-x-1/2 w-72"
+                    <div className={`font-bold tracking-wide ${
+                      compact ? "text-xs" : "text-base"
+                    } ${
+                      isHighlight || isSelected
+                        ? "text-[#ff8a3c]"
+                        : "text-zinc-400 group-hover:text-[#ff8a3c]"
                     }`}>
-                      <div className={`relative bg-gradient-to-b from-[#111113] to-[#0a0a0c] border border-[#ff8a3c]/30 rounded-xl shadow-2xl shadow-black/60 backdrop-blur-xl ${
-                        compact ? "p-3" : "p-5"
-                      }`}>
-                        <div className={`absolute left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111113] border-l border-t border-[#ff8a3c]/30 rotate-45 ${
-                          compact ? "-top-1.5" : "-top-[6px]"
-                        }`} />
-                    <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none" />
-                    
-                    {tier.monthlyIncluded && tier.monthlyIncluded.length > 0 && (
-                      <div className="relative">
-                        <div className={`flex items-center gap-2 ${compact ? "mb-2" : "mb-3"}`}>
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_8px_rgba(255,138,60,0.8)]" />
-                          <div className={`uppercase tracking-[0.2em] text-[#ff8a3c] font-semibold ${compact ? "text-[8px]" : "text-[10px]"}`} style={{ fontFamily: "var(--font-goldman)" }}>
-                            Sisältö
-                          </div>
-                        </div>
-                        <ul className={`pl-1 ${compact ? "space-y-1 mb-3" : "space-y-2 mb-5"}`}>
-                          {tier.monthlyIncluded.map((item, i) => (
-                            <li key={i} className={`flex items-start gap-2 text-zinc-300 leading-relaxed ${compact ? "text-[10px]" : "text-[12px]"}`}>
-                              <svg className={`text-[#ff8a3c] shrink-0 mt-0.5 ${compact ? "w-2.5 h-2.5" : "w-3.5 h-3.5"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                              </svg>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {tier.monthlyExcluded && tier.monthlyExcluded.length > 0 && (
-                      <div className={`relative border-t border-white/5 ${compact ? "pt-2" : "pt-4"}`}>
-                        <div className={`flex items-center gap-2 ${compact ? "mb-2" : "mb-3"}`}>
-                          <div className="w-1.5 h-1.5 rounded-full bg-zinc-600" />
-                          <div className={`uppercase tracking-[0.2em] text-zinc-500 font-semibold ${compact ? "text-[8px]" : "text-[10px]"}`} style={{ fontFamily: "var(--font-goldman)" }}>
-                            Ei sisällä
-                          </div>
-                        </div>
-                        <ul className={`pl-1 ${compact ? "space-y-1" : "space-y-2"}`}>
-                          {tier.monthlyExcluded.map((item, i) => (
-                            <li key={i} className={`flex items-start gap-2 text-zinc-500 leading-relaxed ${compact ? "text-[10px]" : "text-[12px]"}`}>
-                              <svg className={`text-zinc-600 shrink-0 mt-0.5 ${compact ? "w-2.5 h-2.5" : "w-3.5 h-3.5"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
+                      {tier.monthlyValue}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex flex-col items-end">
-                <div className={`uppercase tracking-[0.15em] ${
-                  compact ? "text-[7px]" : "text-[9px]"
-                } ${
-                  isHighlight || isSelected
-                    ? "text-[#ff8a3c]/70"
-                    : "text-zinc-500 group-hover:text-[#ff8a3c]/70"
-                }`}>
-                  {tier.monthlyLabel || "Kuukausimaksu"}
-                </div>
-                <div className={`font-bold tracking-wide ${
-                  compact ? "text-xs" : "text-base"
-                } ${
-                  isHighlight || isSelected
-                    ? "text-[#ff8a3c]"
-                    : "text-zinc-400 group-hover:text-[#ff8a3c]"
-                }`}>
-                  {tier.monthlyValue}
-                </div>
-              </div>
+              )}
             </div>
-          )}
-        </div>
 
         <div className={`relative h-px w-full ${compact ? "mb-3" : "mb-4 sm:mb-8"}`}>
           <div className={`absolute inset-0 transition-all duration-500 ${
@@ -1273,55 +1312,56 @@ export function SelectablePricingCard({
             ))}
           </ul>
         </div>
-            <div className={`mt-auto relative z-10 w-full ${compact ? "pt-2" : "pt-4"}`}>
-              <button
-                ref={buttonRef}
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSelectPackage();
-                }}
-                style={{ fontFamily: "var(--font-goldman)" }}
-                className={`group/btn relative flex w-full items-center justify-center gap-2 overflow-hidden font-bold uppercase tracking-[0.16em] transition-all cursor-pointer duration-300 ${
-                  compact ? "px-3 py-2 text-[10px]" : "px-6 py-4 text-xs"
-                } ${
-                  isSelected
-                    ? "text-white bg-[#ff8a3c]/20 shadow-[0_0_20px_rgba(255,138,60,0.3)]"
-                    : "text-[#ff8a3c] hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
-                }`}
+
+        <div className={`mt-auto relative z-10 w-full ${compact ? "pt-2" : "pt-4"}`}>
+          <button
+            ref={buttonRef}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelectPackage();
+            }}
+            style={{ fontFamily: "var(--font-goldman)" }}
+            className={`group/btn relative flex w-full items-center justify-center gap-2 overflow-hidden font-bold uppercase tracking-[0.16em] transition-all cursor-pointer duration-300 ${
+              compact ? "px-3 py-2 text-[10px]" : "px-6 py-4 text-xs"
+            } ${
+              isSelected
+                ? "text-white bg-[#ff8a3c]/20 shadow-[0_0_20px_rgba(255,138,60,0.3)]"
+                : "text-[#ff8a3c] hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)]"
+            }`}
+          >
+            <span className={`pointer-events-none absolute left-0 top-0 border-l-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+            <span className={`pointer-events-none absolute right-0 top-0 border-r-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+            <span className={`pointer-events-none absolute bottom-0 right-0 border-b-2 border-r-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+            <span className={`pointer-events-none absolute bottom-0 left-0 border-b-2 border-l-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
+            
+            <span className="pointer-events-none absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
+            
+            {(isHighlight && !isSelected) && (
+              <div className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-[#ff8a3c]/20 to-transparent group-hover/btn:animate-[shimmer_1s_infinite]" />
+            )}
+
+            <span className="relative z-10">{isSelected ? "Valittu ✓" : tier.cta}</span>
+            {!isSelected && (
+              <svg
+                className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1"
+                viewBox="0 0 12 12"
+                fill="none"
               >
-                <span className={`pointer-events-none absolute left-0 top-0 border-l-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-                <span className={`pointer-events-none absolute right-0 top-0 border-r-2 border-t-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-                <span className={`pointer-events-none absolute bottom-0 right-0 border-b-2 border-r-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-                <span className={`pointer-events-none absolute bottom-0 left-0 border-b-2 border-l-2 transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full ${compact ? "h-2 w-2" : "h-3 w-3"} ${isSelected ? "border-[#ff8a3c] h-full w-full" : isHighlight ? "border-[#ff8a3c]" : "border-[#ff8a3c]/60 group-hover/btn:border-[#ff8a3c]"}`} />
-                
-                <span className="pointer-events-none absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
-                
-                {(isHighlight && !isSelected) && (
-                  <div className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-[#ff8a3c]/20 to-transparent group-hover/btn:animate-[shimmer_1s_infinite]" />
-                )}
+                <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </button>
 
-                <span className="relative z-10">{isSelected ? "Valittu ✓" : tier.cta}</span>
-                {!isSelected && (
-                  <svg
-                    className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                  >
-                    <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
-              </button>
-
-              <HammerStrike
-                ref={strikeRef}
-                targetRef={buttonRef}
-                className="absolute inset-0"
-              />
-            </div>
-          </>
-        )}
-      </div>
+          <HammerStrike
+            ref={strikeRef}
+            targetRef={buttonRef}
+            className="absolute inset-0"
+          />
+        </div>
+      </>
+      )}
+    </div>
     </article>
   );
 }
