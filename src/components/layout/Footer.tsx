@@ -101,44 +101,42 @@ export default function Footer({ locale }: FooterProps) {
             <div className="flex justify-start lg:justify-end">
               <Link
                 href={`/${locale}/yhteydenotto`}
-                className="group relative isolate overflow-hidden rounded-lg border border-[#ff8a3c]/30 bg-[#0a0a0a]/80 p-8 backdrop-blur-sm transition-all duration-700 hover:border-[#ff8a3c]/60 hover:bg-[#0f0f12]/90 hover:shadow-[0_0_40px_-10px_rgba(255,138,60,0.3)] hover:-translate-y-1 hover:scale-[1.02]"
+                className="group relative isolate flex flex-col gap-5 border-l-2 border-[#ff8a3c]/30 pl-6 transition-all duration-500 hover:border-[#ff8a3c] hover:pl-8"
               >
-                {/* Corner accents */}
-                <div className="absolute top-0 left-0 h-4 w-4 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-6 group-hover:w-6" />
-                <div className="absolute bottom-0 right-0 h-4 w-4 border-r-2 border-b-2 border-[#ff8a3c] transition-all duration-500 group-hover:h-6 group-hover:w-6" />
+                {/* Eyebrow - bracket style */}
+                <span
+                  style={{ fontFamily: "var(--font-goldman)" }}
+                  className="text-[#ff8a3c] text-[11px] uppercase tracking-[0.2em] font-semibold"
+                >
+                  [ {t("Valmis aloittamaan?", "Ready to start?")} ]
+                </span>
                 
-                {/* Glow overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#ff8a3c]/10 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
-                
-                <div className="relative space-y-4">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-[#ff8a3c]/20 bg-[#ff8a3c]/5 px-3 py-1">
-                    <span className="flex h-1.5 w-1.5 rounded-full bg-[#ff8a3c]" />
-                    <span className="text-[10px] uppercase tracking-wider text-[#ffcc80]">
-                      {t("Valmis aloittamaan?", "Ready to start?")}
-                    </span>
-                  </div>
-                  
+                <div className="space-y-3">
                   <h3 
                     style={{ fontFamily: "var(--font-goldman)" }}
-                    className="text-2xl font-bold text-white transition-colors duration-500 group-hover:text-[#ff8a3c]"
+                    className="text-3xl font-bold text-white transition-colors duration-500 group-hover:text-[#ff8a3c]"
                   >
                     {t("Pyydä tarjous", "Get a Quote")}
                   </h3>
                   
-                  <p className="text-sm text-zinc-400 transition-colors duration-500 group-hover:text-zinc-300">
+                  <p className="max-w-sm text-sm leading-relaxed text-zinc-400 transition-colors duration-500 group-hover:text-zinc-300">
                     {t(
                       "Kerro meille projektistasi ja saat tarjouksen 24 tunnissa.",
                       "Tell us about your project and get a quote within 24 hours."
                     )}
                   </p>
-                  
-                  <div className="flex items-center gap-2 text-[#ff8a3c] transition-transform duration-500 group-hover:translate-x-2">
-                    <span style={{ fontFamily: "var(--font-goldman)" }} className="text-sm font-bold uppercase tracking-wider">
-                      {t("Aloita tästä", "Start here")}
-                    </span>
-                    <svg className="h-4 w-4" viewBox="0 0 12 12" fill="none">
-                      <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                </div>
+                
+                {/* CTA Button - corner bracket style like hero */}
+                <div className="inline-flex">
+                  <div className="group/btn relative isolate flex items-center gap-3 px-8 py-4 text-sm font-bold uppercase tracking-[0.16em] text-[#ff8a3c] transition-colors duration-300 hover:text-white hover:shadow-[0_0_20px_rgba(255,138,60,0.2)] cursor-pointer">
+                    <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                    <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                    <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                    <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
+                    <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
+                    <span className="relative z-10" style={{ fontFamily: "var(--font-goldman)" }}>{t("Aloita tästä", "Start here")}</span>
+                    <svg className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                 </div>
               </Link>

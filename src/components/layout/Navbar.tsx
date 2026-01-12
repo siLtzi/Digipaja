@@ -27,7 +27,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 // Flag components
-// Styled language button with sharp angular frame
+// Corner bracket style language button (matches hero CTA)
 function LanguageButton({ 
   isActive, 
   onClick, 
@@ -47,70 +47,27 @@ function LanguageButton({
     <button
       type="button"
       onClick={onClick}
-      className="group relative cursor-pointer"
+      className={`
+        group relative cursor-pointer isolate
+        transition-all duration-200
+        ${scrolled ? "h-5 w-7 p-0.5" : "h-6 w-8 p-0.5"}
+        ${isActive ? "" : "opacity-50 hover:opacity-90"}
+      `}
       aria-label={label}
       title={title}
     >
-      {/* Outer angular frame */}
-      <div 
-        className={`
-          relative flex items-center justify-center
-          transition-all duration-300
-          ${scrolled ? "h-7 w-10" : "h-8 w-11"}
-        `}
-        style={{
-          clipPath: "polygon(12% 0%, 100% 0%, 100% 75%, 88% 100%, 0% 100%, 0% 25%)",
-        }}
-      >
-        {/* Background glow for active */}
-        <div 
-          className={`
-            absolute inset-0 transition-opacity duration-300
-            ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"}
-          `}
-          style={{
-            background: "linear-gradient(135deg, rgba(255,138,60,0.3) 0%, rgba(255,138,60,0.1) 100%)",
-          }}
-        />
-        
-        {/* Border frame */}
-        <div 
-          className={`
-            absolute inset-0 transition-all duration-300
-            ${isActive 
-              ? "bg-gradient-to-br from-[#ff8a3c] via-[#ff8a3c]/60 to-[#ff8a3c]" 
-              : "bg-gradient-to-br from-zinc-600 via-zinc-700 to-zinc-600 group-hover:from-[#ff8a3c]/50 group-hover:to-[#ff8a3c]/50"
-            }
-          `}
-          style={{
-            clipPath: "polygon(12% 0%, 100% 0%, 100% 75%, 88% 100%, 0% 100%, 0% 25%)",
-          }}
-        />
-        
-        {/* Inner content area */}
-        <div 
-          className={`
-            absolute inset-[2px] flex items-center justify-center overflow-hidden
-            bg-[#0a0c10] transition-all duration-300
-            ${!isActive && "group-hover:bg-[#0f1218]"}
-          `}
-          style={{
-            clipPath: "polygon(12% 0%, 100% 0%, 100% 75%, 88% 100%, 0% 100%, 0% 25%)",
-          }}
-        >
-          {/* Flag content */}
-          <div className={`
-            w-full h-full transition-all duration-300
-            ${isActive ? "opacity-100" : "opacity-40 group-hover:opacity-80"}
-          `}>
-            {children}
-          </div>
-        </div>
-        
-        {/* Active indicator dot */}
-        {isActive && (
-          <div className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-[#ff8a3c] shadow-[0_0_6px_rgba(255,138,60,0.8)]" />
-        )}
+      {/* Corner brackets */}
+      <span className={`absolute left-0 top-0 h-1.5 w-1.5 border-l border-t transition-all duration-300 ${isActive ? "border-[#ff8a3c]" : "border-white/30 group-hover:border-white/60"} group-hover:h-full group-hover:w-full`} />
+      <span className={`absolute right-0 top-0 h-1.5 w-1.5 border-r border-t transition-all duration-300 ${isActive ? "border-[#ff8a3c]" : "border-white/30 group-hover:border-white/60"} group-hover:h-full group-hover:w-full`} />
+      <span className={`absolute bottom-0 right-0 h-1.5 w-1.5 border-b border-r transition-all duration-300 ${isActive ? "border-[#ff8a3c]" : "border-white/30 group-hover:border-white/60"} group-hover:h-full group-hover:w-full`} />
+      <span className={`absolute bottom-0 left-0 h-1.5 w-1.5 border-b border-l transition-all duration-300 ${isActive ? "border-[#ff8a3c]" : "border-white/30 group-hover:border-white/60"} group-hover:h-full group-hover:w-full`} />
+      
+      {/* Background glow on hover/active */}
+      <span className={`absolute inset-0 -z-10 transition-opacity duration-300 ${isActive ? "bg-[#ff8a3c]/10 opacity-100" : "bg-white/5 opacity-0 group-hover:opacity-100"}`} />
+      
+      {/* Flag content */}
+      <div className="relative z-10 w-full h-full overflow-hidden rounded-[1px]">
+        {children}
       </div>
     </button>
   );
@@ -265,10 +222,10 @@ export default function Navbar({ locale }: NavbarProps) {
               type="button"
               onClick={() => handleScrollTo(item.href)}
               style={{ fontFamily: "var(--font-goldman)" }}
-              className="group relative cursor-pointer text-[11px] font-medium uppercase tracking-[0.2em] text-zinc-400 transition-colors duration-300 hover:text-white"
+              className="group relative cursor-pointer text-[13px] font-semibold uppercase tracking-[0.15em] text-zinc-300 transition-colors duration-300 hover:text-white"
             >
               {t(item.labelFi, item.labelEn)}
-              <span className="absolute -bottom-1 left-0 h-[1px] w-0 bg-[#ff8a3c] transition-all duration-300 group-hover:w-full" />
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-[#ff8a3c] transition-all duration-300 group-hover:w-full" />
             </button>
           ))}
         </nav>
@@ -285,7 +242,7 @@ export default function Navbar({ locale }: NavbarProps) {
               title="Suomi"
               scrolled={scrolled}
             >
-              <FinnishFlag className="h-full w-full scale-125" />
+              <FinnishFlag className="h-full w-full" />
             </LanguageButton>
             <LanguageButton
               isActive={locale === "en"}
@@ -294,19 +251,28 @@ export default function Navbar({ locale }: NavbarProps) {
               title="English"
               scrolled={scrolled}
             >
-              <UKFlag className="h-full w-full scale-125" />
+              <UKFlag className="h-full w-full" />
             </LanguageButton>
           </div>
           
-          {/* DESKTOP CONTACT BUTTON */}
+          {/* DESKTOP CONTACT BUTTON - Hero style with corner brackets */}
           <Link
             href={`/${locale}/yhteydenotto`}
+            style={{ fontFamily: "var(--font-goldman)" }}
             className={`
-               cyber-btn relative place-content-center hidden md:inline-grid 
-               ${scrolled ? "text-[12px]" : "text-[15px]"}
+              group relative isolate hidden md:flex items-center gap-2 cursor-pointer
+              font-bold uppercase tracking-[0.12em] text-[#ff8a3c] 
+              transition-colors duration-300 hover:text-white
+              ${scrolled ? "text-[10px] px-4 py-2" : "text-[11px] px-5 py-2.5"}
             `}
           >
-            {t("Ota yhteyttä", "Contact")}
+            <span className="absolute left-0 top-0 h-2 w-2 border-l-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute right-0 top-0 h-2 w-2 border-r-2 border-t-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute bottom-0 right-0 h-2 w-2 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute bottom-0 left-0 h-2 w-2 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover:h-full group-hover:w-full" />
+            <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover:opacity-10" />
+            <span className="relative z-10">{t("Ota yhteyttä", "Contact")}</span>
+            <svg className="relative z-10 h-2.5 w-2.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </Link>
 
           {/* MOBILE MENU TOGGLE */}

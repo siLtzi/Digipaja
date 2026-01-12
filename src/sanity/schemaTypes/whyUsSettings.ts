@@ -4,46 +4,60 @@ export default defineType({
   name: "whyUsSettings",
   title: "Why Us — Settings",
   type: "document",
+  groups: [
+    { name: "finnish", title: "Finnish Content" },
+    { name: "english", title: "English Content" },
+    { name: "cards", title: "Benefit Cards" },
+  ],
   fields: [
-    // HEADERS
+    // ==================== FINNISH CONTENT ====================
     defineField({
       name: "whyUsEyebrow_fi",
       title: "Eyebrow (FI)",
       type: "string",
-    }),
-    defineField({
-      name: "whyUsEyebrow_en",
-      title: "Eyebrow (EN)",
-      type: "string",
+      group: "finnish",
     }),
     defineField({
       name: "whyUsTitle_fi",
       title: "Title (FI)",
       type: "string",
-    }),
-    defineField({
-      name: "whyUsTitle_en",
-      title: "Title (EN)",
-      type: "string",
+      group: "finnish",
     }),
     defineField({
       name: "whyUsSubtitle_fi",
       title: "Subtitle (FI)",
       type: "text",
       rows: 2,
+      group: "finnish",
+    }),
+
+    // ==================== ENGLISH CONTENT ====================
+    defineField({
+      name: "whyUsEyebrow_en",
+      title: "Eyebrow (EN)",
+      type: "string",
+      group: "english",
+    }),
+    defineField({
+      name: "whyUsTitle_en",
+      title: "Title (EN)",
+      type: "string",
+      group: "english",
     }),
     defineField({
       name: "whyUsSubtitle_en",
       title: "Subtitle (EN)",
       type: "text",
       rows: 2,
+      group: "english",
     }),
 
-    // CARDS
+    // ==================== CARDS ====================
     defineField({
       name: "cards",
       title: "Benefit Cards",
       type: "array",
+      group: "cards",
       of: [
         {
           type: "object",
@@ -76,6 +90,12 @@ export default defineType({
               type: "string",
             }),
           ],
+          preview: {
+            select: {
+              title: "title_fi",
+              subtitle: "icon",
+            },
+          },
         },
       ],
     }),
@@ -83,7 +103,7 @@ export default defineType({
   preview: {
     prepare() {
       return {
-        title: "Why Us Settings",
+        title: "Why Us Section Settings",
       };
     },
   },

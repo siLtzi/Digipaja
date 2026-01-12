@@ -1,12 +1,9 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { draftMode } from "next/headers";
-import { VisualEditing } from "next-sanity/visual-editing";
 
 import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
-import { SanityLive } from "@/sanity/lib/live";
 
 // Toggle this to enable/disable custom cursor site-wide
 const ENABLE_CUSTOM_CURSOR = true;
@@ -143,9 +140,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const { isEnabled: isDraftMode } = await draftMode()
-  
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fi" suppressHydrationWarning className="scroll-smooth">
       <body
@@ -157,8 +152,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       >
         <CustomCursor enabled={ENABLE_CUSTOM_CURSOR} />
         {children}
-        <SanityLive />
-        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   );

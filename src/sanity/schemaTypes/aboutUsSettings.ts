@@ -5,51 +5,71 @@ export default defineType({
   title: "About Us — Settings",
   type: "document",
   groups: [
-    { name: "hero", title: "Hero Section" },
+    { name: "finnish", title: "Finnish Content" },
+    { name: "english", title: "English Content" },
     { name: "team", title: "Team Members" },
     { name: "stats", title: "Statistics" },
     { name: "values", title: "Values & Mission" },
-    { name: "footer", title: "Footer Info" },
   ],
   fields: [
-    // ==================== HERO SECTION ====================
+    // ==================== FINNISH CONTENT ====================
     defineField({
       name: "aboutUsEyebrow_fi",
       title: "Eyebrow (FI)",
       type: "string",
       description: "Small text above the title, e.g. 'Meistä'",
-      group: "hero",
+      group: "finnish",
     }),
-    defineField({
-      name: "aboutUsEyebrow_en",
-      title: "Eyebrow (EN)",
-      type: "string",
-      description: "Small text above the title, e.g. 'About Us'",
-      group: "hero",
-    }),
-
     defineField({
       name: "aboutUsTitle_fi",
       title: "Title (FI)",
       type: "string",
       description: "Main heading",
-      group: "hero",
+      group: "finnish",
     }),
-    defineField({
-      name: "aboutUsTitle_en",
-      title: "Title (EN)",
-      type: "string",
-      description: "Main heading",
-      group: "hero",
-    }),
-
     defineField({
       name: "aboutUsSubtitle_fi",
       title: "Subtitle (FI)",
       type: "text",
       rows: 3,
       description: "Short description below the title",
-      group: "hero",
+      group: "finnish",
+    }),
+    defineField({
+      name: "aboutUsDescription2_fi",
+      title: "Footer Description (FI)",
+      type: "text",
+      rows: 3,
+      group: "finnish",
+    }),
+    defineField({
+      name: "aboutUsBulletPoint_fi",
+      title: "Highlight Text (FI)",
+      type: "string",
+      description: "e.g. 'Aina saatavilla'",
+      group: "finnish",
+    }),
+    defineField({
+      name: "cta_fi",
+      title: "CTA Button Text (FI)",
+      type: "string",
+      group: "finnish",
+    }),
+
+    // ==================== ENGLISH CONTENT ====================
+    defineField({
+      name: "aboutUsEyebrow_en",
+      title: "Eyebrow (EN)",
+      type: "string",
+      description: "Small text above the title, e.g. 'About Us'",
+      group: "english",
+    }),
+    defineField({
+      name: "aboutUsTitle_en",
+      title: "Title (EN)",
+      type: "string",
+      description: "Main heading",
+      group: "english",
     }),
     defineField({
       name: "aboutUsSubtitle_en",
@@ -57,7 +77,27 @@ export default defineType({
       type: "text",
       rows: 3,
       description: "Short description below the title",
-      group: "hero",
+      group: "english",
+    }),
+    defineField({
+      name: "aboutUsDescription2_en",
+      title: "Footer Description (EN)",
+      type: "text",
+      rows: 3,
+      group: "english",
+    }),
+    defineField({
+      name: "aboutUsBulletPoint_en",
+      title: "Highlight Text (EN)",
+      type: "string",
+      description: "e.g. 'Always available'",
+      group: "english",
+    }),
+    defineField({
+      name: "cta_en",
+      title: "CTA Button Text (EN)",
+      type: "string",
+      group: "english",
     }),
 
     // ==================== TEAM - SAMULI ====================
@@ -85,14 +125,12 @@ export default defineType({
       name: "aboutUsTechTitle_fi",
       title: "Samuli - Title (FI)",
       type: "string",
-      description: "Job title, e.g. 'Pidän huolen, että se toimii 3 vuoden päästäkin.'",
       group: "team",
     }),
     defineField({
       name: "aboutUsTechTitle_en",
       title: "Samuli - Title (EN)",
       type: "string",
-      description: "Job title",
       group: "team",
     }),
     defineField({
@@ -100,7 +138,6 @@ export default defineType({
       title: "Samuli - Bio (FI)",
       type: "text",
       rows: 4,
-      description: "Short biography",
       group: "team",
     }),
     defineField({
@@ -108,7 +145,6 @@ export default defineType({
       title: "Samuli - Bio (EN)",
       type: "text",
       rows: 4,
-      description: "Short biography",
       group: "team",
     }),
     defineField({
@@ -151,14 +187,12 @@ export default defineType({
       name: "aboutUsBizTitle_fi",
       title: "Jouko - Title (FI)",
       type: "string",
-      description: "Job title",
       group: "team",
     }),
     defineField({
       name: "aboutUsBizTitle_en",
       title: "Jouko - Title (EN)",
       type: "string",
-      description: "Job title",
       group: "team",
     }),
     defineField({
@@ -166,7 +200,6 @@ export default defineType({
       title: "Jouko - Bio (FI)",
       type: "text",
       rows: 4,
-      description: "Short biography",
       group: "team",
     }),
     defineField({
@@ -174,7 +207,6 @@ export default defineType({
       title: "Jouko - Bio (EN)",
       type: "text",
       rows: 4,
-      description: "Short biography",
       group: "team",
     }),
     defineField({
@@ -231,34 +263,42 @@ export default defineType({
 
     // ==================== VALUES & MISSION ====================
     defineField({
-      name: "missionTitle",
-      title: "Mission Title",
-      type: "object",
+      name: "missionTitle_fi",
+      title: "Mission Title (FI)",
+      type: "string",
       group: "values",
-      fields: [
-        { name: "fi", title: "Finnish", type: "string" },
-        { name: "en", title: "English", type: "string" },
-      ],
     }),
     defineField({
-      name: "missionText",
-      title: "Mission Text",
-      type: "object",
+      name: "missionTitle_en",
+      title: "Mission Title (EN)",
+      type: "string",
       group: "values",
-      fields: [
-        { name: "fi", title: "Finnish", type: "text", rows: 4 },
-        { name: "en", title: "English", type: "text", rows: 4 },
-      ],
     }),
     defineField({
-      name: "valuesTitle",
-      title: "Values Section Title",
-      type: "object",
+      name: "missionText_fi",
+      title: "Mission Text (FI)",
+      type: "text",
+      rows: 4,
       group: "values",
-      fields: [
-        { name: "fi", title: "Finnish", type: "string" },
-        { name: "en", title: "English", type: "string" },
-      ],
+    }),
+    defineField({
+      name: "missionText_en",
+      title: "Mission Text (EN)",
+      type: "text",
+      rows: 4,
+      group: "values",
+    }),
+    defineField({
+      name: "valuesTitle_fi",
+      title: "Values Section Title (FI)",
+      type: "string",
+      group: "values",
+    }),
+    defineField({
+      name: "valuesTitle_en",
+      title: "Values Section Title (EN)",
+      type: "string",
+      group: "values",
     }),
     defineField({
       name: "values",
@@ -301,57 +341,13 @@ export default defineType({
         },
       ],
     }),
-
-    // ==================== FOOTER INFO ====================
-    defineField({
-      name: "aboutUsDescription2_fi",
-      title: "Footer Description (FI)",
-      type: "text",
-      rows: 3,
-      description: "Text shown at the bottom of the section",
-      group: "footer",
-    }),
-    defineField({
-      name: "aboutUsDescription2_en",
-      title: "Footer Description (EN)",
-      type: "text",
-      rows: 3,
-      description: "Text shown at the bottom of the section",
-      group: "footer",
-    }),
-
-    defineField({
-      name: "aboutUsBulletPoint_fi",
-      title: "Highlight Text (FI)",
-      type: "string",
-      description: "Italic text with checkmark, e.g. 'Aina saatavilla'",
-      group: "footer",
-    }),
-    defineField({
-      name: "aboutUsBulletPoint_en",
-      title: "Highlight Text (EN)",
-      type: "string",
-      description: "Italic text with checkmark, e.g. 'Always available'",
-      group: "footer",
-    }),
-
-    defineField({
-      name: "cta",
-      title: "CTA Button Text",
-      type: "object",
-      group: "footer",
-      fields: [
-        { name: "fi", title: "Finnish", type: "string" },
-        { name: "en", title: "English", type: "string" },
-      ],
-    }),
   ],
 
   preview: {
     prepare() {
       return {
         title: "About Us – Settings",
-        subtitle: "Hero, Team, Stats, Values & Footer content",
+        subtitle: "Hero, Team, Stats, Values content",
       };
     },
   },

@@ -4,43 +4,28 @@ export default defineType({
   name: "service",
   title: "Services",
   type: "document",
+  groups: [
+    { name: "content", title: "Content" },
+    { name: "media", title: "Media" },
+    { name: "speechDeck", title: "Speech Deck" },
+  ],
   fields: [
-    defineField({
-      name: "heroVideo",
-      title: "Hero Video (Replaces Image)",
-      description:
-        "Upload a short, looping MP4 (max 10MB recommended). Ideally 1:1 aspect ratio, but others work too.",
-      type: "file",
-      options: {
-        accept: "video/mp4,video/webm",
-      },
-    }),
-
-    defineField({
-      name: "mainImage",
-      title: "Main Image / Graphic",
-      type: "image",
-      options: { hotspot: true },
-    }),
-
+    // ==================== CONTENT ====================
     defineField({
       name: "title",
       title: "Title",
       type: "string",
+      group: "content",
       validation: (rule) => rule.required(),
     }),
-
     defineField({
       name: "slug",
       title: "Slug (URL)",
       type: "slug",
-      options: {
-        source: "title",
-        maxLength: 96,
-      },
+      options: { source: "title", maxLength: 96 },
+      group: "content",
       validation: (rule) => rule.required(),
     }),
-
     defineField({
       name: "language",
       title: "Language",
@@ -53,38 +38,53 @@ export default defineType({
         layout: "radio",
       },
       initialValue: "fi",
+      group: "content",
       validation: (rule) => rule.required(),
     }),
-
     defineField({
       name: "description",
       title: "Full Description (Detail Page)",
       type: "text",
       rows: 5,
+      group: "content",
     }),
-
     defineField({
       name: "body",
       title: "Short Summary (Card Preview)",
       type: "text",
       rows: 3,
+      group: "content",
     }),
-
     defineField({
       name: "features",
       title: "Features List",
-      description: "Placeholder/Fallback",
       type: "array",
       of: [{ type: "string" }],
+      group: "content",
     }),
 
-    // =========================
-    // NEW: SpeechDeck (GSAP section)
-    // =========================
+    // ==================== MEDIA ====================
+    defineField({
+      name: "heroVideo",
+      title: "Hero Video",
+      description: "Short looping MP4 (max 10MB recommended)",
+      type: "file",
+      options: { accept: "video/mp4,video/webm" },
+      group: "media",
+    }),
+    defineField({
+      name: "mainImage",
+      title: "Main Image / Graphic",
+      type: "image",
+      options: { hotspot: true },
+      group: "media",
+    }),
+    // ==================== SPEECH DECK ====================
     defineField({
       name: "speechDeck",
       title: "Speech Deck (GSAP / Lottie)",
       type: "object",
+      group: "speechDeck",
       fields: [
         defineField({
           name: "beats",

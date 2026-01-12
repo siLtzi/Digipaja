@@ -4,11 +4,17 @@ export default defineType({
   name: "speechDeckSettings",
   title: "Speech Deck Section",
   type: "document",
+  groups: [
+    { name: "items", title: "Speech Deck Items" },
+    { name: "cta", title: "CTA Section" },
+  ],
   fields: [
+    // ==================== ITEMS ====================
     defineField({
       name: "items",
       title: "Speech Deck Items",
       type: "array",
+      group: "items",
       of: [
         {
           type: "object",
@@ -20,22 +26,26 @@ export default defineType({
               description: "Unique identifier for this item",
             }),
             defineField({
-              name: "title",
-              title: "Title",
-              type: "object",
-              fields: [
-                { name: "fi", title: "Finnish", type: "string" },
-                { name: "en", title: "English", type: "string" },
-              ],
+              name: "title_fi",
+              title: "Title (FI)",
+              type: "string",
             }),
             defineField({
-              name: "body",
-              title: "Body Text",
-              type: "object",
-              fields: [
-                { name: "fi", title: "Finnish", type: "text", rows: 3 },
-                { name: "en", title: "English", type: "text", rows: 3 },
-              ],
+              name: "title_en",
+              title: "Title (EN)",
+              type: "string",
+            }),
+            defineField({
+              name: "body_fi",
+              title: "Body Text (FI)",
+              type: "text",
+              rows: 3,
+            }),
+            defineField({
+              name: "body_en",
+              title: "Body Text (EN)",
+              type: "text",
+              rows: 3,
             }),
             defineField({
               name: "svgType",
@@ -46,37 +56,40 @@ export default defineType({
           ],
           preview: {
             select: {
-              title: "title.fi",
+              title: "title_fi",
               subtitle: "svgType",
             },
           },
         },
       ],
     }),
+
+    // ==================== CTA ====================
     defineField({
-      name: "cta",
-      title: "CTA Section",
-      type: "object",
-      fields: [
-        defineField({
-          name: "title",
-          title: "CTA Title",
-          type: "object",
-          fields: [
-            { name: "fi", title: "Finnish", type: "string" },
-            { name: "en", title: "English", type: "string" },
-          ],
-        }),
-        defineField({
-          name: "body",
-          title: "CTA Body",
-          type: "object",
-          fields: [
-            { name: "fi", title: "Finnish", type: "text" },
-            { name: "en", title: "English", type: "text" },
-          ],
-        }),
-      ],
+      name: "ctaTitle_fi",
+      title: "CTA Title (FI)",
+      type: "string",
+      group: "cta",
+    }),
+    defineField({
+      name: "ctaTitle_en",
+      title: "CTA Title (EN)",
+      type: "string",
+      group: "cta",
+    }),
+    defineField({
+      name: "ctaBody_fi",
+      title: "CTA Body (FI)",
+      type: "text",
+      rows: 3,
+      group: "cta",
+    }),
+    defineField({
+      name: "ctaBody_en",
+      title: "CTA Body (EN)",
+      type: "text",
+      rows: 3,
+      group: "cta",
     }),
   ],
   preview: {

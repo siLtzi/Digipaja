@@ -14,6 +14,8 @@ export function CodeEditorMockup({ title }: CodeEditorMockupProps) {
     "<Analytics />",
     "<SEO optimize />",
     "<Performance />",
+    "<Monitoring />",
+    "<CacheControl />",
   ];
   
   useEffect(() => {
@@ -90,7 +92,7 @@ export function CodeEditorMockup({ title }: CodeEditorMockupProps) {
         <div className="flex-1 flex overflow-hidden relative">
           {/* Line Numbers */}
           <div className="py-3 px-2 bg-[#181825]/50 text-right select-none border-r border-white/5">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((num) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map((num) => (
               <div key={num} className="text-[10px] leading-5 text-zinc-600 font-mono">
                 {num}
               </div>
@@ -100,6 +102,8 @@ export function CodeEditorMockup({ title }: CodeEditorMockupProps) {
           {/* Code Content */}
           <div className="flex-1 py-3 px-3 overflow-hidden font-mono text-[9px] sm:text-[10px] leading-5">
             <div><span className="text-pink-400">import</span> <span className="text-zinc-300">{"{"}</span> <span className="text-blue-300">NextPage</span> <span className="text-zinc-300">{"}"}</span> <span className="text-pink-400">from</span> <span className="text-amber-300">&apos;next&apos;</span></div>
+            <div><span className="text-pink-400">import</span> <span className="text-zinc-300">{"{"}</span> <span className="text-blue-300">Analytics</span><span className="text-zinc-300">,</span> <span className="text-blue-300">SEO</span> <span className="text-zinc-300">{"}"}</span> <span className="text-pink-400">from</span> <span className="text-amber-300">&apos;./components&apos;</span></div>
+            <div>&nbsp;</div>
             {/* THE BIG GREEN COMMENT - Main Focus */}
             <div className="my-1">
               <span 
@@ -109,16 +113,18 @@ export function CodeEditorMockup({ title }: CodeEditorMockupProps) {
                 // {title}
               </span>
             </div>
-            <div><span className="text-pink-400">const</span> <span className="text-blue-300">App</span> <span className="text-zinc-300">=</span> <span className="text-pink-400">()</span> <span className="text-pink-400">=&gt;</span> <span className="text-zinc-300">(</span></div>
-            <div className="pl-3"><span className="text-zinc-500">&lt;</span><span className="text-blue-300">main</span><span className="text-zinc-500">&gt;</span></div>
+            <div>&nbsp;</div>
+            <div><span className="text-pink-400">const</span> <span className="text-blue-300">App</span><span className="text-zinc-300">:</span> <span className="text-blue-300">NextPage</span> <span className="text-zinc-300">=</span> <span className="text-pink-400">()</span> <span className="text-pink-400">=&gt;</span> <span className="text-zinc-300">{"{"}</span></div>
+            <div className="pl-3"><span className="text-pink-400">return</span> <span className="text-zinc-300">(</span></div>
+            <div className="pl-6"><span className="text-zinc-500">&lt;</span><span className="text-blue-300">main</span> <span className="text-purple-300">className</span><span className="text-zinc-300">=</span><span className="text-amber-300">&quot;app&quot;</span><span className="text-zinc-500">&gt;</span></div>
             {/* Typing animation lines */}
             {codeToType.map((line, i) => {
-              if (i > lineIndex) return <div key={i} className="pl-6 h-5">&nbsp;</div>;
+              if (i > lineIndex) return <div key={i} className="pl-9 h-5">&nbsp;</div>;
               const displayText = i === lineIndex ? typedText : line;
               const componentName = displayText.replace(/<|>|\/|\s.*/g, '');
               const hasAttr = displayText.includes(' ');
               return (
-                <div key={i} className="pl-6 h-5">
+                <div key={i} className="pl-9 h-5">
                   {displayText && (
                     <>
                       <span className="text-zinc-500">&lt;</span>
@@ -132,8 +138,11 @@ export function CodeEditorMockup({ title }: CodeEditorMockupProps) {
                 </div>
               );
             })}
-            <div className="pl-3"><span className="text-zinc-500">&lt;/</span><span className="text-blue-300">main</span><span className="text-zinc-500">&gt;</span></div>
-            <div><span className="text-zinc-300">);</span></div>
+            <div className="pl-6"><span className="text-zinc-500">&lt;/</span><span className="text-blue-300">main</span><span className="text-zinc-500">&gt;</span></div>
+            <div className="pl-3"><span className="text-zinc-300">);</span></div>
+            <div><span className="text-zinc-300">{"}"}</span></div>
+            <div>&nbsp;</div>
+            <div><span className="text-pink-400">export</span> <span className="text-pink-400">default</span> <span className="text-blue-300">App</span><span className="text-zinc-300">;</span></div>
           </div>
         </div>
 
@@ -147,10 +156,23 @@ export function CodeEditorMockup({ title }: CodeEditorMockupProps) {
               TSX
             </span>
             <span>UTF-8</span>
+            <span>Ln {lineIndex + 8}, Col {typedText.length + 1}</span>
+            <span className="flex items-center gap-1">
+              <svg className="w-2.5 h-2.5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              Prettier
+            </span>
           </div>
-          <div className="flex items-center gap-1 text-[9px] text-zinc-500 font-medium">
+          <div className="flex items-center gap-3 text-[9px] text-zinc-500 font-medium">
+            <span className="flex items-center gap-1">
+              <svg className="w-3 h-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Fast
+            </span>
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            Typing...
+            <span>Typing...</span>
           </div>
         </div>
       </div>

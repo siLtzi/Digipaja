@@ -4,11 +4,20 @@ export default defineType({
   name: "project",
   title: "Project (Reference)",
   type: "document",
+  groups: [
+    { name: "finnish", title: "Finnish Content" },
+    { name: "english", title: "English Content" },
+    { name: "details", title: "Project Details" },
+    { name: "media", title: "Media & Images" },
+    { name: "metrics", title: "Metrics & Scores" },
+  ],
   fields: [
+    // ==================== PROJECT DETAILS ====================
     defineField({
       name: "title",
       title: "Project Title",
       type: "string",
+      group: "details",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -16,6 +25,7 @@ export default defineType({
       title: "Slug",
       type: "slug",
       options: { source: "title" },
+      group: "details",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -23,37 +33,60 @@ export default defineType({
       title: "Category",
       type: "string",
       description: "e.g. 'SaaS Platform' or 'Corporate Website'",
+      group: "details",
     }),
-    defineField({
-      name: "description_fi",
-      title: "Short Description (FI)",
-      type: "text",
-      rows: 3,
-    }),
-    defineField({
-      name: "description_en",
-      title: "Short Description (EN)",
-      type: "text",
-      rows: 3,
-    }),
-    // === DETAILED CONTENT FOR PROJECT PAGE ===
     defineField({
       name: "clientName",
       title: "Client Name",
       type: "string",
       description: "The name of the client or company",
+      group: "details",
     }),
     defineField({
       name: "projectYear",
       title: "Project Year",
       type: "string",
       description: "e.g. '2024' or '2023-2024'",
+      group: "details",
     }),
     defineField({
       name: "projectDuration",
       title: "Project Duration",
       type: "string",
       description: "e.g. '6 weeks' or '3 months'",
+      group: "details",
+    }),
+    defineField({
+      name: "liveUrl",
+      title: "Live Website URL",
+      type: "url",
+      description: "The URL to the live website",
+      group: "details",
+      validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
+    }),
+    defineField({
+      name: "technologies",
+      title: "Tech Stack",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      group: "details",
+    }),
+    defineField({
+      name: "publishedAt",
+      title: "Published At",
+      type: "datetime",
+      initialValue: () => new Date().toISOString(),
+      group: "details",
+    }),
+
+    // ==================== FINNISH CONTENT ====================
+    defineField({
+      name: "description_fi",
+      title: "Short Description (FI)",
+      type: "text",
+      rows: 3,
+      group: "finnish",
     }),
     defineField({
       name: "challenge_fi",
@@ -61,12 +94,7 @@ export default defineType({
       type: "text",
       rows: 4,
       description: "What problem was the client facing?",
-    }),
-    defineField({
-      name: "challenge_en",
-      title: "The Challenge (EN)",
-      type: "text",
-      rows: 4,
+      group: "finnish",
     }),
     defineField({
       name: "solution_fi",
@@ -74,12 +102,7 @@ export default defineType({
       type: "text",
       rows: 4,
       description: "How did we solve the problem?",
-    }),
-    defineField({
-      name: "solution_en",
-      title: "Our Solution (EN)",
-      type: "text",
-      rows: 4,
+      group: "finnish",
     }),
     defineField({
       name: "results_fi",
@@ -87,12 +110,7 @@ export default defineType({
       type: "text",
       rows: 4,
       description: "What were the outcomes?",
-    }),
-    defineField({
-      name: "results_en",
-      title: "Results (EN)",
-      type: "text",
-      rows: 4,
+      group: "finnish",
     }),
     defineField({
       name: "testimonial_fi",
@@ -100,18 +118,7 @@ export default defineType({
       type: "text",
       rows: 3,
       description: "Optional quote from the client",
-    }),
-    defineField({
-      name: "testimonial_en",
-      title: "Client Testimonial (EN)",
-      type: "text",
-      rows: 3,
-    }),
-    defineField({
-      name: "testimonialAuthor",
-      title: "Testimonial Author",
-      type: "string",
-      description: "Name and title of the person quoted",
+      group: "finnish",
     }),
     defineField({
       name: "keyFeatures_fi",
@@ -119,7 +126,44 @@ export default defineType({
       type: "array",
       of: [{ type: "string" }],
       options: { layout: "tags" },
-      description: "List of key features delivered",
+      group: "finnish",
+    }),
+
+    // ==================== ENGLISH CONTENT ====================
+    defineField({
+      name: "description_en",
+      title: "Short Description (EN)",
+      type: "text",
+      rows: 3,
+      group: "english",
+    }),
+    defineField({
+      name: "challenge_en",
+      title: "The Challenge (EN)",
+      type: "text",
+      rows: 4,
+      group: "english",
+    }),
+    defineField({
+      name: "solution_en",
+      title: "Our Solution (EN)",
+      type: "text",
+      rows: 4,
+      group: "english",
+    }),
+    defineField({
+      name: "results_en",
+      title: "Results (EN)",
+      type: "text",
+      rows: 4,
+      group: "english",
+    }),
+    defineField({
+      name: "testimonial_en",
+      title: "Client Testimonial (EN)",
+      type: "text",
+      rows: 3,
+      group: "english",
     }),
     defineField({
       name: "keyFeatures_en",
@@ -127,11 +171,48 @@ export default defineType({
       type: "array",
       of: [{ type: "string" }],
       options: { layout: "tags" },
+      group: "english",
     }),
+    defineField({
+      name: "testimonialAuthor",
+      title: "Testimonial Author",
+      type: "string",
+      description: "Name and title of the person quoted",
+      group: "english",
+    }),
+
+    // ==================== MEDIA ====================
+    defineField({
+      name: "mainImage",
+      title: "Main Image (Desktop)",
+      type: "image",
+      options: { hotspot: true },
+      group: "media",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "mobileImage",
+      title: "Mobile View Image",
+      type: "image",
+      options: { hotspot: true },
+      description: "Upload a screenshot taken at mobile width",
+      group: "media",
+    }),
+    defineField({
+      name: "gallery",
+      title: "Project Gallery",
+      type: "array",
+      of: [{ type: "image", options: { hotspot: true } }],
+      description: "Additional screenshots or images",
+      group: "media",
+    }),
+
+    // ==================== METRICS ====================
     defineField({
       name: "metrics",
       title: "Project Metrics",
       type: "array",
+      group: "metrics",
       of: [
         {
           type: "object",
@@ -142,80 +223,30 @@ export default defineType({
           ],
         },
       ],
-      description: "e.g. '95+' - 'Lighthouse Score', '2s' - 'Load Time'",
     }),
-    // === LIGHTHOUSE SCORES ===
     defineField({
       name: "lighthouseMobile",
       title: "Lighthouse Scores (Mobile)",
       type: "object",
+      group: "metrics",
       fields: [
         { name: "performance", title: "Performance", type: "number", validation: (Rule) => Rule.min(0).max(100) },
         { name: "accessibility", title: "Accessibility", type: "number", validation: (Rule) => Rule.min(0).max(100) },
         { name: "bestPractices", title: "Best Practices", type: "number", validation: (Rule) => Rule.min(0).max(100) },
         { name: "seo", title: "SEO", type: "number", validation: (Rule) => Rule.min(0).max(100) },
       ],
-      description: "Lighthouse scores for mobile version (0-100)",
     }),
     defineField({
       name: "lighthouseDesktop",
       title: "Lighthouse Scores (Desktop)",
       type: "object",
+      group: "metrics",
       fields: [
         { name: "performance", title: "Performance", type: "number", validation: (Rule) => Rule.min(0).max(100) },
         { name: "accessibility", title: "Accessibility", type: "number", validation: (Rule) => Rule.min(0).max(100) },
         { name: "bestPractices", title: "Best Practices", type: "number", validation: (Rule) => Rule.min(0).max(100) },
         { name: "seo", title: "SEO", type: "number", validation: (Rule) => Rule.min(0).max(100) },
       ],
-      description: "Lighthouse scores for desktop version (0-100)",
-    }),
-    // === IMAGES ===
-    defineField({
-      name: "mainImage",
-      title: "Main Image (Desktop)",
-      type: "image",
-      options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "mobileImage",
-      title: "Mobile View Image",
-      type: "image",
-      options: { hotspot: true },
-      description: "Upload a screenshot taken at mobile width (e.g. iPhone 14 size). If left empty, Desktop image will be used.",
-    }),
-    defineField({
-      name: "gallery",
-      title: "Project Gallery",
-      type: "array",
-      of: [
-        {
-          type: "image",
-          options: { hotspot: true },
-        },
-      ],
-      description: "Additional screenshots or images from the project",
-    }),
-    // === LINKS & META ===
-    defineField({
-      name: "liveUrl",
-      title: "Live Website URL",
-      type: "url",
-      description: "The URL to the live website (e.g. https://example.com). This will be displayed in the browser preview.",
-      validation: (Rule) => Rule.uri({ scheme: ['http', 'https'] }),
-    }),
-    defineField({
-      name: "technologies",
-      title: "Tech Stack",
-      type: "array",
-      of: [{ type: "string" }],
-      options: { layout: "tags" },
-    }),
-    defineField({
-      name: "publishedAt",
-      title: "Published At",
-      type: "datetime",
-      initialValue: () => new Date().toISOString(),
     }),
   ],
   preview: {

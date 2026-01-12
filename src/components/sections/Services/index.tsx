@@ -62,23 +62,32 @@ export default async function Services({ locale }: { locale: "fi" | "en" }) {
   const title = isFi ? cms?.title_fi || m.title : m.title;
   const subtitle = isFi ? cms?.subtitle_fi || m.subtitle : m.subtitle;
 
-  const baseServices = (isFi ? (cms?.services_fi ?? m.items) : m.items) ?? [];
+  // Primary source: servicesOverview (has full content)
+  // Fallback: servicesSettings.services_fi or JSON
+  const overviewServices = overview?.services;
   
-  // Merge image/video/gallery from servicesOverview based on matching slug
-  // Also try partial matching for backwards compatibility (e.g., "kotisivut" matches "raataloidyt-kotisivut")
-  const services: Service[] = baseServices.map((service) => {
-    const overviewService = overview?.services?.find(
-      (s) => s.slug === service.slug || 
-             s.slug?.includes(service.slug || "") || 
-             service.slug?.includes(s.slug || "")
-    );
-    return {
+  let services: Service[];
+  
+  if (overviewServices && overviewServices.length > 0) {
+    // Use servicesOverview as primary source (it has title, body, media, etc.)
+    services = overviewServices.map((s: any) => ({
+      title: s.title || '',
+      body: s.shortDescription || '',
+      slug: s.slug,
+      imageUrl: s.imageUrl,
+      videoUrl: s.videoUrl,
+      gallery: s.gallery,
+    }));
+  } else {
+    // Fallback to servicesSettings or JSON
+    const baseServices = (isFi ? (cms?.services_fi ?? m.items) : m.items) ?? [];
+    services = baseServices.map((service) => ({
       ...service,
-      imageUrl: overviewService?.imageUrl,
-      videoUrl: overviewService?.videoUrl,
-      gallery: overviewService?.gallery,
-    };
-  });
+      imageUrl: undefined,
+      videoUrl: undefined,
+      gallery: undefined,
+    }));
+  }
 
   return (
     <ServicesContent

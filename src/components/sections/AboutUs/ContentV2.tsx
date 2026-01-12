@@ -292,7 +292,7 @@ export default function AboutUsContent({
               {title}
             </h2>
 
-            <p className="text-zinc-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl">
+            <p className="text-zinc-300 text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl whitespace-pre-line">
               {subtitle}
             </p>
           </div>

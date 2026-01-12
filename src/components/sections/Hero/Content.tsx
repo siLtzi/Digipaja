@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -26,12 +26,13 @@ type HeroProps = {
 };
 
 const STACK_ICONS = [
-  { name: "Next.js", src: "/tech/nextjs.svg" },
-  { name: "Sanity", src: "/tech/sanity.svg" },
-  { name: "Vercel", src: "/tech/vercel.svg" },
-  { name: "Tailwind", src: "/tech/tailwind.svg" },
-  { name: "GSAP", src: "/tech/gsap.svg" },
-  { name: "i18n", src: "/tech/monikielisyys.svg" },
+  { name: "Next.js", src: "/tech/nextjs.svg", desc: "React-pohjainen ohjelmistokehys", invert: true },
+  { name: "Astro", src: "/tech/astro.svg", desc: "Kevyet & nopeat staattiset sivut", invert: false },
+  { name: "Sanity", src: "/tech/sanity.svg", desc: "Moderni sisällönhallinta", invert: false },
+  { name: "Vercel", src: "/tech/vercel.svg", desc: "Nopea globaali hosting", invert: true },
+  { name: "Tailwind", src: "/tech/tailwind.svg", desc: "Tehokas CSS-tyylitys", invert: false },
+  { name: "GSAP", src: "/tech/gsap.svg", desc: "Sulava animaatiokirjasto", invert: false },
+  { name: "i18n", src: "/tech/monikielisyys.svg", desc: "Monikielisyystuki", invert: false },
 ];
 
 export default function HeroContent({
@@ -47,9 +48,9 @@ export default function HeroContent({
 }: HeroProps) {
   // Refs for animation targets
   const containerRef = useRef<HTMLDivElement>(null);
-  
-  // State for mobile tech icon selection
-  const [selectedTech, setSelectedTech] = useState<number | null>(null);
+  const techStackRef = useRef<HTMLDivElement>(null);
+  const stackButtonRef = useRef<HTMLButtonElement>(null);
+  const [isStackOpen, setIsStackOpen] = useState(false);
   
   // Get locale from pathname
   const pathname = usePathname();
@@ -65,6 +66,153 @@ export default function HeroContent({
       { y: 0, opacity: 1, duration: 0.7, stagger: 0.08 }
     );
   }, { scope: containerRef });
+
+  // === 2. TECH STACK HOVER ANIMATIONS ===
+  useEffect(() => {
+    const techStack = techStackRef.current;
+    if (!techStack) return;
+
+    const items = gsap.utils.toArray<HTMLElement>(techStack.querySelectorAll('.tech-item'));
+    const cleanups: Array<() => void> = [];
+
+    items.forEach((item) => {
+      const icon = item.querySelector<HTMLElement>('.tech-icon');
+      const label = item.querySelector<HTMLElement>('.tech-label');
+      const underline = item.querySelector<HTMLElement>('.tech-underline');
+      const glow = item.querySelector<HTMLElement>('.tech-glow');
+
+      // Initial states
+      gsap.set(underline, { scaleX: 0, opacity: 0.9, transformOrigin: '50% 50%' });
+      gsap.set(glow, { opacity: 0 });
+
+      const toX = gsap.quickTo(item, 'x', { duration: 0.22, ease: 'power3.out' });
+      const toY = gsap.quickTo(item, 'y', { duration: 0.22, ease: 'power3.out' });
+      const toR = gsap.quickTo(item, 'rotateZ', { duration: 0.22, ease: 'power3.out' });
+
+      const onMove = (e: MouseEvent) => {
+        const r = item.getBoundingClientRect();
+        const px = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+        const py = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+        const clamp = gsap.utils.clamp(-1, 1);
+        const dx = clamp(px) * 6;
+        const dy = clamp(py) * 4;
+        toX(dx);
+        toY(dy);
+        toR(dx * 0.15);
+      };
+
+      const onEnter = () => {
+        gsap.set(item, { zIndex: 30 });
+        item.addEventListener('mousemove', onMove);
+        gsap.to(item, { scale: 1.15, duration: 0.18, ease: 'power3.out' });
+        if (glow) gsap.to(glow, { opacity: 1, duration: 0.2, ease: 'power2.out' });
+        if (underline) gsap.to(underline, { scaleX: 1, opacity: 1, duration: 0.22, ease: 'power2.out' });
+        if (icon) gsap.to(icon, { scale: 1.25, duration: 0.18, ease: 'back.out(2.4)' });
+        if (label) gsap.to(label, { letterSpacing: '0.02em', duration: 0.18, ease: 'power2.out' });
+      };
+
+      const onLeave = () => {
+        item.removeEventListener('mousemove', onMove);
+        toX(0);
+        toY(0);
+        toR(0);
+        gsap.to(item, { scale: 1, duration: 0.2, ease: 'power3.out' });
+        if (glow) gsap.to(glow, { opacity: 0, duration: 0.2, ease: 'power2.out' });
+        if (underline) gsap.to(underline, { scaleX: 0, opacity: 0.9, duration: 0.2, ease: 'power2.out' });
+        if (icon) gsap.to(icon, { scale: 1, duration: 0.2, ease: 'power2.out' });
+        if (label) gsap.to(label, { letterSpacing: '0em', duration: 0.2, ease: 'power2.out' });
+        gsap.delayedCall(0.22, () => gsap.set(item, { zIndex: 0 }));
+      };
+
+      item.addEventListener('mouseenter', onEnter);
+      item.addEventListener('mouseleave', onLeave);
+
+      cleanups.push(() => {
+        item.removeEventListener('mouseenter', onEnter);
+        item.removeEventListener('mouseleave', onLeave);
+        item.removeEventListener('mousemove', onMove);
+      });
+    });
+
+    return () => cleanups.forEach(fn => fn());
+  }, []);
+
+  // === 3. TOGGLE TECH STACK ANIMATION ===
+  const toggleStack = () => {
+    const techStack = techStackRef.current;
+    const button = stackButtonRef.current;
+    if (!techStack || !button) return;
+
+    const items = gsap.utils.toArray<HTMLElement>(techStack.querySelectorAll('.tech-item'));
+    const layers = button.querySelectorAll('.stack-layer');
+
+    if (!isStackOpen) {
+      // OPEN animation
+      setIsStackOpen(true);
+      
+      // Animate button layers to spread apart
+      gsap.to(layers[0], { y: -8, duration: 0.3, ease: 'back.out(2)' });
+      gsap.to(layers[1], { y: 0, duration: 0.3, ease: 'back.out(2)' });
+      gsap.to(layers[2], { y: 8, duration: 0.3, ease: 'back.out(2)' });
+      
+      // Show the tech stack container
+      gsap.set(techStack, { display: 'flex', opacity: 0 });
+      gsap.to(techStack, { opacity: 1, duration: 0.3 });
+      
+      // Animate each tech item flying in from the left (where the button is)
+      items.forEach((item, i) => {
+        gsap.fromTo(item,
+          { 
+            x: -600, 
+            y: 100,
+            opacity: 0, 
+            scale: 0.2,
+            rotation: -30
+          },
+          { 
+            x: 0, 
+            y: 0,
+            opacity: 1, 
+            scale: 1,
+            rotation: 0,
+            duration: 0.6,
+            delay: i * 0.08,
+            ease: 'back.out(1.2)'
+          }
+        );
+      });
+    } else {
+      // CLOSE animation
+      setIsStackOpen(false);
+      
+      // Animate button layers back together
+      gsap.to(layers[0], { y: 0, duration: 0.3, ease: 'power2.inOut' });
+      gsap.to(layers[1], { y: 0, duration: 0.3, ease: 'power2.inOut' });
+      gsap.to(layers[2], { y: 0, duration: 0.3, ease: 'power2.inOut' });
+      
+      // Animate items flying back to the button
+      items.forEach((item, i) => {
+        gsap.to(item, { 
+          x: -600, 
+          y: 100,
+          opacity: 0, 
+          scale: 0.2,
+          rotation: -30,
+          duration: 0.4,
+          delay: (items.length - 1 - i) * 0.04,
+          ease: 'power3.in'
+        });
+      });
+      
+      // Hide container after animation
+      gsap.to(techStack, { 
+        opacity: 0, 
+        duration: 0.2, 
+        delay: 0.25,
+        onComplete: () => { gsap.set(techStack, { display: 'none' }); }
+      });
+    }
+  };
 
   // 🔥 FIX: Use ScrollSmoother to prevent empty space bug
   const scrollTo = (id: string) => {
@@ -154,7 +302,7 @@ export default function HeroContent({
             </p>
           </div>
 
-          {/* CTAs */}
+          {/* CTAs + Stack Button */}
           <div className="animate-in flex flex-wrap items-center gap-5 pt-4 opacity-0">
             <Link
               href={`/${locale}/yhteydenotto`}
@@ -172,161 +320,104 @@ export default function HeroContent({
 
             <button
               type="button"
-              // Updated to scroll to "references"
               onClick={() => scrollTo("references")}
               style={{ fontFamily: "var(--font-goldman)" }}
               className="group flex items-center gap-2 rounded-sm border border-white/10 bg-white/5 px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-300 backdrop-blur-sm transition-all hover:border-[#ff8a3c]/50 hover:bg-white/10 hover:text-white cursor-pointer"
             >
               <span>{secondaryCta}</span>
             </button>
-          </div>
 
-          {/* Tech Stack */}
-          <div className="animate-in flex flex-col gap-4 pt-8 opacity-0 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-5">
-            {/* Label - hidden on mobile, shown on sm+ */}
-            <div className="hidden sm:flex items-center gap-4">
-              <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-[0.25em] text-[#ff8a3c]/70">Tech Stack</span>
-              <div className="h-5 w-px bg-gradient-to-b from-[#ff8a3c]/50 to-transparent" />
-            </div>
-            
-            {/* Icons grid on mobile, flex row on desktop */}
-            <div className="flex items-center gap-2 sm:contents">
-              {/* Mobile label */}
-              <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-[0.2em] text-[#ff8a3c]/70 sm:hidden">Stack</span>
-              <div className="h-4 w-px bg-[#ff8a3c]/30 sm:hidden" />
-              
-              {STACK_ICONS.map((tech, idx) => (
-                <div 
-                  key={tech.name} 
-                  className="group/tech relative"
-                  style={{ animationDelay: `${idx * 0.1}s` }}
-                >
-                  {/* Clickable icon */}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedTech(selectedTech === idx ? null : idx)}
-                    className={`relative flex h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-sm border bg-white/[0.02] p-1.5 sm:p-2 backdrop-blur-sm transition-all duration-300 ease-out cursor-pointer sm:group-hover/tech:-translate-y-2 sm:group-hover/tech:border-[#ff8a3c]/50 sm:group-hover/tech:bg-[#ff8a3c]/10 sm:group-hover/tech:shadow-[0_0_30px_rgba(255,138,60,0.3)] ${
-                      selectedTech === idx 
-                        ? 'border-[#ff8a3c] bg-[#ff8a3c]/10 scale-125 z-30 shadow-[0_0_25px_rgba(255,138,60,0.4)]' 
-                        : 'border-white/5'
-                    }`}
-                  >
-                    <div className={`relative h-full w-full transition-all duration-300 ease-out sm:group-hover/tech:opacity-100 sm:group-hover/tech:grayscale-0 sm:group-hover/tech:scale-110 ${
-                      selectedTech === idx 
-                        ? 'opacity-100 grayscale-0' 
-                        : 'opacity-50 sm:opacity-60 grayscale'
-                    }`}>
-                      <Image 
-                        src={tech.src} 
-                        alt={tech.name}
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
-                    
-                    {/* Glow effect behind */}
-                    <div className={`absolute inset-0 -z-10 rounded-sm bg-[#ff8a3c] blur-xl transition-opacity duration-300 sm:group-hover/tech:opacity-20 ${
-                      selectedTech === idx ? 'opacity-30' : 'opacity-0'
-                    }`} />
-                  </button>
-                  
-                  {/* Mobile tooltip - shows on tap */}
-                  <div 
-                    className={`sm:hidden pointer-events-none absolute left-1/2 -translate-x-1/2 z-40 transition-all duration-300 ease-out ${
-                      selectedTech === idx 
-                        ? '-top-14 opacity-100' 
-                        : '-top-10 opacity-0'
-                    }`}
-                  >
-                    <div className="relative whitespace-nowrap border border-[#ff8a3c] bg-[#090b12]/95 px-3 py-1.5 shadow-[0_0_20px_rgba(255,138,60,0.4)] rounded backdrop-blur-md">
-                      <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[11px] uppercase tracking-wider text-[#ff8a3c]">
-                        {tech.name}
-                      </span>
-                      {/* Arrow */}
-                      <div className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 border-b border-r border-[#ff8a3c] bg-[#090b12]/95" />
-                    </div>
-                  </div>
-                  
-                  {/* Desktop Tooltip - only on hover */}
-                  <div className="pointer-events-none absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-300 ease-out sm:group-hover/tech:-top-14 sm:group-hover/tech:opacity-100 z-20 hidden sm:block">
-                    <div className="relative whitespace-nowrap border border-[#ff8a3c]/40 bg-[#090b12]/95 px-3 py-1.5 shadow-[0_0_15px_rgba(255,138,60,0.3)] rounded backdrop-blur-md">
-                      <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[10px] uppercase tracking-wider text-[#ff8a3c]">
-                        {tech.name}
-                      </span>
-                      {/* Arrow */}
-                      <div className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rotate-45 border-b border-r border-[#ff8a3c]/40 bg-[#090b12]/95" />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* Stack Layers Button - orange themed */}
+            <button
+              ref={stackButtonRef}
+              type="button"
+              onClick={toggleStack}
+              className="group relative flex h-16 w-16 items-center justify-center transition-transform duration-200 hover:scale-110 cursor-pointer overflow-visible"
+              aria-label="Toggle tech stack"
+            >
+              {/* Stacked layers SVG - monochrome orange */}
+              <svg 
+                viewBox="0 0 48 48" 
+                className="h-10 w-10 drop-shadow-lg overflow-visible"
+                fill="none"
+                style={{ overflow: 'visible' }}
+              >
+                {/* Top layer */}
+                <path 
+                  className="stack-layer transition-all duration-300"
+                  d="M24 8L40 18L24 28L8 18L24 8Z" 
+                  fill={isStackOpen ? "#ff8a3c" : "#ff6b00"}
+                  stroke="#1a1a1a"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                />
+                {/* Middle layer */}
+                <path 
+                  className="stack-layer transition-all duration-300"
+                  d="M8 24L24 34L40 24" 
+                  fill="none"
+                  stroke={isStackOpen ? "#ffb347" : "#ff8a3c"}
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {/* Bottom layer */}
+                <path 
+                  className="stack-layer transition-all duration-300"
+                  d="M8 32L24 42L40 32" 
+                  fill="none"
+                  stroke={isStackOpen ? "#ffd699" : "#ffb347"}
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
           </div>
         </div>
 
-        {/* --- RIGHT COLUMN: REMOVED TECH GRID --- */}
-        <aside className="relative w-full max-w-[280px] lg:mt-0 hidden">
-           
-           <div className="hero-card relative p-2 opacity-0">
-              <div className="relative z-10 mb-6 text-center">
-                  {/* Updated Text Color to Orange */}
-                  <h3 style={{ fontFamily: "var(--font-goldman)" }} className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.3em] text-[#ff8a3c]">
-                      SYSTEM STACK
-                  </h3>
+        {/* Tech Stack - positioned on the right side of hero */}
+        <div 
+          ref={techStackRef}
+          className="hidden absolute right-8 top-1/2 -translate-y-1/2 lg:right-16 xl:right-24 flex-col items-center gap-5"
+        >
+          {STACK_ICONS.map((tech, idx) => (
+            <div
+              key={`${tech.name}-${idx}`}
+              className="tech-item group/tech cursor-default select-none relative flex items-center gap-5 outline-none"
+            >
+              {/* Glow behind */}
+              <span className="tech-glow pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(255,138,60,0.35)_0%,transparent_60%)] blur-md opacity-0" />
+
+              <div className="tech-icon relative z-10 flex h-16 w-16 items-center justify-center">
+                <Image
+                  src={tech.src}
+                  alt={tech.name}
+                  width={56}
+                  height={56}
+                  className={`object-contain ${tech.invert ? 'invert brightness-100' : ''}`}
+                  draggable={false}
+                />
               </div>
 
-             {/* Grid */}
-             <div className="relative z-10 grid grid-cols-2 gap-4">
-               {STACK_ICONS.map((tech) => (
-                 <div 
-                   key={tech.name}
-                   className="
-                     group/icon relative flex aspect-square w-full cursor-pointer items-center justify-center 
-                     bg-white/[0.03] rounded-sm p-1
-                     transition-all duration-300 ease-out
-                     hover:shadow-[0_0_20px_rgba(255,138,60,0.15)]
-                   "
-                 >
-                   {/* Inner Corners */}
-                   <span className="absolute left-0 top-0 h-2 w-2 border-l border-t border-zinc-500 rounded-tl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                   <span className="absolute right-0 top-0 h-2 w-2 border-r border-t border-zinc-500 rounded-tr-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                   <span className="absolute bottom-0 right-0 h-2 w-2 border-b border-r border-zinc-500 rounded-br-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                   <span className="absolute bottom-0 left-0 h-2 w-2 border-b border-l border-zinc-500 rounded-bl-sm transition-all duration-300 group-hover/icon:h-full group-hover/icon:w-full group-hover/icon:border-[#ff8a3c]" />
-                   
-                   {/* Hover Fill */}
-                   <span className="absolute inset-0 bg-[#ff8a3c]/0 transition-all duration-300 group-hover/icon:bg-[#ff8a3c]/5 rounded-sm" />
+              {/* Name and description on the right */}
+              <div className="flex flex-col items-start gap-1">
+                <span
+                  className="tech-label cursor-default text-lg font-bold text-white"
+                  style={{ fontFamily: "var(--font-goldman)" }}
+                >
+                  {tech.name}
+                </span>
+                <span className="text-sm text-zinc-400 max-w-[200px]">
+                  {tech.desc}
+                </span>
+              </div>
 
-                   {/* Tooltip */}
-                   <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 transition-all duration-200 ease-out group-hover/icon:top-[-42px] group-hover/icon:opacity-100 z-20">
-                       <div className="whitespace-nowrap border border-[#ff8a3c] bg-[#090b12] px-3 py-1.5 shadow-[0_0_10px_rgba(255,138,60,0.2)] rounded-sm">
-                           <span style={{ fontFamily: "var(--font-goldman)" }} className="text-[9px] uppercase tracking-wider text-[#ff8a3c]">
-                               {tech.name}
-                           </span>
-                       </div>
-                        <div className="absolute left-1/2 -bottom-2 h-2 w-px -translate-x-1/2 bg-[#ff8a3c]"></div>
-                   </div>
-
-                   {/* Icon */}
-                   <div className="relative h-10 w-10 opacity-80 transition-all duration-300 ease-out group-hover/icon:opacity-100 grayscale brightness-200 contrast-125 group-hover/icon:grayscale-0 group-hover/icon:brightness-100 group-hover/icon:contrast-100 group-hover/icon:drop-shadow-[0_0_8px_rgba(255,138,60,0.8)]">
-                     <Image 
-                       src={tech.src} 
-                       alt={tech.name}
-                       fill
-                       className="object-contain"
-                     />
-                   </div>
-                 </div>
-               ))}
-             </div>
-             
-             {/* Outer HUD Corners */}
-             <div className="pointer-events-none absolute -top-2 -left-2 h-8 w-8 border-t border-l border-[#ff8a3c] rounded-tl-sm" />
-             <div className="pointer-events-none absolute -top-2 -right-2 h-8 w-8 border-t border-r border-[#ff8a3c] rounded-tr-sm" />
-             <div className="pointer-events-none absolute -bottom-2 -left-2 h-8 w-8 border-b border-l border-[#ff8a3c] rounded-bl-sm" />
-             <div className="pointer-events-none absolute -bottom-2 -right-2 h-8 w-8 border-b border-r border-[#ff8a3c] rounded-br-sm" />
-             
-           </div>
-        </aside>
-
+              {/* Underline draws in on hover */}
+              <span className="tech-underline pointer-events-none absolute bottom-0 left-0 h-[2px] w-16 bg-gradient-to-r from-[#ff8a3c] to-transparent opacity-90" />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

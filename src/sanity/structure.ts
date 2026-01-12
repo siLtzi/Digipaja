@@ -81,28 +81,12 @@ export const structure: StructureResolver = (S) =>
                     .title('Pricing Section')
                 ),
               S.listItem()
-                .title('Contact Section')
-                .child(
-                  S.document()
-                    .schemaType('contactSettings')
-                    .documentId('contactSettings')
-                    .title('Contact Section')
-                ),
-              S.listItem()
                 .title('CTA Section')
                 .child(
                   S.document()
                     .schemaType('ctaSettings')
                     .documentId('ctaSettings')
                     .title('CTA Section')
-                ),
-              S.listItem()
-                .title('Speech Deck Section')
-                .child(
-                  S.document()
-                    .schemaType('speechDeckSettings')
-                    .documentId('speechDeckSettings')
-                    .title('Speech Deck Section')
                 ),
             ])
         ),

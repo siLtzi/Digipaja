@@ -5,133 +5,151 @@ export const pricingTier = defineType({
   name: "pricingTier",
   title: "Pricing Tier",
   type: "object",
+  groups: [
+    { name: "finnish", title: "Finnish" },
+    { name: "english", title: "English" },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    // ==================== FINNISH ====================
     defineField({
-      name: "name",
-      title: "Tier Name",
-      type: "object",
-      fields: [
-        { name: "fi", type: "string", title: "FI" },
-        { name: "en", type: "string", title: "EN" },
-      ],
+      name: "name_fi",
+      title: "Tier Name (FI)",
+      type: "string",
+      group: "finnish",
     }),
     defineField({
-      name: "price",
-      title: "Price Display (e.g. '1 800 €')",
-      type: "object",
-      fields: [
-        { name: "fi", type: "string", title: "FI" },
-        { name: "en", type: "string", title: "EN" },
-      ],
+      name: "price_fi",
+      title: "Price Display (FI)",
+      type: "string",
+      description: "e.g. '1 800 €'",
+      group: "finnish",
     }),
     defineField({
-      name: "monthlyPayment",
-      title: "Monthly Payment",
-      description: "The monthly maintenance/hosting fee shown on the card",
-      type: "object",
-      fields: [
-        { 
-          name: "label_fi", 
-          type: "string", 
-          title: "Label (FI)", 
-          description: "e.g. 'YLLÄPITO' or 'KK-MAKSU'",
-          initialValue: "YLLÄPITO"
-        },
-        { 
-          name: "label_en", 
-          type: "string", 
-          title: "Label (EN)", 
-          description: "e.g. 'MAINTENANCE' or 'MONTHLY'",
-          initialValue: "MAINTENANCE"
-        },
-        { 
-          name: "value_fi", 
-          type: "string", 
-          title: "Value (FI)", 
-          description: "e.g. '150 €/kk' or 'Sisältyy'" 
-        },
-        { 
-          name: "value_en", 
-          type: "string", 
-          title: "Value (EN)", 
-          description: "e.g. '150 €/mo' or 'Included'" 
-        },
-        {
-          name: "included_fi",
-          type: "array",
-          title: "Included Items (FI)",
-          description: "What's included in maintenance (shown in tooltip)",
-          of: [{ type: "string" }],
-        },
-        {
-          name: "included_en",
-          type: "array",
-          title: "Included Items (EN)",
-          of: [{ type: "string" }],
-        },
-        {
-          name: "excluded_fi",
-          type: "array",
-          title: "Excluded Items (FI)",
-          description: "What's NOT included (shown in tooltip)",
-          of: [{ type: "string" }],
-        },
-        {
-          name: "excluded_en",
-          type: "array",
-          title: "Excluded Items (EN)",
-          of: [{ type: "string" }],
-        },
-      ],
+      name: "description_fi",
+      title: "Description (FI)",
+      type: "text",
+      rows: 3,
+      group: "finnish",
     }),
     defineField({
-      name: "description",
-      title: "Description",
-      type: "object",
-      fields: [
-        { name: "fi", type: "text", title: "FI" },
-        { name: "en", type: "text", title: "EN" },
-      ],
+      name: "features_fi",
+      title: "Features (FI)",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "finnish",
     }),
     defineField({
-      name: "features",
-      title: "Features List",
-      type: "object",
-      fields: [
-        {
-          name: "fi",
-          title: "Features (FI)",
-          type: "array",
-          of: [{ type: "string" }],
-        },
-        {
-          name: "en",
-          title: "Features (EN)",
-          type: "array",
-          of: [{ type: "string" }],
-        },
-      ],
+      name: "cta_fi",
+      title: "Button Text (FI)",
+      type: "string",
+      group: "finnish",
     }),
     defineField({
-      name: "cta",
-      title: "Button Text",
-      type: "object",
-      fields: [
-        { name: "fi", type: "string", title: "FI" },
-        { name: "en", type: "string", title: "EN" },
-      ],
+      name: "monthlyLabel_fi",
+      title: "Monthly Label (FI)",
+      type: "string",
+      description: "e.g. 'YLLÄPITO'",
+      group: "finnish",
     }),
+    defineField({
+      name: "monthlyValue_fi",
+      title: "Monthly Value (FI)",
+      type: "string",
+      description: "e.g. '150 €/kk'",
+      group: "finnish",
+    }),
+    defineField({
+      name: "monthlyIncluded_fi",
+      title: "Included in Maintenance (FI)",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "finnish",
+    }),
+    defineField({
+      name: "monthlyExcluded_fi",
+      title: "Excluded from Maintenance (FI)",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "finnish",
+    }),
+
+    // ==================== ENGLISH ====================
+    defineField({
+      name: "name_en",
+      title: "Tier Name (EN)",
+      type: "string",
+      group: "english",
+    }),
+    defineField({
+      name: "price_en",
+      title: "Price Display (EN)",
+      type: "string",
+      description: "e.g. '€1,800'",
+      group: "english",
+    }),
+    defineField({
+      name: "description_en",
+      title: "Description (EN)",
+      type: "text",
+      rows: 3,
+      group: "english",
+    }),
+    defineField({
+      name: "features_en",
+      title: "Features (EN)",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "english",
+    }),
+    defineField({
+      name: "cta_en",
+      title: "Button Text (EN)",
+      type: "string",
+      group: "english",
+    }),
+    defineField({
+      name: "monthlyLabel_en",
+      title: "Monthly Label (EN)",
+      type: "string",
+      description: "e.g. 'MAINTENANCE'",
+      group: "english",
+    }),
+    defineField({
+      name: "monthlyValue_en",
+      title: "Monthly Value (EN)",
+      type: "string",
+      description: "e.g. '€150/mo'",
+      group: "english",
+    }),
+    defineField({
+      name: "monthlyIncluded_en",
+      title: "Included in Maintenance (EN)",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "english",
+    }),
+    defineField({
+      name: "monthlyExcluded_en",
+      title: "Excluded from Maintenance (EN)",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "english",
+    }),
+
+    // ==================== SETTINGS ====================
     defineField({
       name: "highlight",
       title: "Highlight (Popular)",
       type: "boolean",
       initialValue: false,
+      group: "settings",
     }),
   ],
   preview: {
     select: {
-      title: "name.fi",
-      subtitle: "price.fi",
+      title: "name_fi",
+      subtitle: "price_fi",
     },
   },
 });
@@ -141,39 +159,68 @@ export const pricingSettings = defineType({
   name: "pricingSettings",
   title: "Pricing Section",
   type: "document",
+  groups: [
+    { name: "finnish", title: "Finnish Content" },
+    { name: "english", title: "English Content" },
+    { name: "tiers", title: "Pricing Tiers" },
+  ],
   fields: [
+    // ==================== FINNISH ====================
     defineField({
-      name: "eyebrow",
-      title: "Eyebrow",
-      type: "object",
-      fields: [
-        { name: "fi", type: "string", title: "FI" },
-        { name: "en", type: "string", title: "EN" },
-      ],
+      name: "eyebrow_fi",
+      title: "Eyebrow (FI)",
+      type: "string",
+      group: "finnish",
     }),
     defineField({
-      name: "title",
-      title: "Title",
-      type: "object",
-      fields: [
-        { name: "fi", type: "string", title: "FI" },
-        { name: "en", type: "string", title: "EN" },
-      ],
+      name: "title_fi",
+      title: "Title (FI)",
+      type: "string",
+      group: "finnish",
     }),
     defineField({
-      name: "subtitle",
-      title: "Subtitle",
-      type: "object",
-      fields: [
-        { name: "fi", type: "text", title: "FI" },
-        { name: "en", type: "text", title: "EN" },
-      ],
+      name: "subtitle_fi",
+      title: "Subtitle (FI)",
+      type: "text",
+      rows: 3,
+      group: "finnish",
     }),
+
+    // ==================== ENGLISH ====================
+    defineField({
+      name: "eyebrow_en",
+      title: "Eyebrow (EN)",
+      type: "string",
+      group: "english",
+    }),
+    defineField({
+      name: "title_en",
+      title: "Title (EN)",
+      type: "string",
+      group: "english",
+    }),
+    defineField({
+      name: "subtitle_en",
+      title: "Subtitle (EN)",
+      type: "text",
+      rows: 3,
+      group: "english",
+    }),
+
+    // ==================== TIERS ====================
     defineField({
       name: "tiers",
       title: "Pricing Tiers",
       type: "array",
       of: [{ type: "pricingTier" }],
+      group: "tiers",
     }),
   ],
+  preview: {
+    prepare() {
+      return {
+        title: "Pricing Section Settings",
+      };
+    },
+  },
 });

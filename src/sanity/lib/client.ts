@@ -6,9 +6,5 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false, // Disable CDN for immediate updates after publishing
-  stega: {
-    enabled: false, // Stega is handled by sanityFetch in live.ts
-    studioUrl: '/studio',
-  },
+  useCdn: false,
 })

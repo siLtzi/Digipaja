@@ -113,6 +113,7 @@ export default function ProcessContent({
         const icon = step.querySelector(".step-icon");
         const card = step.querySelector(".step-card");
         const number = step.querySelector(".step-number");
+        const isLastStep = index === stepsElements.length - 1;
 
         ScrollTrigger.create({
           trigger: step,
@@ -143,14 +144,93 @@ export default function ProcessContent({
               duration: 0.5,
               ease: "back.out(2)"
             });
-            // Icon pops in
-            gsap.to(icon, {
-              scale: 1,
-              opacity: 1,
-              rotation: 0,
-              duration: 0.6,
-              ease: "back.out(1.7)",
-            });
+            
+            // Special rocket launch animation for the last step
+            if (isLastStep) {
+              gsap.killTweensOf(icon); // Kill any existing animations
+              const rocketTl = gsap.timeline({ overwrite: true });
+              // Initial appearance
+              rocketTl.to(icon, {
+                scale: 1,
+                opacity: 1,
+                rotation: 0,
+                x: 0,
+                y: 0,
+                duration: 0.4,
+                ease: "back.out(1.7)",
+              })
+              // Shake/rumble before launch
+              .to(icon, {
+                x: -3,
+                duration: 0.05,
+                ease: "none",
+              })
+              .to(icon, {
+                x: 3,
+                duration: 0.05,
+                ease: "none",
+              })
+              .to(icon, {
+                x: -3,
+                duration: 0.05,
+                ease: "none",
+              })
+              .to(icon, {
+                x: 3,
+                duration: 0.05,
+                ease: "none",
+              })
+              .to(icon, {
+                x: -2,
+                duration: 0.04,
+                ease: "none",
+              })
+              .to(icon, {
+                x: 2,
+                duration: 0.04,
+                ease: "none",
+              })
+              .to(icon, {
+                x: 0,
+                duration: 0.03,
+                ease: "none",
+              })
+              // LAUNCH! Fly off diagonally up-right
+              .to(icon, {
+                x: 300,
+                y: -400,
+                scale: 0.3,
+                rotation: 45,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.in",
+              })
+              // Reset position instantly (hidden)
+              .set(icon, {
+                x: 0,
+                y: 0,
+                scale: 1,
+                rotation: 0,
+                opacity: 0,
+              })
+              // Fly back in from bottom
+              .to(icon, {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 0.6,
+                ease: "back.out(1.5)",
+              });
+            } else {
+              // Normal icon animation for other steps
+              gsap.to(icon, {
+                scale: 1,
+                opacity: 1,
+                rotation: 0,
+                duration: 0.6,
+                ease: "back.out(1.7)",
+              });
+            }
           },
           onLeaveBack: () => {
             // Reset marker
@@ -179,6 +259,8 @@ export default function ProcessContent({
               scale: 0.85,
               opacity: 0.3,
               rotation: -10,
+              x: 0,
+              y: 0,
               duration: 0.4,
             });
           },
@@ -192,7 +274,7 @@ export default function ProcessContent({
     <section
       ref={containerRef}
       id="process"
-      className="relative overflow-hidden bg-[#050609] py-24 lg:py-32"
+      className="relative bg-[#050609] py-24 lg:py-32"
     >
       {/* === TOP SEPARATOR: LASER HORIZON === */}
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
@@ -238,8 +320,8 @@ export default function ProcessContent({
           </div>
 
           {/* === RIGHT: TIMELINE === */}
-          <div className="lg:col-span-7">
-            <div className="relative pl-8 sm:pl-12">
+          <div className="lg:col-span-7 overflow-visible">
+            <div className="relative pl-8 sm:pl-12 overflow-visible">
               
               {/* TIMELINE LINES - Enhanced */}
               <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-gradient-to-b from-zinc-800 via-zinc-800 to-zinc-900" />
@@ -256,7 +338,7 @@ export default function ProcessContent({
               {/* STEPS */}
               <div className="flex flex-col gap-16 py-12">
                 {steps.map((step, index) => (
-                  <div key={index} className="process-step group relative">
+                  <div key={index} className="process-step group relative overflow-visible">
                     
                     {/* Enhanced marker */}
                     <div 
@@ -266,7 +348,7 @@ export default function ProcessContent({
                     </div>
 
                     {/* Card Container with hover effect */}
-                    <div className="step-card relative rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent p-6 sm:p-8 transition-all duration-300 hover:border-[#ff8a3c]/20 hover:scale-[1.02]">
+                    <div className={`step-card relative rounded-lg border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent p-6 sm:p-8 transition-all duration-300 hover:border-[#ff8a3c]/20 hover:scale-[1.02] ${index === steps.length - 1 ? 'overflow-visible' : ''}`}>
                       
                       {/* Hover glow effect */}
                       <div className="absolute inset-0 rounded-lg bg-[radial-gradient(circle_at_center,rgba(255,138,60,0.1)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -282,7 +364,7 @@ export default function ProcessContent({
                       
                       <div className="step-text relative opacity-40 transition-all duration-500">
                         
-                        <div className="flex items-center gap-5 mb-6">
+                        <div className="flex items-center gap-5 mb-6 overflow-visible">
                           {/* Enhanced number */}
                           <span 
                              style={{ fontFamily: "var(--font-goldman)" }}
@@ -292,13 +374,13 @@ export default function ProcessContent({
                           </span>
                           
                           {/* Enhanced icon container */}
-                          <div className="step-icon relative h-10 w-10 opacity-30 transition-all duration-700 will-change-transform sm:h-12 sm:w-12 group-hover:scale-110">
+                          <div className={`step-icon relative h-10 w-10 opacity-30 will-change-transform sm:h-12 sm:w-12 ${index === steps.length - 1 ? 'rocket-icon' : ''}`}>
                              <div className="absolute inset-0 rounded-lg bg-[#ff8a3c]/10 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
                              <Image 
                                 src={getIconPath(step.icon, index)}
                                 alt={step.title}
                                 fill
-                                className="object-contain transition-all duration-700 group-hover:brightness-110 group-hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.4)]"
+                                className="object-contain group-hover:brightness-110 group-hover:drop-shadow-[0_0_8px_rgba(255,138,60,0.4)]"
                              />
                           </div>
                         </div>
