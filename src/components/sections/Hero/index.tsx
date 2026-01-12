@@ -25,6 +25,8 @@ type HeroSettings = {
   heroTitleStart_en?: string | null;
   heroTitleAccent_fi?: string | null;
   heroTitleAccent_en?: string | null;
+  heroRotatingWords_fi?: string[] | null;
+  heroRotatingWords_en?: string[] | null;
   heroTitleEnd_fi?: string | null;
   heroTitleEnd_en?: string | null;
   heroSubtitle_fi?: string | null;
@@ -58,6 +60,14 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
   const titleAccent = isFi 
     ? cms.heroTitleAccent_fi || m.titleAccent 
     : cms.heroTitleAccent_en || m.titleAccent;
+  
+  // Rotating words - fallback to some defaults if not set in Sanity
+  const defaultWordsFi = ["hyvältä", "modernilta", "nopealta", "ammattimaisilta"];
+  const defaultWordsEn = ["great", "modern", "fast", "professional"];
+  const rotatingWords = isFi
+    ? (cms.heroRotatingWords_fi?.length ? cms.heroRotatingWords_fi : defaultWordsFi)
+    : (cms.heroRotatingWords_en?.length ? cms.heroRotatingWords_en : defaultWordsEn);
+    
   const titleEnd = isFi 
     ? cms.heroTitleEnd_fi || m.titleEnd 
     : cms.heroTitleEnd_en || m.titleEnd;
@@ -80,6 +90,7 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
       eyebrow={eyebrow}
       titleStart={titleStart}
       titleAccent={titleAccent}
+      rotatingWords={rotatingWords}
       titleEnd={titleEnd}
       subtitle={subtitle}
       primaryCta={primaryCta}

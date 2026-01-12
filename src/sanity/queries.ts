@@ -33,6 +33,8 @@ export const heroSettingsQuery = groq`
   heroTitleStart_en,
   heroTitleAccent_fi,
   heroTitleAccent_en,
+  heroRotatingWords_fi,
+  heroRotatingWords_en,
   heroTitleEnd_fi,
   heroTitleEnd_en,
   heroSubtitle_fi,

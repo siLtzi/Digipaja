@@ -17,6 +17,7 @@ type HeroProps = {
   eyebrow: string;
   titleStart: string;
   titleAccent: string;
+  rotatingWords: string[];
   titleEnd: string;
   subtitle: string;
   primaryCta: string;
@@ -39,6 +40,7 @@ export default function HeroContent({
   eyebrow,
   titleStart,
   titleAccent,
+  rotatingWords,
   titleEnd,
   subtitle,
   primaryCta,
@@ -50,7 +52,9 @@ export default function HeroContent({
   const containerRef = useRef<HTMLDivElement>(null);
   const techStackRef = useRef<HTMLDivElement>(null);
   const stackButtonRef = useRef<HTMLButtonElement>(null);
+  const rotatingWordRef = useRef<HTMLSpanElement>(null);
   const [isStackOpen, setIsStackOpen] = useState(false);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   
   // Get locale from pathname
   const pathname = usePathname();
@@ -67,7 +71,40 @@ export default function HeroContent({
     );
   }, { scope: containerRef });
 
-  // === 2. TECH STACK HOVER ANIMATIONS ===
+  // === 2. ROTATING WORDS ANIMATION ===
+  useEffect(() => {
+    if (!rotatingWords || rotatingWords.length === 0) return;
+    
+    const interval = setInterval(() => {
+      const wordEl = rotatingWordRef.current;
+      if (!wordEl) return;
+
+      // Animate out: slide up and fade
+      gsap.to(wordEl, {
+        y: -20,
+        opacity: 0,
+        duration: 0.35,
+        ease: "power2.in",
+        onComplete: () => {
+          // Update to next word
+          setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
+          
+          // Reset position to below and animate in
+          gsap.set(wordEl, { y: 20 });
+          gsap.to(wordEl, {
+            y: 0,
+            opacity: 1,
+            duration: 0.35,
+            ease: "power2.out",
+          });
+        },
+      });
+    }, 3000); // Change word every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [rotatingWords]);
+
+  // === 3. TECH STACK HOVER ANIMATIONS ===
   useEffect(() => {
     const techStack = techStackRef.current;
     if (!techStack) return;
@@ -286,12 +323,19 @@ export default function HeroContent({
               fontFamily: "var(--font-goldman)",
               animation: "fadeInUpHero 0.6s ease-out"
             }}
-            className="text-balance text-5xl font-bold leading-none text-white sm:text-6xl lg:text-[4.5rem]"
+            className="text-5xl font-bold leading-[1.1] text-white sm:text-6xl lg:text-[4.5rem]"
           >
-            {titleStart}{" "}
-            <span className="bg-gradient-to-r from-[#ffb347] via-[#ff8a3c] to-[#ff6b00] bg-clip-text text-transparent">
-              {titleAccent}
-            </span>{" "}
+            {titleStart}
+            <br />
+            <span 
+              ref={rotatingWordRef}
+              className="inline-block bg-gradient-to-r from-[#ffb347] via-[#ff8a3c] to-[#ff6b00] bg-clip-text text-transparent"
+            >
+              {rotatingWords && rotatingWords.length > 0 
+                ? rotatingWords[currentWordIndex] 
+                : titleAccent}
+            </span>
+            <br />
             {titleEnd}
           </h1>
 

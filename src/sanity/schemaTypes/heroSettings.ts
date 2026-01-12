@@ -30,7 +30,15 @@ export default defineType({
       name: "heroTitleAccent_fi",
       title: "Title Accent Word (FI)",
       type: "string",
-      description: "Highlighted word in gradient, e.g. 'hyvältä'",
+      description: "Default highlighted word in gradient, e.g. 'hyvältä'",
+      group: "finnish",
+    }),
+    defineField({
+      name: "heroRotatingWords_fi",
+      title: "Rotating Accent Words (FI)",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Words that rotate in the hero title. Example: hyvältä, modernilta, nopealta, ammattimaisilta",
       group: "finnish",
     }),
     defineField({
@@ -80,7 +88,15 @@ export default defineType({
       name: "heroTitleAccent_en",
       title: "Title Accent Word (EN)",
       type: "string",
-      description: "Highlighted word in gradient",
+      description: "Default highlighted word in gradient",
+      group: "english",
+    }),
+    defineField({
+      name: "heroRotatingWords_en",
+      title: "Rotating Accent Words (EN)",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Words that rotate in the hero title. Example: great, modern, fast, professional",
       group: "english",
     }),
     defineField({
