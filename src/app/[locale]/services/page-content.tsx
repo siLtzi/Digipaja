@@ -628,7 +628,7 @@ export default function ServicesOverviewContent({
 
                 <div
                   id={service.slug}
-                  className={`service-card grid grid-cols-1 gap-12 lg:grid-cols-2 items-center ${
+                  className={`service-card scroll-mt-24 lg:scroll-mt-32 grid grid-cols-1 gap-12 lg:grid-cols-2 items-center ${
                     index % 2 === 1 ? "lg:grid-flow-dense" : ""
                   }`}
                 >

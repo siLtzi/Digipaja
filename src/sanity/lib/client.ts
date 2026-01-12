@@ -8,6 +8,7 @@ export const client = createClient({
   apiVersion,
   useCdn: false, // Disable CDN for immediate updates after publishing
   stega: {
-    enabled: false,
+    enabled: false, // Stega is handled by sanityFetch in live.ts
+    studioUrl: '/studio',
   },
 })

@@ -309,9 +309,9 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
   return (
     <Link
       ref={cardRef}
-      href={`/${locale}/services`}
+      href={`/${locale}/services${service.slug ? `#${service.slug}` : ''}`}
       data-service-card={idx}
-      className={`group relative block rounded-lg rounded-br-none border border-white/5 bg-[#050609] transition-all duration-500 hover:border-[#ff8a3c]/20 overflow-hidden ${
+      className={`group relative block rounded-lg rounded-br-none border border-[#ff8a3c]/20 bg-[#050609] transition-all duration-500 hover:border-[#ff8a3c]/50 overflow-hidden ${
         hasCustomVisual ? "min-h-[280px] sm:min-h-[320px] lg:min-h-[360px]" : "p-6 lg:p-8"
       }`}
     >
@@ -446,6 +446,21 @@ function ServiceCard({ service, idx, locale }: { service: Service; idx: number; 
         <div className="absolute bottom-0 right-0 w-[2px] h-6 bg-gradient-to-t from-[#ff8a3c]/20 to-transparent transition-all duration-500 group-hover:h-16 group-hover:from-[#ff8a3c] group-hover:shadow-[0_0_12px_rgba(255,138,60,0.8)]" />
         {/* Horizontal line */}
         <div className="absolute bottom-0 right-0 h-[2px] w-6 bg-gradient-to-l from-[#ff8a3c]/20 to-transparent transition-all duration-500 group-hover:w-16 group-hover:from-[#ff8a3c] group-hover:shadow-[0_0_12px_rgba(255,138,60,0.8)]" />
+      </div>
+
+      {/* Click indicator strip - bottom left corner */}
+      <div className="absolute bottom-0 left-0 z-30 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[#0a0a12] to-transparent rounded-tr-lg">
+        <svg 
+          className="w-3.5 h-3.5 text-zinc-600 group-hover:text-[#ff8a3c] transition-all duration-300 group-hover:translate-x-0.5" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+        <span className="text-[10px] uppercase tracking-wider text-zinc-600 group-hover:text-[#ff8a3c] transition-colors duration-300">
+          {locale === "fi" ? "Lue lisää" : "Learn more"}
+        </span>
       </div>
     </Link>
   );
