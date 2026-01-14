@@ -210,11 +210,11 @@ export default function HeroContent({
       items.forEach((item, i) => {
         gsap.fromTo(item,
           { 
-            x: window.innerWidth < 1024 ? 0 : -600, 
-            y: window.innerWidth < 1024 ? 20 : 100,
+            x: window.innerWidth < 1024 ? 0 : 80, 
+            y: window.innerWidth < 1024 ? 20 : 0,
             opacity: 0, 
-            scale: window.innerWidth < 1024 ? 0.9 : 0.2,
-            rotation: window.innerWidth < 1024 ? 0 : -30
+            scale: window.innerWidth < 1024 ? 0.9 : 0.8,
+            rotation: 0
           },
           { 
             x: 0, 
@@ -224,7 +224,7 @@ export default function HeroContent({
             rotation: 0,
             duration: 0.5,
             delay: i * 0.06,
-            ease: 'back.out(1.2)'
+            ease: 'back.out(1.7)'
           }
         );
       });
@@ -438,7 +438,7 @@ export default function HeroContent({
         {/* Tech Stack - Modal on mobile, sidebar on desktop */}
         <div 
           ref={techStackRef}
-          className="hidden fixed inset-0 z-50 lg:absolute lg:inset-auto lg:right-16 lg:top-1/2 lg:-translate-y-1/2 xl:right-24"
+          className="hidden fixed inset-0 z-50 lg:fixed lg:right-8 lg:top-1/2 lg:-translate-y-1/2 lg:inset-auto xl:right-12"
         >
           {/* Backdrop - mobile only */}
           <div 
@@ -446,22 +446,25 @@ export default function HeroContent({
             onClick={toggleStack}
           />
           
-          {/* Container - modal on mobile, no container on desktop */}
-          <div className="stack-container absolute inset-x-4 top-1/2 -translate-y-1/2 max-h-[80vh] overflow-y-auto rounded-lg border border-[#ff8a3c]/30 bg-[#08090C]/95 p-6 backdrop-blur-md lg:static lg:inset-auto lg:transform-none lg:max-h-none lg:overflow-visible lg:rounded-none lg:border-none lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
-            {/* Close button - mobile only */}
+          {/* Container - modal on mobile, sidebar on desktop */}
+          <div className="stack-container absolute inset-x-4 top-1/2 -translate-y-1/2 max-h-[80vh] overflow-y-auto rounded-lg border border-[#ff8a3c]/30 bg-[#08090C]/95 p-6 backdrop-blur-md lg:relative lg:inset-auto lg:translate-y-0 lg:max-h-none lg:overflow-visible lg:rounded-xl lg:border-[#ff8a3c]/30 lg:bg-gradient-to-b lg:from-[#111113] lg:to-[#0a0a0c] lg:p-8 lg:shadow-2xl lg:shadow-black/60 lg:backdrop-blur-xl">
+            {/* Glow effect - desktop only */}
+            <div className="absolute inset-0 rounded-xl bg-[radial-gradient(circle_at_top,rgba(255,138,60,0.08),transparent_60%)] pointer-events-none hidden lg:block" />
+            
+            {/* Close button */}
             <button
               onClick={toggleStack}
-              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-[#ff8a3c]/30 bg-[#ff8a3c]/10 text-[#ff8a3c] transition-colors hover:bg-[#ff8a3c]/20 lg:hidden"
+              className="absolute right-4 top-4 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-[#ff8a3c]/30 bg-[#ff8a3c]/10 text-[#ff8a3c] transition-colors hover:bg-[#ff8a3c]/20 lg:right-6 lg:top-6 cursor-pointer"
               aria-label="Close"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-4 w-4 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
             
-            {/* Title - mobile only */}
+            {/* Title */}
             <h3 
-              className="mb-6 text-xl font-bold uppercase tracking-wider text-[#ff8a3c] lg:hidden"
+              className="mb-6 text-xl font-bold uppercase tracking-wider text-[#ff8a3c] relative z-10"
               style={{ fontFamily: "var(--font-goldman)" }}
             >
               Tech Stack

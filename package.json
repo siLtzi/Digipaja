@@ -15,6 +15,7 @@
     "@sanity/presentation": "^2.0.0",
     "@sanity/vision": "^4.21.0",
     "@sanity/visual-editing": "^5.0.4",
+    "@types/three": "^0.182.0",
     "groq": "^4.19.0",
     "gsap": "^3.13.0",
     "jsdom": "^27.3.0",
@@ -27,6 +28,7 @@
     "react-dom": "19.2.1",
     "sanity": "^4.21.0",
     "styled-components": "^6.1.19",
+    "three": "^0.182.0",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
