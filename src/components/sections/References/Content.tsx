@@ -55,7 +55,6 @@ export default function ReferencesContent({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
-  // === GSAP: LASER BEAM ANIMATION ===
   useGSAP(
     () => {
       if (!sectionRef.current) return;
@@ -89,7 +88,6 @@ export default function ReferencesContent({
     { scope: sectionRef }
   );
 
-  // === GSAP: SCANLINE & SCROLL RESET ===
   useGSAP(
     () => {
       if (!viewportRef.current) return;

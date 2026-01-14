@@ -81,7 +81,7 @@ export default function ProjectHero({
       const mask = (q(".hero-image-mask")[0] as HTMLElement | undefined) ?? null;
       const grid = (q(".hero-image-grid")[0] as HTMLElement | undefined) ?? null;
 
-      // --- Reduced motion
+      // Reduced motion
       mm.add("(prefers-reduced-motion: reduce)", () => {
         if (breadcrumb) gsap.set(breadcrumb, { opacity: 1, y: 0 });
         if (eyebrow) gsap.set(eyebrow, { opacity: 1, x: 0 });
@@ -99,7 +99,7 @@ export default function ProjectHero({
         return () => {};
       });
 
-      // --- Normal motion
+      // Normal motion
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         // Initial
         if (breadcrumb) gsap.set(breadcrumb, { opacity: 0, y: -10, filter: "blur(8px)" });
@@ -199,7 +199,7 @@ export default function ProjectHero({
           onEnter: () => tl.play(0),
         });
 
-        // --- Auto-pan long screenshot inside a smaller viewport (no glare)
+        // Auto-pan long screenshot inside a smaller viewport (no glare)
         const viewport = viewportRef.current;
         const inner = imageInnerRef.current;
 
@@ -246,7 +246,7 @@ export default function ProjectHero({
         if (viewport) ro.observe(viewport);
         if (inner) ro.observe(inner);
 
-        // --- Hover polish (image frame + meta cards)
+        // Hover polish (image frame + meta cards)
         const cleanups: Array<() => void> = [];
 
         if (imageFrame) {

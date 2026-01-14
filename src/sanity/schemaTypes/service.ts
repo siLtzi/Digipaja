@@ -10,7 +10,7 @@ export default defineType({
     { name: "speechDeck", title: "Speech Deck" },
   ],
   fields: [
-    // ==================== CONTENT ====================
+    // CONTENT
     defineField({
       name: "title",
       title: "Title",
@@ -63,7 +63,7 @@ export default defineType({
       group: "content",
     }),
 
-    // ==================== MEDIA ====================
+    // MEDIA
     defineField({
       name: "heroVideo",
       title: "Hero Video",
@@ -79,7 +79,7 @@ export default defineType({
       options: { hotspot: true },
       group: "media",
     }),
-    // ==================== SPEECH DECK ====================
+    // SPEECH DECK
     defineField({
       name: "speechDeck",
       title: "Speech Deck (GSAP / Lottie)",

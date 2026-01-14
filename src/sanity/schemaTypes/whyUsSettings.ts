@@ -10,7 +10,7 @@ export default defineType({
     { name: "cards", title: "Benefit Cards" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "whyUsEyebrow_fi",
       title: "Eyebrow (FI)",
@@ -31,7 +31,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "whyUsEyebrow_en",
       title: "Eyebrow (EN)",
@@ -52,7 +52,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== CARDS ====================
+    // CARDS
     defineField({
       name: "cards",
       title: "Benefit Cards",

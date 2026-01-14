@@ -12,7 +12,7 @@ export default defineType({
     { name: "values", title: "Values & Mission" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "aboutUsEyebrow_fi",
       title: "Eyebrow (FI)",
@@ -56,7 +56,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "aboutUsEyebrow_en",
       title: "Eyebrow (EN)",
@@ -100,7 +100,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== TEAM - SAMULI ====================
+    // TEAM - SAMULI
     defineField({
       name: "samuliName",
       title: "Samuli - Name",
@@ -162,7 +162,7 @@ export default defineType({
       group: "team",
     }),
 
-    // ==================== TEAM - JOUKO ====================
+    // TEAM - JOUKO
     defineField({
       name: "joukoName",
       title: "Jouko - Name",
@@ -224,7 +224,7 @@ export default defineType({
       group: "team",
     }),
 
-    // ==================== STATISTICS ====================
+    // STATISTICS
     defineField({
       name: "stats",
       title: "Statistics",
@@ -261,7 +261,7 @@ export default defineType({
       ],
     }),
 
-    // ==================== VALUES & MISSION ====================
+    // VALUES & MISSION
     defineField({
       name: "missionTitle_fi",
       title: "Mission Title (FI)",

@@ -135,7 +135,6 @@ export default function Navbar({ locale }: NavbarProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // --- THE SCROLL HANDLER (Prevents Empty Space Bug) ---
   const handleScrollTo = (targetId: string) => {
     setMenuOpen(false);
 

@@ -12,7 +12,7 @@ export default defineType({
     { name: "general", title: "General Settings" },
   ],
   fields: [
-    // ==================== GENERAL SETTINGS ====================
+    // GENERAL SETTINGS
     defineField({
       name: "email",
       title: "Email Address",
@@ -30,7 +30,7 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "eyebrow_fi",
       title: "Eyebrow (FI)",
@@ -113,7 +113,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "eyebrow_en",
       title: "Eyebrow (EN)",

@@ -1,6 +1,5 @@
 import { defineField, defineType } from "sanity";
 
-// 1. The individual Pricing Card object
 export const pricingTier = defineType({
   name: "pricingTier",
   title: "Pricing Tier",
@@ -11,7 +10,6 @@ export const pricingTier = defineType({
     { name: "settings", title: "Settings" },
   ],
   fields: [
-    // ==================== FINNISH ====================
     defineField({
       name: "name_fi",
       title: "Tier Name (FI)",
@@ -74,7 +72,7 @@ export const pricingTier = defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH ====================
+    // ENGLISH
     defineField({
       name: "name_en",
       title: "Tier Name (EN)",
@@ -137,7 +135,7 @@ export const pricingTier = defineType({
       group: "english",
     }),
 
-    // ==================== SETTINGS ====================
+    // SETTINGS
     defineField({
       name: "highlight",
       title: "Highlight (Popular)",
@@ -165,7 +163,7 @@ export const pricingSettings = defineType({
     { name: "tiers", title: "Pricing Tiers" },
   ],
   fields: [
-    // ==================== FINNISH ====================
+    // FINNISH
     defineField({
       name: "eyebrow_fi",
       title: "Eyebrow (FI)",
@@ -186,7 +184,7 @@ export const pricingSettings = defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH ====================
+    // ENGLISH
     defineField({
       name: "eyebrow_en",
       title: "Eyebrow (EN)",
@@ -207,7 +205,7 @@ export const pricingSettings = defineType({
       group: "english",
     }),
 
-    // ==================== TIERS ====================
+    // TIERS
     defineField({
       name: "tiers",
       title: "Pricing Tiers",

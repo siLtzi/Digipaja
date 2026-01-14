@@ -29,7 +29,6 @@ type PricingTier = {
   highlight?: boolean;
 };
 
-// Hook to detect if device is touch-based (mobile)
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false);
   
@@ -45,7 +44,6 @@ function useIsMobile() {
   return isMobile;
 }
 
-// Info Modal Component - Uses Portal to render at document root
 function InfoModal({ 
   tier, 
   isOpen, 
@@ -153,7 +151,6 @@ function InfoModal({
   return createPortal(modalContent, document.body);
 }
 
-// Info Button with hover tooltip (desktop) and click modal (mobile)
 function InfoButton({ 
   tier, 
   isHighlight, 
@@ -374,7 +371,6 @@ export type { PricingTier };
 
 export function PricingCard({ tier, index, totalTiers = 3 }: { tier: PricingTier; index: number; totalTiers?: number }) {
   const isHighlight = tier.highlight;
-  // Middle card is taller, outer cards are shorter
   const isMiddle = totalTiers === 3 && index === 1;
 
   const cardRef = useRef<HTMLElement>(null);
@@ -390,7 +386,6 @@ export function PricingCard({ tier, index, totalTiers = 3 }: { tier: PricingTier
   const handleSelectPackage = useCallback(() => {
     contextSafe(() => {
       const onDone = () => {
-        // Navigate to contact page with package as query param
         router.push(`/fi/yhteydenotto?package=${encodeURIComponent(tier.name)}`);
       };
 
@@ -656,7 +651,6 @@ export function PricingCard({ tier, index, totalTiers = 3 }: { tier: PricingTier
   );
 }
 
-// Expandable card wrapper for contact form - flex-based expansion animation
 export function ExpandablePricingCards({
   tiers,
   selectedId,
@@ -668,12 +662,9 @@ export function ExpandablePricingCards({
   onSelect: (id: string) => void;
   packageToId: (index: number) => string;
 }) {
-  // Find which card should be initially expanded
   const getInitialExpanded = () => {
-    // If a card is selected, expand that one
     const selectedIndex = tiers.findIndex((_, i) => packageToId(i) === selectedId);
     if (selectedIndex !== -1) return selectedIndex;
-    // Otherwise expand the middle card (index 1 for 3 cards)
     return 1;
   };
 
@@ -681,14 +672,12 @@ export function ExpandablePricingCards({
 
   return (
     <div className="flex flex-col gap-3 overflow-hidden">
-      {/* Tab headers - themed cards with corner brackets */}
       <div className="flex gap-1.5 sm:gap-2">
         {tiers.map((tier, index) => {
           const isExpanded = expandedIndex === index;
           const isSelected = selectedId === packageToId(index);
           const isHighlight = tier.highlight;
           
-          // Determine corner color based on state
           const cornerColor = isExpanded || isSelected
             ? "border-[#ff8a3c]"
             : isHighlight
@@ -715,17 +704,14 @@ export function ExpandablePricingCards({
               <span className={`absolute bottom-0 right-0 h-2.5 w-2.5 border-b border-r transition-all duration-300 ${cornerColor}`} />
               <span className={`absolute bottom-0 left-0 h-2.5 w-2.5 border-b border-l transition-all duration-300 ${cornerColor}`} />
               
-              {/* Top edge glow for expanded/selected */}
               {(isExpanded || isSelected) && (
                 <div className="absolute top-0 left-2 right-2 h-px bg-gradient-to-r from-transparent via-[#ff8a3c]/60 to-transparent" />
               )}
               
-              {/* Background hover glow */}
               <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,138,60,0.08)_0%,transparent_70%)] transition-opacity duration-300 pointer-events-none ${
                 isExpanded || isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
               }`} />
               
-              {/* Selected dot indicator (instead of checkmark) */}
               {isSelected && (
                 <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#ff8a3c] shadow-[0_0_6px_rgba(255,138,60,0.8)]" />
               )}
@@ -759,7 +745,6 @@ export function ExpandablePricingCards({
         })}
       </div>
 
-      {/* Expanded card - full original design */}
       <ExpandedPricingCard
         tier={tiers[expandedIndex]}
         isSelected={selectedId === packageToId(expandedIndex)}
@@ -769,7 +754,6 @@ export function ExpandablePricingCards({
   );
 }
 
-// Full expanded card - matches original pricing card design
 function ExpandedPricingCard({
   tier,
   isSelected,
@@ -986,7 +970,6 @@ function ExpandedPricingCard({
   );
 }
 
-// Selectable variant for contact form - uses same styling but with selection state
 export function SelectablePricingCard({ 
   tier, 
   index, 
@@ -1079,7 +1062,6 @@ export function SelectablePricingCard({
     ? "border-[#ff8a3c]"
     : "border-zinc-700 group-hover:border-[#ff8a3c]";
 
-  // Compact mode with expand/collapse behavior
   const isCompactCollapsed = compact && !isExpanded;
   const isCompactExpanded = compact && isExpanded;
 
@@ -1111,7 +1093,6 @@ export function SelectablePricingCard({
           : "bg-linear-to-b from-[#0a0a0a]/80 to-[#050609]/60 border-white/5 hover:border-[#ff8a3c]/20 hover:bg-linear-to-b hover:from-[#0f0f12] hover:to-[#0a0a0a]"
       }`}
     >
-      {/* Selected indicator */}
       {isSelected && (
         <div className={`absolute z-20 flex items-center justify-center rounded-full bg-[#ff8a3c] shadow-[0_0_20px_rgba(255,138,60,0.6)] ${
           compact ? "-top-2 -right-2 h-6 w-6" : "-top-3 -right-3 h-8 w-8"
@@ -1152,7 +1133,6 @@ export function SelectablePricingCard({
       )}
 
       <div className="relative z-10">
-        {/* Collapsed compact view - just name and price */}
         {isCompactCollapsed && (
           <div className="flex flex-col items-center text-center py-2">
             <span
@@ -1197,7 +1177,6 @@ export function SelectablePricingCard({
           </div>
         )}
 
-        {/* Expanded compact view or normal view */}
         {(!compact || isCompactExpanded) && (
           <>
             <div className={`flex items-start justify-between ${compact ? "mb-3" : "mb-4 sm:mb-8"}`}>

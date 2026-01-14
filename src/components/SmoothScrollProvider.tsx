@@ -28,22 +28,18 @@ export default function SmoothScrollProvider({
 
     const isMobile = window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 
-    // Kill existing smoother first
     const existingSmoother = ScrollSmoother.get();
     if (existingSmoother) {
       existingSmoother.scrollTop(0);
       existingSmoother.kill();
     }
     
-    // Kill all ScrollTriggers to prevent stale positions
     ScrollTrigger.getAll().forEach((st) => st.kill());
 
-    // Force scroll to top on route change - multiple approaches for reliability
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
     
-    // Also reset using requestAnimationFrame to catch any late renders
     requestAnimationFrame(() => {
       window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
@@ -60,28 +56,24 @@ export default function SmoothScrollProvider({
     const smoother = ScrollSmoother.create({
       wrapper: wrapperRef.current,
       content: contentRef.current,
-      smooth: 0.8, // Slightly higher for smoother feel
-      effects: false, // Disable data-speed effects - major performance gain
+      smooth: 0.8,
+      effects: false,
       normalizeScroll: false,
     });
 
-    // Ensure we start at the top (unless there's a hash)
     if (!window.location.hash) {
       smoother.scrollTop(0);
-      // Double-tap to ensure it takes effect
       requestAnimationFrame(() => {
         smoother.scrollTop(0);
       });
     }
 
-    // 🔥 FIX: ResizeObserver forces refresh if content height changes (e.g. form appearing)
-    // Debounce to prevent excessive refreshes during animations
     let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
     const resizeObserver = new ResizeObserver(() => {
       if (resizeTimeout) clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 300); // debounce 300ms
+      }, 300);
     });
     resizeObserver.observe(contentRef.current);
 
@@ -93,31 +85,26 @@ export default function SmoothScrollProvider({
     };
   }, [pathname]);
 
-  // Secondary refresh trigger on URL change
   useLayoutEffect(() => {
     const timer = setTimeout(() => ScrollTrigger.refresh(), 100);
     return () => clearTimeout(timer);
   }, [searchParams]);
 
-  // Handle hash navigation
   useEffect(() => {
     if (window.location.hash) {
       const hash = window.location.hash;
       
-      // Use a timeout to ensure everything is loaded and calculated
       const t = setTimeout(() => {
         const smoother = ScrollSmoother.get();
         if (smoother) {
-          // Force a refresh to ensure accurate positions
           ScrollTrigger.refresh();
           
-          // Try to find the element
           const target = document.querySelector(hash);
           if (target) {
             smoother.scrollTo(target, true, "top 120px");
           }
         }
-      }, 1000); // 1 second delay to be safe
+      }, 1000);
       
       return () => clearTimeout(t);
     }

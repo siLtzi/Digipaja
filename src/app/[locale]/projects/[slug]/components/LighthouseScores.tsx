@@ -134,7 +134,6 @@ function DeviceScores({
       const el = containerRef.current;
       if (!el) return;
 
-      // === TUNING KNOBS (adjust these only) ===
       const SPEED = {
         cardIn: 0.42, // card entrance
         itemsIn: 0.32, // individual score items

@@ -9,7 +9,7 @@ export default defineType({
     { name: "cta", title: "CTA Section" },
   ],
   fields: [
-    // ==================== ITEMS ====================
+    // ITEMS
     defineField({
       name: "items",
       title: "Speech Deck Items",
@@ -64,7 +64,7 @@ export default defineType({
       ],
     }),
 
-    // ==================== CTA ====================
+    // CTA
     defineField({
       name: "ctaTitle_fi",
       title: "CTA Title (FI)",

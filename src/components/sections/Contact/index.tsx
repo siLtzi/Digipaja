@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 
 const ContactContent = dynamic(() => import("./Content"));
 
-// --- TYPES FOR MESSAGES FILE (local JSON) ---
 type ContactMessages = {
   eyebrow: string;
   title: string;
@@ -26,7 +25,6 @@ type MessagesFile = {
   contact: ContactMessages;
 };
 
-// --- TYPES FOR SANITY SETTINGS ---
 type ContactSettings = {
   email?: string | null;
   phone?: string | null;

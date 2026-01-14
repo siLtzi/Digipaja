@@ -417,7 +417,7 @@ export const contactPageSettingsQuery = `
   }
 `;
 
-// ==================== SITE SETTINGS ====================
+// SITE SETTINGS
 export const siteSettingsQuery = groq`
   *[_type == "siteSettings"][0]{
     companyName,
@@ -479,7 +479,7 @@ export const siteSettingsQuery = groq`
   }
 `;
 
-// ==================== CTA SETTINGS ====================
+// CTA SETTINGS
 export const ctaSettingsQuery = groq`
   *[_type == "ctaSettings"][0]{
     "ctaText_fi": ctaText.fi,
@@ -488,7 +488,7 @@ export const ctaSettingsQuery = groq`
   }
 `;
 
-// ==================== SPEECH DECK SETTINGS ====================
+// SPEECH DECK SETTINGS
 export const speechDeckSettingsQuery = groq`
   *[_type == "speechDeckSettings"][0]{
     items[]{

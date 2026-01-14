@@ -10,7 +10,7 @@ export default defineType({
     { name: "settings", title: "Settings" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "eyebrow_fi",
       title: "Eyebrow (FI)",
@@ -40,7 +40,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "eyebrow_en",
       title: "Eyebrow (EN)",
@@ -70,7 +70,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== SETTINGS ====================
+    // SETTINGS
     defineField({
       name: "ctaLink",
       title: "CTA Link",

@@ -10,7 +10,6 @@ import {
   type PricingTier,
 } from "@/components/sections/Pricing/Content";
 
-// ============ TYPES ============
 type FormData = {
   // Step 1: Contact Info
   name: string;
@@ -32,7 +31,6 @@ type FormData = {
   budget: string;
 };
 
-// ============ CTA BUTTON COMPONENT ============
 function CTAButton({
   onClick,
   disabled,
@@ -162,7 +160,7 @@ export type Translations = {
   features: Feature[];
 };
 
-// ============ STEP INDICATOR COMPONENT ============
+// STEP INDICATOR COMPONENT
 function StepIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
   return (
     <div className="flex flex-col items-center gap-0">
@@ -213,7 +211,7 @@ const PACKAGE_NAME_TO_ID: Record<string, "kipina" | "hehku" | "roihu"> = {
   "Roihu": "roihu",
 };
 
-// ============ MAIN COMPONENT ============
+// MAIN COMPONENT
 export default function ConversationalContactForm({ t }: { t: Translations }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -415,7 +413,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
     }
   }, []);
 
-  // ============ SUCCESS STATE ============
+  // SUCCESS STATE
   if (isSubmitted) {
     return (
       <div
@@ -484,7 +482,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
     );
   }
 
-  // ============ MAIN FORM ============
+  // MAIN FORM
   return (
     <div
       ref={containerRef}
@@ -684,7 +682,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
   );
 }
 
-// ============ STEP COMPONENTS ============
+// STEP COMPONENTS
 
 // Step 0: Contact Info (all fields on same screen)
 function ContactInfoStep({

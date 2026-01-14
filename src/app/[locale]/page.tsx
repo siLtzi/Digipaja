@@ -13,7 +13,6 @@ const BASE_URL = "https://digipajaoulu.fi";
 // Disable caching for this page to always fetch fresh Sanity data
 export const dynamic = 'force-dynamic';
 
-// --- DYNAMIC METADATA GENERATION ---
 export async function generateMetadata({
   params,
 }: {
@@ -239,7 +238,6 @@ function JsonLd({ locale }: { locale: string }) {
   );
 }
 
-// --- MAIN PAGE COMPONENT ---
 export default async function HomePage({
   params,
 }: {

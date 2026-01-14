@@ -33,7 +33,6 @@ export default function WhyUsContent({
   const horizontalRef = useRef<HTMLDivElement>(null);
   const finalCardRef = useRef<HTMLDivElement>(null);
 
-  // Separate regular cards from highlight card (last one)
   const regularCards = cards.slice(0, -1);
   const highlightCard = cards[cards.length - 1];
 
@@ -45,12 +44,9 @@ export default function WhyUsContent({
       const finalCard = finalCardRef.current;
       if (!horizontal) return;
 
-      // Calculate the total width to scroll (just the cards, no extra space)
       const totalWidth = horizontal.scrollWidth - window.innerWidth;
 
-      // Only create scroll trigger if there's content to scroll
       if (totalWidth > 0) {
-        // Horizontal scroll timeline
         gsap.to(horizontal, {
           x: -totalWidth,
           ease: "none",
@@ -59,13 +55,12 @@ export default function WhyUsContent({
             pin: true,
             start: "top top",
             end: () => `+=${totalWidth}`,
-            scrub: 0.3, // Faster scrub for quick scrolling
+            scrub: 0.3,
             anticipatePin: 1,
           },
         });
       }
 
-      // Final card reveal animation (separate scroll trigger)
       if (finalCard) {
         gsap.fromTo(finalCard, 
           { 
@@ -87,7 +82,6 @@ export default function WhyUsContent({
           }
         );
 
-        // Glow pulse animation
         gsap.fromTo(".final-glow",
           { scale: 0.5, opacity: 0 },
           {
@@ -180,7 +174,6 @@ export default function WhyUsContent({
   );
 }
 
-// --- HORIZONTAL CARD (Big cards for sideways scroll) ---
 function HorizontalCard({
   card,
   index,
@@ -228,7 +221,6 @@ function HorizontalCard({
   );
 }
 
-// --- FINAL CARD (Dramatic reveal at end) ---
 function FinalCard({
   card,
   index,
@@ -275,7 +267,6 @@ function FinalCard({
   );
 }
 
-// --- ICON COMPONENT ---
 function CardIcon({ icon, className }: { icon: string; className?: string }) {
   const baseClass = className || "w-6 h-6";
   

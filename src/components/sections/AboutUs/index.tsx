@@ -4,7 +4,6 @@ import dynamic from "next/dynamic";
 
 const AboutUsContent = dynamic(() => import("./ContentV2"));
 
-// --- TYPES FOR MESSAGES FILE ---
 type ValueItem = {
   title: string;
   description: string;
@@ -45,7 +44,6 @@ type MessagesFile = {
   aboutUs: AboutUsMessages;
 };
 
-// --- TYPES FOR SANITY SETTINGS ---
 type AboutUsSettings = {
   // Hero
   aboutUsEyebrow_fi?: string | null;

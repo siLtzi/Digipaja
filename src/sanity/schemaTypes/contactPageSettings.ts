@@ -10,7 +10,7 @@ export default defineType({
     { name: "formOptions", title: "Form Options" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     // Hero Section
     defineField({
       name: "heroEyebrow_fi",
@@ -395,7 +395,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     // Hero Section
     defineField({
       name: "heroEyebrow_en",
@@ -780,7 +780,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== FORM OPTIONS ====================
+    // FORM OPTIONS
     // Section Numbers
     defineField({
       name: "sectionContactNumber",

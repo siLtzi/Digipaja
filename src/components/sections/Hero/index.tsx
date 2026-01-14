@@ -2,7 +2,6 @@ import { sanityClient } from "@/sanity/config";
 import { heroSettingsQuery } from "@/sanity/queries";
 import HeroContent from "./Content";
 
-// --- TYPES FOR MESSAGES FILE ---
 type HeroMessages = {
   eyebrow: string;
   titleStart: string;
@@ -17,7 +16,6 @@ type MessagesFile = {
   hero: HeroMessages;
 };
 
-// --- TYPES FOR SANITY SETTINGS ---
 type HeroSettings = {
   heroEyebrow_fi?: string | null;
   heroEyebrow_en?: string | null;

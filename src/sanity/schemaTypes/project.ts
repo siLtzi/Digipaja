@@ -12,7 +12,7 @@ export default defineType({
     { name: "metrics", title: "Metrics & Scores" },
   ],
   fields: [
-    // ==================== PROJECT DETAILS ====================
+    // PROJECT DETAILS
     defineField({
       name: "title",
       title: "Project Title",
@@ -80,7 +80,7 @@ export default defineType({
       group: "details",
     }),
 
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "description_fi",
       title: "Short Description (FI)",
@@ -129,7 +129,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "description_en",
       title: "Short Description (EN)",
@@ -181,7 +181,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== MEDIA ====================
+    // MEDIA
     defineField({
       name: "mainImage",
       title: "Main Image (Desktop)",
@@ -207,7 +207,7 @@ export default defineType({
       group: "media",
     }),
 
-    // ==================== METRICS ====================
+    // METRICS
     defineField({
       name: "metrics",
       title: "Project Metrics",

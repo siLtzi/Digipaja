@@ -52,9 +52,9 @@ l 0.0988,0.15994 1.16152,-0.11114
 c 0.63884,-0.0611 1.89407,-0.24899 2.78938,-0.41746
 z`] 
 
-// ======================
+
 //  WORDMARK: DIGIPAJA
-// ======================
+
 
 export const DIGIPAJA_WORDMARK_LETTERS: LetterPaths[] = [
   {
@@ -181,9 +181,9 @@ z`
   },
 ];
 
-// ======================
+
 //  SUBTEXT: OULU
-// ======================
+
 
 export const DIGIPAJA_OULU_LETTERS: LetterPaths[] = [
   {

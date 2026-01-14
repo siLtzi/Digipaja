@@ -18,9 +18,6 @@ export default function LogoMark() {
   const containerRef = useRef<SVGSVGElement>(null);
   const iconRef = useRef<SVGGElement>(null);
 
-  // ================================
-  //      ENTRANCE ANIMATION
-  // ================================
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
@@ -59,9 +56,6 @@ export default function LogoMark() {
     );
   }, { scope: containerRef });
 
-  // ================================
-  //     HOVER: Simple glow effect
-  // ================================
   const handleMouseEnter = () => {
     gsap.to(iconRef.current, {
       scale: 1.05,

@@ -77,7 +77,6 @@ export default function AboutUsContent({
     () => {
       if (typeof window === "undefined") return;
 
-      // Hero animations
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".about-hero",
@@ -124,7 +123,6 @@ export default function AboutUsContent({
           "-=0.5"
         );
 
-      // Stats animation with counter effect
       gsap.fromTo(
         ".stat-item",
         { y: 60, opacity: 0, scale: 0.9 },
@@ -143,7 +141,6 @@ export default function AboutUsContent({
         }
       );
 
-      // Mission section
       const missionTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".mission-section",
@@ -171,7 +168,6 @@ export default function AboutUsContent({
           "-=0.6"
         );
 
-      // Values animation
       gsap.fromTo(
         ".value-card",
         { y: 40, opacity: 0, rotateX: -15 },
@@ -190,7 +186,6 @@ export default function AboutUsContent({
         }
       );
 
-      // Team cards animation
       gsap.fromTo(
         ".team-card",
         { y: 100, opacity: 0, scale: 0.95 },
@@ -209,7 +204,6 @@ export default function AboutUsContent({
         }
       );
 
-      // Floating animation for decorative elements
       gsap.to(".float-element", {
         y: -15,
         duration: 3,
@@ -387,7 +381,6 @@ export default function AboutUsContent({
   );
 }
 
-// ==================== TEAM CARD COMPONENT ====================
 function TeamCard({
   member,
   stack,

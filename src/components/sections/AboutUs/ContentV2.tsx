@@ -90,49 +90,40 @@ export default function AboutUsContent({
       const isMobile = window.innerWidth < 768;
 
       if (isMobile) {
-        // MOBILE: Sequential animations on load, no scroll trigger waiting
-        // Everything animates immediately when component mounts
         const mobileTl = gsap.timeline({
           defaults: { ease: "power3.out" },
-          delay: 0.3, // <-- Adjust this value to make animations start later (in seconds)
         });
 
-        // 1. Laser beams appear first (quick)
         mobileTl
           .fromTo(
             ".laser-beam",
             { scaleX: 0, opacity: 0 },
             { scaleX: 1, opacity: 1, duration: 0.3, stagger: 0.05, ease: "expo.out" }
           )
-          // 2. Hero content (text) appears
           .fromTo(
             ".hero-content",
             { y: 20, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.4 },
             "-=0.1"
           )
-          // 3. Team photo appears
           .fromTo(
             ".team-photo-group",
             { y: 30, opacity: 0, scale: 0.98 },
             { y: 0, opacity: 1, scale: 1, duration: 0.4 },
             "-=0.2"
           )
-          // 4. Team container expands
           .fromTo(
             ".team-container",
             { scaleX: 0, opacity: 0 },
             { scaleX: 1, opacity: 1, duration: 0.35, ease: "power2.inOut" },
             "-=0.1"
           )
-          // 5. Container laser beams
           .fromTo(
             [".container-laser-blur", ".container-laser-line", ".container-laser-highlight"],
             { scaleX: 0, opacity: 0 },
             { scaleX: 1, opacity: 1, duration: 0.25, stagger: 0.03, ease: "expo.out" },
             "-=0.2"
           )
-          // 6. Team content fades in
           .fromTo(
             ".team-content",
             { y: 10, opacity: 0 },
@@ -143,13 +134,7 @@ export default function AboutUsContent({
         return;
       }
 
-      // DESKTOP: Original scroll-triggered animations
       const heroTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".about-hero",
-          start: "top 90%",
-          toggleActions: "play none none reverse",
-        },
         defaults: { ease: "power3.out" },
       });
 
@@ -172,24 +157,21 @@ export default function AboutUsContent({
           "-=0.2"
         );
 
-      // Team section timeline - container expands first, then header + image pop up together
       const teamTl = gsap.timeline({
         scrollTrigger: {
           trigger: ".team-container",
-          start: "top 98%",
+          start: "top bottom+=600px",
           toggleActions: "play none none reverse",
         },
         defaults: { ease: "power3.out" },
       });
 
       teamTl
-        // Container expands from center first
         .fromTo(
           ".team-container",
           { scaleX: 0, opacity: 0 },
           { scaleX: 1, opacity: 1, duration: 0.4, ease: "power2.inOut" }
         )
-        // Laser beam glow animates in
         .fromTo(
           ".container-laser-blur",
           { scaleX: 0, opacity: 0 },
@@ -208,21 +190,18 @@ export default function AboutUsContent({
           { scaleX: 1, opacity: 0.6, duration: 0.3, ease: "expo.out" },
           "-=0.25"
         )
-        // Header text pops up from the left
         .fromTo(
           ".hero-content",
           { y: 40, opacity: 0 },
           { y: 0, opacity: 1, duration: 0.5, ease: "back.out(1.2)" },
           "-=0.1"
         )
-        // Image rises up from the right at the same time
         .fromTo(
           ".team-photo-group",
           { y: 60, opacity: 0, scale: 0.95 },
           { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.2)" },
-          "<" // same time as header
+          "<"
         )
-        // Team content fades in after
         .fromTo(
           ".team-content",
           { y: 15, opacity: 0 },
@@ -233,10 +212,6 @@ export default function AboutUsContent({
     { scope: containerRef }
   );
 
-  // Sorting team to have Jouko first, Samuli second based on name or role if possible
-  // Assuming the array order is roughly correct or we find them. 
-  // In fi.json, Jouko is listed, Samuli is listed.
-  // The design specifically puts Jouko on Left, Samuli on Right.
   const jouko = team.find(m => m.name.toLowerCase().includes('jouko')) || team[1];
   const samuli = team.find(m => m.name.toLowerCase().includes('samuli')) || team[0];
 
@@ -274,10 +249,10 @@ export default function AboutUsContent({
 
       {/* === HERO SECTION: Text Left, Image Right === */}
       <div className="relative z-10 mx-auto max-w-7xl px-6 about-hero">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4 items-end">
           
           {/* LEFT: Text Content */}
-          <div className="hero-content flex flex-col gap-4">
+          <div className="hero-content flex flex-col gap-4 pb-8 lg:pb-12">
             <span
               style={goldmanStyle}
               className="text-[#ff8a3c] text-[11px] sm:text-[13px] uppercase tracking-[0.25em] font-semibold"

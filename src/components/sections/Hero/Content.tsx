@@ -60,7 +60,6 @@ export default function HeroContent({
   const pathname = usePathname();
   const locale = pathname?.startsWith("/en") ? "en" : "fi";
   
-  // === 1. MAIN ENTRANCE ANIMATION ===
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
@@ -71,7 +70,6 @@ export default function HeroContent({
     );
   }, { scope: containerRef });
 
-  // === 2. ROTATING WORDS ANIMATION ===
   useEffect(() => {
     if (!rotatingWords || rotatingWords.length === 0) return;
     
@@ -104,7 +102,6 @@ export default function HeroContent({
     return () => clearInterval(interval);
   }, [rotatingWords]);
 
-  // === 3. TECH STACK HOVER ANIMATIONS ===
   useEffect(() => {
     const techStack = techStackRef.current;
     if (!techStack) return;
@@ -174,7 +171,6 @@ export default function HeroContent({
     return () => cleanups.forEach(fn => fn());
   }, []);
 
-  // === 3. TOGGLE TECH STACK ANIMATION ===
   const toggleStack = () => {
     const techStack = techStackRef.current;
     const button = stackButtonRef.current;
@@ -182,6 +178,8 @@ export default function HeroContent({
 
     const items = gsap.utils.toArray<HTMLElement>(techStack.querySelectorAll('.tech-item'));
     const layers = button.querySelectorAll('.stack-layer');
+    const backdrop = techStack.querySelector('.stack-backdrop');
+    const container = techStack.querySelector('.stack-container');
 
     if (!isStackOpen) {
       // OPEN animation
@@ -193,18 +191,30 @@ export default function HeroContent({
       gsap.to(layers[2], { y: 8, duration: 0.3, ease: 'back.out(2)' });
       
       // Show the tech stack container
-      gsap.set(techStack, { display: 'flex', opacity: 0 });
-      gsap.to(techStack, { opacity: 1, duration: 0.3 });
+      gsap.set(techStack, { display: 'flex' });
       
-      // Animate each tech item flying in from the left (where the button is)
+      // Fade in backdrop (mobile only)
+      if (backdrop) {
+        gsap.fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+      }
+      
+      // Slide in container (mobile only)
+      if (container) {
+        gsap.fromTo(container, 
+          { y: 50, opacity: 0 }, 
+          { y: 0, opacity: 1, duration: 0.4, ease: 'back.out(1.2)' }
+        );
+      }
+      
+      // Animate each tech item
       items.forEach((item, i) => {
         gsap.fromTo(item,
           { 
-            x: -600, 
-            y: 100,
+            x: window.innerWidth < 1024 ? 0 : -600, 
+            y: window.innerWidth < 1024 ? 20 : 100,
             opacity: 0, 
-            scale: 0.2,
-            rotation: -30
+            scale: window.innerWidth < 1024 ? 0.9 : 0.2,
+            rotation: window.innerWidth < 1024 ? 0 : -30
           },
           { 
             x: 0, 
@@ -212,8 +222,8 @@ export default function HeroContent({
             opacity: 1, 
             scale: 1,
             rotation: 0,
-            duration: 0.6,
-            delay: i * 0.08,
+            duration: 0.5,
+            delay: i * 0.06,
             ease: 'back.out(1.2)'
           }
         );
@@ -227,25 +237,30 @@ export default function HeroContent({
       gsap.to(layers[1], { y: 0, duration: 0.3, ease: 'power2.inOut' });
       gsap.to(layers[2], { y: 0, duration: 0.3, ease: 'power2.inOut' });
       
-      // Animate items flying back to the button
+      // Animate items
       items.forEach((item, i) => {
         gsap.to(item, { 
-          x: -600, 
-          y: 100,
+          y: 20,
           opacity: 0, 
-          scale: 0.2,
-          rotation: -30,
-          duration: 0.4,
-          delay: (items.length - 1 - i) * 0.04,
-          ease: 'power3.in'
+          scale: 0.9,
+          duration: 0.3,
+          delay: (items.length - 1 - i) * 0.03,
+          ease: 'power2.in'
         });
       });
       
+      // Fade out backdrop and container
+      if (backdrop) {
+        gsap.to(backdrop, { opacity: 0, duration: 0.3, delay: 0.2 });
+      }
+      if (container) {
+        gsap.to(container, { y: 30, opacity: 0, duration: 0.3, delay: 0.1 });
+      }
+      
       // Hide container after animation
       gsap.to(techStack, { 
-        opacity: 0, 
-        duration: 0.2, 
-        delay: 0.25,
+        duration: 0.01, 
+        delay: 0.5,
         onComplete: () => { gsap.set(techStack, { display: 'none' }); }
       });
     }
@@ -420,47 +435,78 @@ export default function HeroContent({
           </div>
         </div>
 
-        {/* Tech Stack - positioned on the right side of hero */}
+        {/* Tech Stack - Modal on mobile, sidebar on desktop */}
         <div 
           ref={techStackRef}
-          className="hidden absolute right-8 top-1/2 -translate-y-1/2 lg:right-16 xl:right-24 flex-col items-center gap-5"
+          className="hidden fixed inset-0 z-50 lg:absolute lg:inset-auto lg:right-16 lg:top-1/2 lg:-translate-y-1/2 xl:right-24"
         >
-          {STACK_ICONS.map((tech, idx) => (
-            <div
-              key={`${tech.name}-${idx}`}
-              className="tech-item group/tech cursor-default select-none relative flex items-center gap-5 outline-none"
+          {/* Backdrop - mobile only */}
+          <div 
+            className="stack-backdrop absolute inset-0 bg-black/80 backdrop-blur-sm lg:hidden"
+            onClick={toggleStack}
+          />
+          
+          {/* Container - modal on mobile, no container on desktop */}
+          <div className="stack-container absolute inset-x-4 top-1/2 -translate-y-1/2 max-h-[80vh] overflow-y-auto rounded-lg border border-[#ff8a3c]/30 bg-[#08090C]/95 p-6 backdrop-blur-md lg:static lg:inset-auto lg:transform-none lg:max-h-none lg:overflow-visible lg:rounded-none lg:border-none lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+            {/* Close button - mobile only */}
+            <button
+              onClick={toggleStack}
+              className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-[#ff8a3c]/30 bg-[#ff8a3c]/10 text-[#ff8a3c] transition-colors hover:bg-[#ff8a3c]/20 lg:hidden"
+              aria-label="Close"
             >
-              {/* Glow behind */}
-              <span className="tech-glow pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(255,138,60,0.35)_0%,transparent_60%)] blur-md opacity-0" />
-
-              <div className="tech-icon relative z-10 flex h-16 w-16 items-center justify-center">
-                <Image
-                  src={tech.src}
-                  alt={tech.name}
-                  width={56}
-                  height={56}
-                  className={`object-contain ${tech.invert ? 'invert brightness-100' : ''}`}
-                  draggable={false}
-                />
-              </div>
-
-              {/* Name and description on the right */}
-              <div className="flex flex-col items-start gap-1">
-                <span
-                  className="tech-label cursor-default text-lg font-bold text-white"
-                  style={{ fontFamily: "var(--font-goldman)" }}
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Title - mobile only */}
+            <h3 
+              className="mb-6 text-xl font-bold uppercase tracking-wider text-[#ff8a3c] lg:hidden"
+              style={{ fontFamily: "var(--font-goldman)" }}
+            >
+              Tech Stack
+            </h3>
+            
+            {/* Tech items */}
+            <div className="flex flex-col items-start gap-5 lg:items-center">
+              {STACK_ICONS.map((tech, idx) => (
+                <div
+                  key={`${tech.name}-${idx}`}
+                  className="tech-item group/tech relative flex w-full items-center gap-5 outline-none lg:w-auto lg:cursor-default lg:select-none"
                 >
-                  {tech.name}
-                </span>
-                <span className="text-sm text-zinc-400 max-w-[200px]">
-                  {tech.desc}
-                </span>
-              </div>
+                  {/* Glow behind - desktop only */}
+                  <span className="tech-glow pointer-events-none absolute left-0 top-1/2 hidden h-24 w-24 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,138,60,0.35)_0%,transparent_60%)] opacity-0 blur-md lg:block" />
 
-              {/* Underline draws in on hover */}
-              <span className="tech-underline pointer-events-none absolute bottom-0 left-0 h-[2px] w-16 bg-gradient-to-r from-[#ff8a3c] to-transparent opacity-90" />
+                  <div className="tech-icon relative z-10 flex h-14 w-14 shrink-0 items-center justify-center lg:h-16 lg:w-16">
+                    <Image
+                      src={tech.src}
+                      alt={tech.name}
+                      width={56}
+                      height={56}
+                      className={`object-contain ${tech.invert ? 'invert brightness-100' : ''}`}
+                      draggable={false}
+                    />
+                  </div>
+
+                  {/* Name and description */}
+                  <div className="flex flex-col items-start gap-1">
+                    <span
+                      className="tech-label text-base font-bold text-white lg:text-lg lg:cursor-default"
+                      style={{ fontFamily: "var(--font-goldman)" }}
+                    >
+                      {tech.name}
+                    </span>
+                    <span className="text-sm text-zinc-400 max-w-[280px] lg:max-w-[200px]">
+                      {tech.desc}
+                    </span>
+                  </div>
+
+                  {/* Underline - desktop only */}
+                  <span className="tech-underline pointer-events-none absolute bottom-0 left-0 hidden h-[2px] w-16 bg-gradient-to-r from-[#ff8a3c] to-transparent opacity-90 lg:block" />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

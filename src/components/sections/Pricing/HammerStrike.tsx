@@ -97,7 +97,6 @@ export const HammerStrike = forwardRef<HammerStrikeHandle, HammerStrikeProps>(
               duration: 0.1,
               ease: "power4.in",
               onComplete: () => {
-            // ---- IMPORTANT: disable CSS transition on the button during the hit ----
             const prevTransition = (targetEl as HTMLElement).style.transition;
             (targetEl as HTMLElement).style.transition = "none";
 
@@ -177,7 +176,6 @@ export const HammerStrike = forwardRef<HammerStrikeHandle, HammerStrikeProps>(
               (targetEl as HTMLElement).style.willChange = prevWillChange;
             });
 
-            // ---- SPARKS ----
             const sparks = gsap.utils.toArray(sparksEl.children);
             gsap.set(sparks, { x: 0, y: 0, opacity: 1, scale: 1 });
 

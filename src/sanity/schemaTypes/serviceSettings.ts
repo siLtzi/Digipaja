@@ -9,7 +9,7 @@ export default defineType({
     { name: "english", title: "English Content" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "eyebrow_fi",
       title: "Eyebrow (FI)",
@@ -30,7 +30,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "eyebrow_en",
       title: "Eyebrow (EN)",

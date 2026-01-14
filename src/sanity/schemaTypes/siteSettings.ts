@@ -12,7 +12,7 @@ export default defineType({
     { name: "social", title: "Social Media" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "footerTagline_fi",
       title: "Footer Tagline (FI)",
@@ -94,7 +94,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "footerTagline_en",
       title: "Footer Tagline (EN)",
@@ -176,7 +176,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== COMPANY INFO ====================
+    // COMPANY INFO
     defineField({
       name: "companyName",
       title: "Company Name",
@@ -220,7 +220,7 @@ export default defineType({
       group: "company",
     }),
 
-    // ==================== NAVIGATION ====================
+    // NAVIGATION
     defineField({
       name: "navItems",
       title: "Navigation Items",
@@ -327,7 +327,7 @@ export default defineType({
       ],
     }),
 
-    // ==================== SOCIAL MEDIA ====================
+    // SOCIAL MEDIA
     defineField({
       name: "socialLinks",
       title: "Social Media Links",

@@ -11,7 +11,7 @@ export default defineType({
     { name: "metrics", title: "Metrics Section" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "heroEyebrow_fi",
       title: "Eyebrow (FI)",
@@ -70,7 +70,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "heroEyebrow_en",
       title: "Eyebrow (EN)",
@@ -125,7 +125,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== MEDIA ====================
+    // MEDIA
     defineField({
       name: "heroDesktopVideo",
       title: "Hero Video (Desktop)",
@@ -145,7 +145,7 @@ export default defineType({
       group: "media",
     }),
 
-    // ==================== METRICS SECTION ====================
+    // METRICS SECTION
     defineField({
       name: "metricsLabel",
       title: "Metrics Section Label",

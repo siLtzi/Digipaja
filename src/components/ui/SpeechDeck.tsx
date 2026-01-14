@@ -14,9 +14,6 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, SplitText, ScrambleTextPlugin);
 }
 
-/** =========================
- * Types
- * ========================= */
 export type SpeechBeatAnim =
   | "split-reveal"
   | "scramble"
@@ -47,9 +44,6 @@ type SpeechDeckProps = {
   cta: { titleHtml: string; body: string };
 };
 
-/** =========================
- * Helpers
- * ========================= */
 function normalizeAnim(input: string | undefined | null): SpeechBeatAnim {
   const v = (input ?? "")
     .trim()
@@ -109,9 +103,6 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-/** =========================
- * Inline SVG loader (inline = animatable)
- * ========================= */
 function InlineSvg({
   src,
   className,
@@ -154,9 +145,6 @@ function InlineSvg({
   );
 }
 
-/** =========================
- * Component
- * ========================= */
 export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
   const container = useRef<HTMLDivElement>(null);
   const spineRef = useRef<HTMLDivElement>(null);
@@ -173,7 +161,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
     () => {
       ScrollTrigger.config({ ignoreMobileResize: true });
 
-      // Laser progress line (spine height)
       if (progressBarRef.current && spineRef.current) {
         gsap.fromTo(
           progressBarRef.current,
@@ -209,7 +196,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
         const imgWrap = section.querySelector<HTMLElement>("[data-role='image-wrap']");
         const imgInner = section.querySelector<HTMLElement>("[data-role='image-inner']");
 
-        // initial states
         gsap.set([title, body], { autoAlpha: 0 });
         gsap.set(body, { y: 26 });
 
@@ -233,7 +219,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
           gsap.set(imgInner, { y: 18, scale: 1.06 });
         }
 
-        // SVG prep
         let canDrawSvg = false;
         if (svg) {
           const shapes = svg.querySelectorAll<SVGGraphicsElement>(
@@ -261,11 +246,9 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
           },
         });
 
-        // base: node + brackets
         tl.to(node, { scale: 1, autoAlpha: 1, duration: 0.32, ease: "back.out(1.7)" })
           .to(brackets, { scale: 1, autoAlpha: 1, duration: 0.32, stagger: 0.08 }, "<0.06");
 
-        // icon draw/pop
         if (svg && canDrawSvg) {
           const shapes = svg.querySelectorAll<SVGGraphicsElement>(
             "path, circle, rect, line, polyline, polygon"
@@ -288,14 +271,12 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
           );
         }
 
-        // image reveal
         if (imgWrap && imgInner) {
           tl.to(imgWrap, { autoAlpha: 1, duration: 0.01 }, "<")
             .to(imgWrap, { clipPath: "inset(0 0 0% 0 round 28px)", duration: 0.95, ease: "expo.out" }, "<0.08")
             .to(imgInner, { y: 0, scale: 1, duration: 1.15, ease: "power3.out" }, "<0.05");
         }
 
-        // text
         if (!title || !body) return;
 
         if (reducedMotion) {
@@ -410,7 +391,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
             .to(split.lines, { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.12, ease: "power3.out" }, "<0.05")
             .to(body, { autoAlpha: 1, y: 0, duration: 0.6 }, "<0.1");
         } else {
-          // wipe-up default
           tl.fromTo(
             title,
             { autoAlpha: 0, y: 30, clipPath: "inset(0 0 100% 0)" },
@@ -437,21 +417,13 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
     { scope: container, dependencies: [normalized, reducedMotion] }
   );
 
-  /** Layout notes:
-   * - Full-width with clamped gutter
-   * - 12-col grid per beat
-   * - spine sits around center columns
-   */
   return (
     <div
       ref={container}
       className="relative w-full px-[clamp(20px,6vw,110px)] py-24 md:py-28"
     >
-      {/* Spine wrapper: the vertical track is full height of beats */}
       <div ref={spineRef} className="relative">
-        {/* Track (full height) */}
         <div className="pointer-events-none absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-white/10 md:-translate-x-1/2" />
-        {/* Active laser */}
         <div
           ref={progressBarRef}
           className="pointer-events-none absolute left-6 md:left-1/2 top-0 w-0.5 bg-[#ff8a3c] md:-translate-x-1/2 shadow-[0_0_22px_rgba(255,138,60,0.75)] z-10"
@@ -467,13 +439,11 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
               data-anim={beat._anim}
               data-side={right ? "right" : "left"}
             >
-              {/* Node on spine */}
               <div
                 data-role="node"
                 className="absolute left-6 md:left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[#ff8a3c] bg-[#050609] z-20"
               />
 
-              {/* Content block: spans most of the width */}
               <div
                 className={[
                   "col-span-12",
@@ -482,7 +452,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
                   "relative",
                 ].join(" ")}
               >
-                {/* Media row (icon / lottie / image) */}
                 <div
                   className={[
                     "mb-10 flex items-center gap-6",
@@ -498,7 +467,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
                   </div>
                 </div>
 
-                {/* Big title */}
                 <h2
                   data-role="title"
                   className="text-5xl md:text-7xl xl:text-8xl font-bold text-white leading-[1.02] tracking-tight"
@@ -507,7 +475,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
                   {beat.title}
                 </h2>
 
-                {/* underline (for underline-sweep) */}
                 <div
                   data-role="underline"
                   className={[
@@ -537,7 +504,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
                   {beat.body}
                 </p>
 
-                {/* Optional image (wide, cinematic) */}
                 {beat.image && (
                   <div
                     data-role="image-wrap"
@@ -562,7 +528,6 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
                   </div>
                 )}
 
-                {/* Brackets */}
                 <div
                   data-role="bracket"
                   className={[
@@ -579,15 +544,13 @@ export default function SpeechDeck({ items, cta }: SpeechDeckProps) {
                 />
               </div>
 
-              {/* Optional: a faint “counterweight” empty column to keep balance.
-                  We keep the layout breathable. */}
+
               <div className="hidden md:block md:col-span-5 md:col-start-1" />
             </section>
           );
         })}
       </div>
 
-      {/* CTA (full width, centered) */}
       <section className="beat-section relative mt-10 min-h-[70vh] flex flex-col items-center justify-center text-center">
         <h2
           data-role="title"

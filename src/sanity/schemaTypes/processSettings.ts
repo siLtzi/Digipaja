@@ -10,7 +10,7 @@ export default defineType({
     { name: "steps", title: "Process Steps" },
   ],
   fields: [
-    // ==================== FINNISH CONTENT ====================
+    // FINNISH CONTENT
     defineField({
       name: "processEyebrow_fi",
       title: "Eyebrow (FI)",
@@ -31,7 +31,7 @@ export default defineType({
       group: "finnish",
     }),
 
-    // ==================== ENGLISH CONTENT ====================
+    // ENGLISH CONTENT
     defineField({
       name: "processEyebrow_en",
       title: "Eyebrow (EN)",
@@ -52,7 +52,7 @@ export default defineType({
       group: "english",
     }),
 
-    // ==================== STEPS ====================
+    // STEPS
     defineField({
       name: "steps",
       title: "Process Steps",

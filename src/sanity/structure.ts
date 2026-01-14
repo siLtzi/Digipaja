@@ -5,7 +5,7 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Digipaja CMS')
     .items([
-      // ==================== SITE SETTINGS ====================
+      // SITE SETTINGS
       S.listItem()
         .title('⚙️ Site Settings')
         .child(
@@ -17,7 +17,7 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // ==================== PAGE SECTIONS ====================
+      // PAGE SECTIONS
       S.listItem()
         .title('🏠 Homepage Sections')
         .child(
@@ -93,7 +93,7 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // ==================== CONTENT COLLECTIONS ====================
+      // CONTENT COLLECTIONS
       S.listItem()
         .title('📁 Projects')
         .child(S.documentTypeList('project').title('Projects')),
@@ -108,7 +108,7 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // ==================== CONTACT PAGE ====================
+      // CONTACT PAGE
       S.listItem()
         .title('📬 Contact Page')
         .child(
