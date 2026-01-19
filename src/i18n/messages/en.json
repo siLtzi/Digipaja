@@ -442,6 +442,11 @@
       "message": "We have received your message and will get back to you as soon as possible, usually within 1-2 business days.",
       "backToHome": "Back to home page"
     },
+    "error": {
+      "title": "Submission failed",
+      "message": "Your message could not be sent. Please try again or contact us directly via email.",
+      "retry": "Try again"
+    },
     "slider": {
       "pageMin": "1 page",
       "pageMid": "15 pages",

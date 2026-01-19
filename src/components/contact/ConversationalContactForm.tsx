@@ -26,7 +26,7 @@ type FormData = {
   message: string;
   // Step 6: Additional info
   currentWebsite: string;
-  competitors: string;
+  competitorLinks: string[];
   referralSource: string;
   budget: string;
 };
@@ -150,6 +150,7 @@ export type Translations = {
     submit: string;
     sending: string;
     optional: string;
+    addLink?: string;
   };
   success: {
     title: string;
@@ -217,8 +218,11 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [preSelectedPackage, setPreSelectedPackage] = useState<string | null>(null);
   const [showPackageSelector, setShowPackageSelector] = useState(false);
+  const [honeypot, setHoneypot] = useState(""); // Spam protection
+  const [formLoadTime] = useState(() => Date.now()); // Track when form was loaded
 
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -237,7 +241,7 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
     selectedFeatures: [],
     message: "",
     currentWebsite: "",
-    competitors: "",
+    competitorLinks: [""],
     referralSource: "",
     budget: "",
   });
@@ -375,10 +379,58 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
   const handleSubmit = useCallback(async () => {
     if (!canProceed()) return;
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    animateTransition(1, () => setIsSubmitted(true));
-  }, [canProceed, animateTransition]);
+    setSubmitError(null);
+    
+    try {
+      // Find the selected package name for the email
+      const selectedPkg = t.packages.find(p => p.id === formData.selectedPackage);
+      
+      // Filter out empty links
+      const validLinks = formData.competitorLinks.filter(link => link.trim() !== '');
+      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          projectType: selectedPkg?.name || formData.selectedPackage,
+          budget: formData.budget,
+          message: formData.message,
+          // Additional fields for context
+          contactMethod: formData.contactMethod,
+          selectedFeatures: formData.selectedFeatures,
+          currentWebsite: formData.currentWebsite,
+          referenceLinks: validLinks,
+          referralSource: formData.referralSource,
+          // Spam protection
+          _honeypot: honeypot,
+          _timestamp: formLoadTime.toString(),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Viestin lähetys epäonnistui');
+      }
+
+      animateTransition(1, () => setIsSubmitted(true));
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? error.message 
+          : 'Viestin lähetys epäonnistui. Yritä uudelleen.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [canProceed, animateTransition, formData, t.packages, honeypot, formLoadTime]);
 
   // Handle Enter key
   useEffect(() => {
@@ -530,6 +582,40 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
           
           {/* Form content */}
           <div ref={contentRef} className="flex-1 max-w-4xl">
+            {/* Honeypot field - hidden from users, only bots fill this */}
+            <input
+              type="text"
+              name="website_url"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              autoComplete="off"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="absolute opacity-0 pointer-events-none h-0 w-0 overflow-hidden"
+              style={{ position: 'absolute', left: '-9999px' }}
+            />
+
+            {/* Error message */}
+            {submitError && (
+              <div className="mb-6 p-4 rounded-lg border border-red-500/30 bg-red-500/10 flex items-start gap-3 anim-item">
+                <svg className="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div className="flex-1">
+                  <p className="text-red-400 text-sm font-medium">Virhe</p>
+                  <p className="text-red-300/80 text-sm mt-1">{submitError}</p>
+                </div>
+                <button
+                  onClick={() => setSubmitError(null)}
+                  className="text-red-400 hover:text-red-300 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
             {/* Step 0: Contact Info */}
             {currentStep === 0 && (
               <ContactInfoStep
@@ -547,14 +633,11 @@ export default function ConversationalContactForm({ t }: { t: Translations }) {
                 value={formData.contactMethod}
                 onChange={(v) => {
                   updateFormData("contactMethod", v);
-                  setTimeout(() => {
-                    if (!isAnimating) {
-                      animateTransition(1, () => setCurrentStep(2));
-                  }
-                }, 300);
-              }}
-            />
-          )}
+                  // Siirry seuraavaan steppiin heti valinnan jälkeen
+                  animateTransition(1, () => setCurrentStep(shouldSkipPackageStep() ? 3 : 2));
+                }}
+              />
+            )}
 
           {/* Step 2: Package Selection */}
           {currentStep === 2 && (
@@ -1216,6 +1299,27 @@ function AdditionalInfoStep({
   formData: FormData;
   updateFormData: <K extends keyof FormData>(field: K, value: FormData[K]) => void;
 }) {
+  const addLink = () => {
+    if (formData.competitorLinks.length < 5) {
+      updateFormData("competitorLinks", [...formData.competitorLinks, ""]);
+    }
+  };
+
+  const updateLink = (index: number, value: string) => {
+    const newLinks = [...formData.competitorLinks];
+    newLinks[index] = value;
+    updateFormData("competitorLinks", newLinks);
+  };
+
+  const removeLink = (index: number) => {
+    if (formData.competitorLinks.length > 1) {
+      const newLinks = formData.competitorLinks.filter((_, i) => i !== index);
+      updateFormData("competitorLinks", newLinks);
+    } else {
+      updateFormData("competitorLinks", [""]);
+    }
+  };
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="overflow-hidden">
@@ -1252,18 +1356,53 @@ function AdditionalInfoStep({
             />
           </div>
         </div>
-        <div className="overflow-hidden">
+        
+        {/* Competitor links - spans full width */}
+        <div className="overflow-hidden md:col-span-2">
           <div className="anim-item">
-            <InputField
-              label={t.competitors}
-              placeholder={t.competitorsPlaceholder}
-              value={formData.competitors}
-              onChange={(v) => updateFormData("competitors", v)}
-              optional
-              optionalLabel={tUi.optional}
-            />
+            <label className="block text-xs sm:text-sm text-zinc-400 mb-2">
+              {t.competitors}
+              <span className="text-zinc-600 ml-2">({tUi.optional})</span>
+            </label>
+            <div className="space-y-2">
+              {formData.competitorLinks.map((link, index) => (
+                <div key={index} className="flex gap-2">
+                  <input
+                    type="url"
+                    value={link}
+                    onChange={(e) => updateLink(index, e.target.value)}
+                    placeholder={t.competitorsPlaceholder}
+                    className="flex-1 bg-transparent border-b border-zinc-700 py-2 sm:py-3 text-sm sm:text-base text-white placeholder-zinc-600 focus:border-[#ff8a3c] focus:outline-none transition-colors duration-300"
+                  />
+                  {(formData.competitorLinks.length > 1 || link !== "") && (
+                    <button
+                      type="button"
+                      onClick={() => removeLink(index)}
+                      className="flex items-center justify-center w-10 h-10 text-zinc-500 hover:text-red-400 transition-colors duration-300"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            {formData.competitorLinks.length < 5 && (
+              <button
+                type="button"
+                onClick={addLink}
+                className="mt-2 flex items-center gap-2 text-sm text-zinc-400 hover:text-[#ff8a3c] transition-colors duration-300"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                {tUi.addLink || "Lisää linkki"}
+              </button>
+            )}
           </div>
         </div>
+
         <div className="overflow-hidden">
           <div className="anim-item">
             <InputField

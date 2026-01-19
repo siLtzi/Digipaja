@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -23,6 +23,21 @@ type WhyUsProps = {
   cards: Card[];
 };
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  return isMobile;
+}
+
 export default function WhyUsContent({
   eyebrow,
   title,
@@ -32,6 +47,7 @@ export default function WhyUsContent({
   const containerRef = useRef<HTMLElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
   const finalCardRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const regularCards = cards.slice(0, -1);
   const highlightCard = cards[cards.length - 1];
@@ -39,6 +55,12 @@ export default function WhyUsContent({
   useGSAP(
     () => {
       if (typeof window === "undefined") return;
+      
+      // Check window width directly to avoid timing issues
+      const isDesktop = window.innerWidth >= 768;
+      
+      // Skip horizontal scroll animation on mobile
+      if (!isDesktop) return;
 
       const horizontal = horizontalRef.current;
       const finalCard = finalCardRef.current;
@@ -98,7 +120,7 @@ export default function WhyUsContent({
         );
       }
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [isMobile] }
   );
 
   return (
@@ -111,7 +133,7 @@ export default function WhyUsContent({
       <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center justify-center">
         <div className="h-[4px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent blur-md opacity-40" />
         <div className="absolute top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent shadow-[0_0_20px_2px_rgba(255,138,60,0.6)]" />
-        <div className="absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffe8d6] to-transparent mix-blend-screen opacity-90" />
+        <div className="absolute top-0 h-[1px] w-full bg-gradient-to-r from-transparent via-[#ff8a3c] to-transparent mix-blend-screen opacity-90" />
       </div>
 
       {/* === LIGHT GRID BACKGROUND === */}
@@ -121,8 +143,8 @@ export default function WhyUsContent({
         <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ff8a3c]/5 blur-[100px]" />
       </div>
 
-      {/* === HORIZONTAL SCROLL CONTAINER === */}
-      <div className="relative z-10 min-h-screen flex flex-col justify-center py-16">
+      {/* === CONTENT CONTAINER === */}
+      <div className={`relative z-10 ${isMobile ? 'py-16' : 'min-h-screen flex flex-col justify-center py-16'}`}>
         {/* Header */}
         <div className="pb-8 px-6 flex flex-col items-center text-center">
           <span
@@ -144,29 +166,42 @@ export default function WhyUsContent({
           </p>
         </div>
 
-        {/* Horizontal scrolling cards - no extra padding */}
-        <div className="flex items-center overflow-hidden">
-          <div 
-            ref={horizontalRef}
-            className="flex gap-6 px-8 will-change-transform"
-          >
+        {/* === MOBILE: Expandable Accordion Cards === */}
+        {isMobile ? (
+          <div className="px-4 space-y-3">
             {regularCards.map((card, i) => (
-              <HorizontalCard key={i} card={card} index={i} />
+              <AccordionCard key={i} card={card} index={i} />
             ))}
           </div>
-        </div>
+        ) : (
+          /* === DESKTOP: Horizontal scrolling cards === */
+          <div className="flex items-center overflow-hidden">
+            <div 
+              ref={horizontalRef}
+              className="flex gap-6 px-8 will-change-transform"
+            >
+              {regularCards.map((card, i) => (
+                <HorizontalCard key={i} card={card} index={i} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* === FINAL HIGHLIGHT CARD - Separate section === */}
       {highlightCard && (
-        <div className="relative z-10 py-24 px-6">
+        <div className={`relative z-10 ${isMobile ? 'py-8' : 'py-24'} px-4 md:px-6`}>
           <div 
             ref={finalCardRef}
             className="max-w-2xl mx-auto relative"
           >
             {/* Glow effect */}
             <div className="final-glow absolute -inset-8 bg-[#ff8a3c] rounded-full blur-[100px] opacity-0" />
-            <FinalCard card={highlightCard} index={regularCards.length} />
+            {isMobile ? (
+              <AccordionCard card={highlightCard} index={regularCards.length} isHighlight />
+            ) : (
+              <FinalCard card={highlightCard} index={regularCards.length} />
+            )}
           </div>
         </div>
       )}
@@ -174,6 +209,105 @@ export default function WhyUsContent({
   );
 }
 
+/* === MOBILE ACCORDION CARD === */
+function AccordionCard({
+  card,
+  index,
+  isHighlight = false,
+}: {
+  card: Card;
+  index: number;
+  isHighlight?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div
+      className={`relative rounded-lg rounded-br-none border overflow-hidden transition-all duration-300 ${
+        isHighlight 
+          ? 'bg-[#0a0b10]/95 border-[#ff8a3c] shadow-[0_0_30px_-10px_rgba(255,138,60,0.4)]' 
+          : 'bg-[#0a0a0a]/95 border-[#ff8a3c]/20'
+      } ${isOpen && !isHighlight ? 'border-[#ff8a3c]/40' : ''}`}
+    >
+      {/* Background gradient when open or highlight */}
+      <div
+        className={`absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-[#ff8a3c]/10 via-transparent to-transparent transition-opacity duration-300 z-0 ${
+          isOpen || isHighlight ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+
+      {/* Header - Always visible */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="relative z-10 w-full flex items-center justify-between p-4 text-left"
+      >
+        <div className="flex items-center gap-3">
+          {/* Card Number */}
+          <span className={`text-xs font-bold ${isHighlight ? 'text-[#ff8a3c]/50' : 'text-[#ff8a3c]/30'}`}>
+            0{index + 1}
+          </span>
+          
+          {/* Title */}
+          <h3
+            style={{ fontFamily: "var(--font-goldman)" }}
+            className={`text-xl font-bold leading-tight transition-colors duration-300 ${
+              isOpen || isHighlight ? 'text-[#ff8a3c]' : 'text-white'
+            }`}
+          >
+            {card.title}
+          </h3>
+        </div>
+
+        {/* Chevron Icon */}
+        <div className={`flex-shrink-0 w-6 h-6 flex items-center justify-center transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+          <svg 
+            className={`w-4 h-4 ${isHighlight ? 'text-[#ff8a3c]' : 'text-[#ff8a3c]/60'}`}
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor" 
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+      </button>
+
+      {/* Expandable Content */}
+      <div
+        ref={contentRef}
+        className={`relative z-10 overflow-hidden transition-all duration-300 ease-out ${
+          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="px-4 pb-4 pt-0">
+          {/* Separator line */}
+          <div className={`w-full h-px mb-3 ${isHighlight ? 'bg-[#ff8a3c]/30' : 'bg-[#ff8a3c]/15'}`} />
+          
+          <p className={`text-sm leading-relaxed ${isHighlight ? 'text-zinc-200' : 'text-zinc-400'}`}>
+            {card.description}
+          </p>
+        </div>
+      </div>
+
+      {/* Corner accent */}
+      <div className={`absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 transition-colors ${
+        isHighlight ? 'border-[#ff8a3c]' : isOpen ? 'border-[#ff8a3c]/40' : 'border-[#ff8a3c]/20'
+      }`} />
+      
+      {/* Top corner accents for highlight */}
+      {isHighlight && (
+        <>
+          <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-[#ff8a3c]" />
+          <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-[#ff8a3c]" />
+        </>
+      )}
+    </div>
+  );
+}
+
+/* === DESKTOP HORIZONTAL CARD === */
 function HorizontalCard({
   card,
   index,
@@ -221,6 +355,7 @@ function HorizontalCard({
   );
 }
 
+/* === DESKTOP FINAL CARD === */
 function FinalCard({
   card,
   index,

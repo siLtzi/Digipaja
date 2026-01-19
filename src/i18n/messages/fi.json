@@ -445,6 +445,11 @@
       "message": "Olemme vastaanottaneet viestisi ja palaamme asiaan mahdollisimman pian, yleensä 1-2 arkipäivän kuluessa.",
       "backToHome": "Takaisin etusivulle"
     },
+    "error": {
+      "title": "Lähetys epäonnistui",
+      "message": "Viestiä ei voitu lähettää. Yritä uudelleen tai ota yhteyttä suoraan sähköpostilla.",
+      "retry": "Yritä uudelleen"
+    },
     "slider": {
       "pageMin": "1 sivu",
       "pageMid": "15 sivua",

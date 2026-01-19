@@ -16,6 +16,7 @@ type FormData = {
   projectType: string;
   budget: string;
   message: string;
+  referenceLinks: string[];
 };
 
 type Translations = {
@@ -47,6 +48,9 @@ type Translations = {
     subtitle: string;
     messageLabel: string;
     messagePlaceholder: string;
+    linksLabel: string;
+    linksPlaceholder: string;
+    addLink: string;
   };
   projectTypes: {
     landing: { label: string; description: string };
@@ -70,6 +74,11 @@ type Translations = {
     title: string;
     message: string;
   };
+  error?: {
+    title: string;
+    message: string;
+    retry: string;
+  };
 };
 
 const STEP_COUNT = 3;
@@ -79,6 +88,9 @@ export default function MultiStepContactForm({ t }: { t: Translations }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [honeypot, setHoneypot] = useState(""); // Spam protection - hidden field
+  const [formLoadTime] = useState(() => Date.now()); // Track when form was loaded
   const containerRef = useRef<HTMLDivElement>(null);
   const stepContainerRef = useRef<HTMLDivElement>(null);
 
@@ -90,9 +102,10 @@ export default function MultiStepContactForm({ t }: { t: Translations }) {
     projectType: "",
     budget: "",
     message: "",
+    referenceLinks: [""],
   });
 
-  const updateFormData = (field: keyof FormData, value: string) => {
+  const updateFormData = (field: keyof FormData, value: string | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -152,10 +165,38 @@ export default function MultiStepContactForm({ t }: { t: Translations }) {
   const handleSubmit = async () => {
     if (!canProceed()) return;
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    setSubmitError(null);
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          _honeypot: honeypot, // Spam protection
+          _timestamp: formLoadTime.toString(), // Time check
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Viestin lähetys epäonnistui');
+      }
+
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitError(
+        error instanceof Error 
+          ? error.message 
+          : 'Viestin lähetys epäonnistui. Yritä uudelleen.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // Entrance animation
@@ -213,6 +254,19 @@ export default function MultiStepContactForm({ t }: { t: Translations }) {
   return (
     <div ref={containerRef} className="w-full max-w-2xl mx-auto">
       <div className="form-container relative rounded-2xl border border-[#ff8a3c]/20 bg-[#0a0b10]/95 p-6 sm:p-10 backdrop-blur-xl shadow-2xl">
+        {/* Honeypot field - hidden from users, only bots fill this */}
+        <input
+          type="text"
+          name="website"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          autoComplete="off"
+          tabIndex={-1}
+          aria-hidden="true"
+          className="absolute opacity-0 pointer-events-none h-0 w-0 overflow-hidden"
+          style={{ position: 'absolute', left: '-9999px' }}
+        />
+        
         {/* Corner decorations */}
         <div className="absolute top-0 left-0 h-6 w-6 border-l-2 border-t-2 border-[#ff8a3c]/40 rounded-tl-lg" />
         <div className="absolute top-0 right-0 h-6 w-6 border-r-2 border-t-2 border-[#ff8a3c]/40 rounded-tr-lg" />
@@ -295,6 +349,29 @@ export default function MultiStepContactForm({ t }: { t: Translations }) {
             )}
           </div>
         </div>
+
+        {/* Error message */}
+        {submitError && (
+          <div className="mt-6 p-4 rounded-lg border border-red-500/30 bg-red-500/10 flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div className="flex-1">
+              <p className="text-red-400 text-sm font-medium">
+                {t.error?.title || 'Virhe'}
+              </p>
+              <p className="text-red-300/80 text-sm mt-1">{submitError}</p>
+            </div>
+            <button
+              onClick={() => setSubmitError(null)}
+              className="text-red-400 hover:text-red-300 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {/* Navigation buttons */}
         <div className="flex gap-4 mt-8 pt-6 border-t border-zinc-800">
@@ -532,9 +609,31 @@ function Step3({
   t,
 }: {
   formData: FormData;
-  updateFormData: (field: keyof FormData, value: string) => void;
+  updateFormData: (field: keyof FormData, value: string | string[]) => void;
   t: Translations["step3"];
 }) {
+  const addLink = () => {
+    if (formData.referenceLinks.length < 5) {
+      updateFormData("referenceLinks", [...formData.referenceLinks, ""]);
+    }
+  };
+
+  const updateLink = (index: number, value: string) => {
+    const newLinks = [...formData.referenceLinks];
+    newLinks[index] = value;
+    updateFormData("referenceLinks", newLinks);
+  };
+
+  const removeLink = (index: number) => {
+    if (formData.referenceLinks.length > 1) {
+      const newLinks = formData.referenceLinks.filter((_, i) => i !== index);
+      updateFormData("referenceLinks", newLinks);
+    } else {
+      // If it's the last one, just clear it
+      updateFormData("referenceLinks", [""]);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="mb-6">
@@ -555,9 +654,52 @@ function Step3({
           value={formData.message}
           onChange={(e) => updateFormData("message", e.target.value)}
           placeholder={t.messagePlaceholder}
-          rows={6}
+          rows={4}
           className="w-full rounded-lg border border-zinc-800 bg-[#050609] px-4 py-3 text-sm text-white placeholder-zinc-600 transition-all duration-300 focus:border-[#ff8a3c] focus:bg-[#0a0b10] focus:shadow-[0_0_20px_rgba(255,138,60,0.1)] focus:ring-0 focus:outline-none resize-none"
         />
+      </div>
+
+      {/* Reference Links */}
+      <div>
+        <label className="block text-[10px] font-bold uppercase tracking-wider text-zinc-500 mb-2">
+          {t.linksLabel}
+        </label>
+        <div className="space-y-2">
+          {formData.referenceLinks.map((link, index) => (
+            <div key={index} className="flex gap-2">
+              <input
+                type="url"
+                value={link}
+                onChange={(e) => updateLink(index, e.target.value)}
+                placeholder={t.linksPlaceholder}
+                className="flex-1 rounded-lg border border-zinc-800 bg-[#050609] px-4 py-2.5 text-sm text-white placeholder-zinc-600 transition-all duration-300 focus:border-[#ff8a3c] focus:bg-[#0a0b10] focus:shadow-[0_0_20px_rgba(255,138,60,0.1)] focus:ring-0 focus:outline-none"
+              />
+              {(formData.referenceLinks.length > 1 || link !== "") && (
+                <button
+                  type="button"
+                  onClick={() => removeLink(index)}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg border border-zinc-800 bg-zinc-900/50 text-zinc-500 hover:border-red-500/50 hover:text-red-400 transition-all duration-300"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+        {formData.referenceLinks.length < 5 && (
+          <button
+            type="button"
+            onClick={addLink}
+            className="mt-2 flex items-center gap-2 text-sm text-zinc-400 hover:text-[#ff8a3c] transition-colors duration-300"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            {t.addLink}
+          </button>
+        )}
       </div>
     </div>
   );

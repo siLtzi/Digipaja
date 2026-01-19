@@ -42,6 +42,9 @@ type ContactPageProps = {
       subtitle: string;
       messageLabel: string;
       messagePlaceholder: string;
+      linksLabel: string;
+      linksPlaceholder: string;
+      addLink: string;
     };
     projectTypes: {
       landing: { label: string; description: string };

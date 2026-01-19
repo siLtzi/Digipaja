@@ -26,6 +26,7 @@
     "next-sanity": "^11.6.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "resend": "^6.8.0",
     "sanity": "^4.21.0",
     "styled-components": "^6.1.19",
     "three": "^0.182.0",
