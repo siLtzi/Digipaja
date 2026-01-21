@@ -33,6 +33,8 @@ type HeroProps = {
   primaryCta: string;
   secondaryCta: string;
   banners?: Banner[];
+  heroDesktopVideo?: string | null;
+  heroMobileVideo?: string | null;
 };
 
 const STACK_ICONS = [
@@ -55,6 +57,8 @@ export default function HeroContent({
   primaryCta,
   secondaryCta,
   banners = [],
+  heroDesktopVideo,
+  heroMobileVideo,
 }: HeroProps) {
   // Refs for animation targets
   const containerRef = useRef<HTMLDivElement>(null);
@@ -422,8 +426,40 @@ export default function HeroContent({
 
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
-        {/* Particle Background Effect */}
-        <ParticleBackground />
+        {/* Video Background (takes priority if available) */}
+        {(heroDesktopVideo || heroMobileVideo) ? (
+          <>
+            {/* Desktop Video */}
+            {heroDesktopVideo && (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="hidden md:block absolute inset-0 h-full w-full object-cover"
+              >
+                <source src={heroDesktopVideo} type="video/mp4" />
+              </video>
+            )}
+            {/* Mobile Video */}
+            {heroMobileVideo && (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="md:hidden absolute inset-0 h-full w-full object-cover"
+              >
+                <source src={heroMobileVideo} type="video/mp4" />
+              </video>
+            )}
+            {/* Video overlay for better text contrast */}
+            <div className="absolute inset-0 bg-black/40" />
+          </>
+        ) : (
+          /* Particle Background Effect (fallback when no video) */
+          <ParticleBackground />
+        )}
       </div>
 
       {/* === SMOOTH AMBIENT GLOW === */}

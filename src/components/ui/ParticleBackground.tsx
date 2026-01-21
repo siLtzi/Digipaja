@@ -186,29 +186,29 @@ export default function ParticleBackground({ className = "" }: { className?: str
       {
         x: width / 2,
         y: height / 2,
-        radiusX: width * 0.48,  // Almost edge to edge
-        radiusY: 70,  // Thicker
-        alpha: 0.45,
+        radiusX: width * 0.55,  // Even wider
+        radiusY: 120,  // Much thicker
+        alpha: 0.5,
         color: THEME.lights[0],
         phase: 0,
         phaseSpeed: 0.0003,
       },
       {
         x: width / 2,
-        y: height / 2 + 10,
-        radiusX: width * 0.42,
-        radiusY: 100,
-        alpha: 0.35,
+        y: height / 2 + 15,
+        radiusX: width * 0.5,
+        radiusY: 160,
+        alpha: 0.4,
         color: THEME.lights[1],
         phase: Math.PI / 3,
         phaseSpeed: 0.00025,
       },
       {
         x: width / 2,
-        y: height / 2 - 15,
-        radiusX: width * 0.38,
-        radiusY: 55,
-        alpha: 0.28,
+        y: height / 2 - 20,
+        radiusX: width * 0.45,
+        radiusY: 90,
+        alpha: 0.32,
         color: THEME.lights[2],
         phase: Math.PI / 2,
         phaseSpeed: 0.0004,
