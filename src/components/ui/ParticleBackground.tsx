@@ -2,14 +2,13 @@
 
 import { useRef, useEffect } from "react";
 
-// Theme colors - orange palette matching site
+// Theme colors - orange palette
 const THEME = {
   particles: {
     small: "#ff8a3c",
-    medium: "#ffb347", 
+    medium: "#ffb347",
     large: "#ffd699",
   },
-  // Light beam colors - gradient from deep to light orange
   lights: ["#ff6b00", "#ff8a3c", "#ffb347"],
 };
 
@@ -34,85 +33,32 @@ interface Particle {
 interface Light {
   x: number;
   y: number;
-  width: number;
-  height: number;
+  radiusX: number;
+  radiusY: number;
   alpha: number;
   color: string;
   phase: number;
   phaseSpeed: number;
-  scaleX: number;
-  scaleY: number;
-  moveX: number;
-  moveY: number;
 }
 
 function range(min: number, max: number): number {
   return min + (max - min) * Math.random();
 }
 
-// Weighted toward center
 function weightedRandom(min: number, max: number, weight: number = 0.8): number {
   const mid = (min + max) / 2;
   const halfSpread = (max - min) / 2;
   
   if (Math.random() < weight) {
-    // Concentrated toward center with gaussian-like distribution
     const u1 = Math.random();
     const u2 = Math.random();
     const gaussian = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-    return mid + gaussian * halfSpread * 0.3;
+    return Math.min(max, Math.max(min, mid + gaussian * halfSpread * 0.3));
   }
   return min + Math.random() * (max - min);
 }
 
-// Create ultra-soft horizontal glow - no visible edges
-function createLightBeamTexture(width: number, height: number, color: string): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
-  // Much larger canvas to ensure gradient fully fades
-  const size = Math.max(width, height) * 4;
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d")!;
-  
-  const cx = size / 2;
-  const cy = size / 2;
-  
-  // Draw multiple soft layers for a very diffuse look
-  const layers = 5;
-  for (let i = 0; i < layers; i++) {
-    const layerScale = 1 - (i * 0.15);
-    const layerAlpha = 0.15 - (i * 0.025);
-    
-    ctx.save();
-    ctx.translate(cx, cy);
-    // Stretch to make elliptical (wider than tall)
-    ctx.scale(width / height * 1.5, 1);
-    
-    const radius = (size / 2) * layerScale;
-    const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius);
-    
-    // Hex alpha values
-    const a1 = Math.floor(layerAlpha * 255).toString(16).padStart(2, '0');
-    const a2 = Math.floor(layerAlpha * 0.7 * 255).toString(16).padStart(2, '0');
-    const a3 = Math.floor(layerAlpha * 0.4 * 255).toString(16).padStart(2, '0');
-    const a4 = Math.floor(layerAlpha * 0.15 * 255).toString(16).padStart(2, '0');
-    
-    gradient.addColorStop(0, color + a1);
-    gradient.addColorStop(0.3, color + a2);
-    gradient.addColorStop(0.6, color + a3);
-    gradient.addColorStop(0.85, color + a4);
-    gradient.addColorStop(1, color + "00");
-    
-    ctx.fillStyle = gradient;
-    // Fill entire canvas with gradient - no arc clipping
-    ctx.fillRect(-size, -size, size * 2, size * 2);
-    ctx.restore();
-  }
-  
-  return canvas;
-}
-
-// Create glow texture for filled particles
+// Pre-render particle glow texture
 function createGlowTexture(size: number, color: string): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
   canvas.width = size * 4;
@@ -123,15 +69,13 @@ function createGlowTexture(size: number, color: string): HTMLCanvasElement {
   const cy = canvas.height / 2;
   
   const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, size * 2);
-  gradient.addColorStop(0, color + "FF");
+  gradient.addColorStop(0, color);
   gradient.addColorStop(0.3, color + "99");
   gradient.addColorStop(0.6, color + "33");
   gradient.addColorStop(1, "transparent");
   
   ctx.fillStyle = gradient;
-  ctx.beginPath();
-  ctx.arc(cx, cy, size * 2, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   return canvas;
 }
@@ -154,25 +98,18 @@ export default function ParticleBackground({ className = "" }: { className?: str
     canvas.width = width;
     canvas.height = height;
 
-    // Pre-create textures
+    // Pre-create particle glow textures
     const glowTextureMedium = createGlowTexture(12, THEME.particles.medium);
     const glowTextureLarge = createGlowTexture(40, THEME.particles.large);
-    
-    // Light beam textures - ultra wide and soft
-    const lightTextures = [
-      createLightBeamTexture(1200, 150, THEME.lights[0]),  // Main wide beam
-      createLightBeamTexture(900, 400, THEME.lights[1]),   // Secondary glow  
-      createLightBeamTexture(500, 250, THEME.lights[2]),   // Accent
-    ];
 
-    // Initialize particles with proper distribution
+    // Initialize particles
     const particles: Particle[] = [];
     
-    // Small ring particles - 300, concentrated in horizontal band
+    // Small ring particles - 300
     for (let i = 0; i < 300; i++) {
       const initX = weightedRandom(0, width, 0.6);
-      // Concentrate in middle 50% of height
       const initY = weightedRandom(height * 0.25, height * 0.75, 0.8);
+      const baseAlpha = range(0.2, 0.45);
       
       particles.push({
         x: initX,
@@ -181,14 +118,14 @@ export default function ParticleBackground({ className = "" }: { className?: str
         initY,
         radius: range(1.5, 3),
         color: THEME.particles.small,
-        alpha: range(0, 0.1),
-        alphaMax: range(0.3, 0.5),
-        alphaDir: 1,
-        speed: range(0.0003, 0.001),
-        distance: range(2, 6),
+        alpha: baseAlpha,
+        alphaMax: baseAlpha,  // Keep alpha constant
+        alphaDir: 0,  // No flickering
+        speed: 0,
+        distance: range(5, 15),  // Larger floating distance
         fill: false,
         angle: Math.random() * Math.PI * 2,
-        angleSpeed: range(0.001, 0.004) * (Math.random() > 0.5 ? 1 : -1),
+        angleSpeed: range(0.004, 0.012) * (Math.random() > 0.5 ? 1 : -1),
         scale: 1,
       });
     }
@@ -197,6 +134,7 @@ export default function ParticleBackground({ className = "" }: { className?: str
     for (let i = 0; i < 100; i++) {
       const initX = weightedRandom(0, width, 0.5);
       const initY = weightedRandom(height * 0.15, height * 0.85, 0.7);
+      const baseAlpha = range(0.15, 0.3);
       
       particles.push({
         x: initX,
@@ -205,14 +143,14 @@ export default function ParticleBackground({ className = "" }: { className?: str
         initY,
         radius: range(4, 10),
         color: THEME.particles.medium,
-        alpha: range(0, 0.05),
-        alphaMax: range(0.15, 0.35),
-        alphaDir: 1,
-        speed: range(0.0002, 0.0008),
-        distance: range(8, 20),
+        alpha: baseAlpha,
+        alphaMax: baseAlpha,
+        alphaDir: 0,
+        speed: 0,
+        distance: range(15, 35),
         fill: true,
         angle: Math.random() * Math.PI * 2,
-        angleSpeed: range(0.0005, 0.002) * (Math.random() > 0.5 ? 1 : -1),
+        angleSpeed: range(0.002, 0.006) * (Math.random() > 0.5 ? 1 : -1),
         scale: range(0.5, 1),
       });
     }
@@ -221,6 +159,7 @@ export default function ParticleBackground({ className = "" }: { className?: str
     for (let i = 0; i < 12; i++) {
       const initX = weightedRandom(width * 0.1, width * 0.9, 0.4);
       const initY = weightedRandom(height * 0.2, height * 0.8, 0.6);
+      const baseAlpha = range(0.1, 0.22);
       
       particles.push({
         x: initX,
@@ -229,61 +168,50 @@ export default function ParticleBackground({ className = "" }: { className?: str
         initY,
         radius: range(20, 40),
         color: THEME.particles.large,
-        alpha: range(0, 0.02),
-        alphaMax: range(0.1, 0.25),
-        alphaDir: 1,
-        speed: range(0.0001, 0.0004),
-        distance: range(20, 50),
+        alpha: baseAlpha,
+        alphaMax: baseAlpha,
+        alphaDir: 0,
+        speed: 0,
+        distance: range(30, 70),
         fill: true,
         angle: Math.random() * Math.PI * 2,
-        angleSpeed: range(0.0002, 0.001) * (Math.random() > 0.5 ? 1 : -1),
+        angleSpeed: range(0.001, 0.003) * (Math.random() > 0.5 ? 1 : -1),
         scale: range(0.6, 1),
       });
     }
 
-    // Initialize lights - ultra soft horizontal beam effect
+    // Initialize lights - these are drawn directly, no textures
+    // Wide horizontal beams spanning almost full width
     const lights: Light[] = [
       {
         x: width / 2,
         y: height / 2,
-        width: 1200,
-        height: 150,
-        alpha: 1,  // Full alpha since gradient itself is subtle
+        radiusX: width * 0.48,  // Almost edge to edge
+        radiusY: 70,  // Thicker
+        alpha: 0.45,
         color: THEME.lights[0],
         phase: 0,
         phaseSpeed: 0.0003,
-        scaleX: 1.2,
-        scaleY: 1,
-        moveX: 0,
-        moveY: 0,
       },
       {
-        x: width / 2 - 30,
-        y: height / 2,
-        width: 900,
-        height: 400,
-        alpha: 0.8,
+        x: width / 2,
+        y: height / 2 + 10,
+        radiusX: width * 0.42,
+        radiusY: 100,
+        alpha: 0.35,
         color: THEME.lights[1],
         phase: Math.PI / 3,
         phaseSpeed: 0.00025,
-        scaleX: 1,
-        scaleY: 1,
-        moveX: 0,
-        moveY: 0,
       },
       {
-        x: width / 2 + 80,
-        y: height / 2 - 20,
-        width: 500,
-        height: 250,
-        alpha: 0.6,
+        x: width / 2,
+        y: height / 2 - 15,
+        radiusX: width * 0.38,
+        radiusY: 55,
+        alpha: 0.28,
         color: THEME.lights[2],
         phase: Math.PI / 2,
         phaseSpeed: 0.0004,
-        scaleX: 1,
-        scaleY: 1,
-        moveX: 0,
-        moveY: 0,
       },
     ];
 
@@ -295,72 +223,72 @@ export default function ParticleBackground({ className = "" }: { className?: str
 
       ctx.clearRect(0, 0, width, height);
 
-      // Draw lights first (background glow beams)
+      // Draw lights directly on canvas - simple radial gradients
       lights.forEach((light, i) => {
         light.phase += light.phaseSpeed * dt;
         
         const sin = Math.sin(light.phase);
         const cos = Math.cos(light.phase * 0.7);
         
-        // Animate scale and position
+        // Subtle animation
+        let scaleX = 1;
+        let scaleY = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+        
         if (i === 0) {
-          light.scaleX = 1.5 + sin * 0.5;
-          light.scaleY = 0.8 + cos * 0.2;
+          scaleX = 1 + sin * 0.2;
+          scaleY = 1 - sin * 0.1;
         } else if (i === 1) {
-          light.scaleX = 1 + sin * 0.3;
-          light.scaleY = 1 + cos * 0.4;
-          light.moveX = cos * 80;
-          light.moveY = sin * 30;
+          scaleX = 1 + sin * 0.15;
+          scaleY = 1 + cos * 0.15;
+          offsetX = cos * 50;
+          offsetY = sin * 20;
         } else {
-          light.scaleX = 1 + sin * 0.2;
-          light.scaleY = 1 + cos * 0.2;
-          light.moveX = cos * 120;
-          light.moveY = sin * 40;
+          scaleX = 1 + sin * 0.1;
+          scaleY = 1 + cos * 0.1;
+          offsetX = cos * 80;
+          offsetY = sin * 30;
         }
 
-        const texture = lightTextures[i];
-        const drawWidth = texture.width * light.scaleX;
-        const drawHeight = texture.height * light.scaleY;
+        const rx = light.radiusX * scaleX;
+        const ry = light.radiusY * scaleY;
+        const cx = light.x + offsetX;
+        const cy = light.y + offsetY;
         
+        // Draw elliptical gradient using scale transform
         ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(rx / ry, 1);
+        
+        const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, ry);
+        gradient.addColorStop(0, light.color + "50");  // ~31% at center
+        gradient.addColorStop(0.15, light.color + "40");
+        gradient.addColorStop(0.3, light.color + "28");
+        gradient.addColorStop(0.5, light.color + "18");
+        gradient.addColorStop(0.7, light.color + "0a");
+        gradient.addColorStop(0.85, light.color + "04");
+        gradient.addColorStop(1, light.color + "00");
+        
         ctx.globalAlpha = light.alpha;
         ctx.globalCompositeOperation = "screen";
-        ctx.drawImage(
-          texture,
-          light.x + light.moveX - drawWidth / 2,
-          light.y + light.moveY - drawHeight / 2,
-          drawWidth,
-          drawHeight
-        );
+        ctx.fillStyle = gradient;
+        ctx.fillRect(-rx * 2, -ry * 2, rx * 4, ry * 4);
         ctx.restore();
       });
 
-      // Draw particles with additive blending
+      // Draw particles
       ctx.globalCompositeOperation = "lighter";
       
       particles.forEach((p) => {
-        // Update position - gentle circular drift
-        p.angle += p.angleSpeed * dt * 0.05;
+        // Smooth floating motion
+        p.angle += p.angleSpeed * dt * 0.25;
         p.x = p.initX + Math.cos(p.angle) * p.distance;
-        p.y = p.initY + Math.sin(p.angle * 0.7) * p.distance * 0.5;
-
-        // Alpha pulsing
-        p.alpha += p.alphaDir * p.speed * dt;
-        if (p.alpha >= p.alphaMax) {
-          p.alpha = p.alphaMax;
-          p.alphaDir = -1;
-        } else if (p.alpha <= 0) {
-          p.alpha = 0;
-          p.alphaDir = 1;
-          p.speed = range(0.0002, 0.001);
-        }
-
-        if (p.alpha <= 0.01) return;
+        p.y = p.initY + Math.sin(p.angle * 0.8) * p.distance * 0.6;
 
         ctx.globalAlpha = p.alpha;
 
         if (p.fill) {
-          // Use pre-rendered glow texture
           const texture = p.radius > 15 ? glowTextureLarge : glowTextureMedium;
           const size = p.radius * p.scale * 2;
           ctx.drawImage(
@@ -371,7 +299,6 @@ export default function ParticleBackground({ className = "" }: { className?: str
             size * 2
           );
         } else {
-          // Ring particles - simple strokes
           ctx.strokeStyle = p.color;
           ctx.lineWidth = 1;
           ctx.beginPath();
@@ -385,14 +312,12 @@ export default function ParticleBackground({ className = "" }: { className?: str
 
     animationRef.current = requestAnimationFrame(animate);
 
-    // Resize handler
     function handleResize() {
       if (!parent || !canvas) return;
       
       const newWidth = parent.offsetWidth;
       const newHeight = parent.offsetHeight;
       
-      // Scale particle positions
       const scaleX = newWidth / width;
       const scaleY = newHeight / height;
       
@@ -403,9 +328,8 @@ export default function ParticleBackground({ className = "" }: { className?: str
         p.y = p.initY;
       });
 
-      // Update light positions
       lights.forEach((l) => {
-        l.x = newWidth / 2 + (l.x - width / 2) * scaleX;
+        l.x = newWidth / 2 + (l.x - width / 2);
         l.y = newHeight / 2;
       });
 
