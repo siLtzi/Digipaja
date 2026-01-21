@@ -3,32 +3,112 @@
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
 
-type FooterProps = {
-  locale: "fi" | "en";
+type SiteSettings = {
+  companyName?: string;
+  businessId?: string;
+  city?: string;
+  country?: string;
+  email?: string;
+  phoneMain?: string;
+  phoneTechnical?: string;
+  footerTagline_fi?: string;
+  footerTagline_en?: string;
+  footerDescription_fi?: string;
+  footerDescription_en?: string;
+  footerCtaBadge_fi?: string;
+  footerCtaBadge_en?: string;
+  footerCtaTitle_fi?: string;
+  footerCtaTitle_en?: string;
+  footerCtaDescription_fi?: string;
+  footerCtaDescription_en?: string;
+  footerCtaButton_fi?: string;
+  footerCtaButton_en?: string;
+  socialLinks?: Array<{ platform: string; url: string }>;
+  footerLinks?: Array<{ label_fi: string; label_en: string; href: string }>;
+  legalLinks?: Array<{ label_fi: string; label_en: string; href: string }>;
 };
 
-export default function Footer({ locale }: FooterProps) {
+type FooterProps = {
+  locale: "fi" | "en";
+  settings?: SiteSettings | null;
+};
+
+export default function Footer({ locale, settings }: FooterProps) {
   const currentYear = new Date().getFullYear();
-  const t = (fi: string, en: string) => (locale === "fi" ? fi : en);
+  const t = <T,>(fi: T, en: T): T => (locale === "fi" ? fi : en);
 
-  const FOOTER_LINKS = [
-    { label: t("Etusivu", "Home"), href: "/" },
-    { label: t("Palvelut", "Services"), href: "/#services" },
-    { label: t("Työt", "Work"), href: "/work" },
-    { label: t("Meistä", "About"), href: "/#about-us" },
-    { label: t("Ota yhteyttä", "Contact"), href: "/yhteydenotto" },
-  ];
+  // Use Sanity data with fallbacks
+  const companyName = settings?.companyName || "Digipaja";
+  const email = settings?.email || "contact@digipaja.fi";
+  const phoneMain = settings?.phoneMain || "";
+  const phoneTechnical = settings?.phoneTechnical || "";
+  const businessId = settings?.businessId || "";
+  const location = [settings?.city, settings?.country].filter(Boolean).join(", ") || "Oulu, Finland";
 
-  const LEGAL_LINKS = [
-    { label: t("Tietosuoja", "Privacy Policy"), href: "/tietosuoja" },
-    { label: t("Käyttöehdot", "Terms of Service"), href: "/kayttoehdot" },
-  ];
+  const tagline = t(
+    settings?.footerTagline_fi || "Rakennamme digitaalista ylivoimaa.",
+    settings?.footerTagline_en || "We build digital superiority."
+  );
 
-  const SOCIALS = [
-    { label: "LinkedIn", href: "https://linkedin.com" },
-    { label: "GitHub", href: "https://github.com" },
-    { label: "Instagram", href: "https://instagram.com" },
-  ];
+  const description = t(
+    settings?.footerDescription_fi || "Emme vain koodaa. Me luomme liiketoimintakriittisiä ratkaisuja, jotka ovat nopeampia, turvallisempia ja näyttävämpiä kuin kilpailijoillasi.",
+    settings?.footerDescription_en || "We don't just code. We create business-critical solutions that are faster, more secure, and more impressive than your competitors'."
+  );
+
+  const ctaBadge = t(
+    settings?.footerCtaBadge_fi || "Valmis aloittamaan?",
+    settings?.footerCtaBadge_en || "Ready to start?"
+  );
+
+  const ctaTitle = t(
+    settings?.footerCtaTitle_fi || "Pyydä tarjous",
+    settings?.footerCtaTitle_en || "Get a Quote"
+  );
+
+  const ctaDescription = t(
+    settings?.footerCtaDescription_fi || "Kerro meille projektistasi ja saat tarjouksen 24 tunnissa.",
+    settings?.footerCtaDescription_en || "Tell us about your project and get a quote within 24 hours."
+  );
+
+  const ctaButton = t(
+    settings?.footerCtaButton_fi || "Aloita tästä",
+    settings?.footerCtaButton_en || "Start here"
+  );
+
+  // Use Sanity links or fallback to defaults
+  const FOOTER_LINKS = settings?.footerLinks?.length
+    ? settings.footerLinks.map((link) => ({
+        label: t(link.label_fi, link.label_en),
+        href: link.href,
+      }))
+    : [
+        { label: t("Etusivu", "Home"), href: "/" },
+        { label: t("Palvelut", "Services"), href: "/#services" },
+        { label: t("Työt", "Work"), href: "/work" },
+        { label: t("Meistä", "About"), href: "/#about-us" },
+        { label: t("Ota yhteyttä", "Contact"), href: "/yhteydenotto" },
+      ];
+
+  const LEGAL_LINKS = settings?.legalLinks?.length
+    ? settings.legalLinks.map((link) => ({
+        label: t(link.label_fi, link.label_en),
+        href: link.href,
+      }))
+    : [
+        { label: t("Tietosuoja", "Privacy Policy"), href: "/tietosuoja" },
+        { label: t("Käyttöehdot", "Terms of Service"), href: "/kayttoehdot" },
+      ];
+
+  const SOCIALS = settings?.socialLinks?.length
+    ? settings.socialLinks.map((link) => ({
+        label: link.platform,
+        href: link.url,
+      }))
+    : [
+        { label: "LinkedIn", href: "https://linkedin.com" },
+        { label: "GitHub", href: "https://github.com" },
+        { label: "Instagram", href: "https://instagram.com" },
+      ];
 
   const withLocale = (href: string) => {
     if (href === "/") return `/${locale}`;
@@ -83,17 +163,11 @@ export default function Footer({ locale }: FooterProps) {
                 style={{ fontFamily: "var(--font-goldman)" }}
                 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
               >
-                {t(
-                  "Rakennamme digitaalista ylivoimaa.",
-                  "We build digital superiority."
-                )}
+                {tagline}
               </h2>
               
               <p className="max-w-xl text-base leading-relaxed text-zinc-400">
-                {t(
-                  "Emme vain koodaa. Me luomme liiketoimintakriittisiä ratkaisuja, jotka ovat nopeampia, turvallisempia ja näyttävämpiä kuin kilpailijoillasi.",
-                  "We don't just code. We create business-critical solutions that are faster, more secure, and more impressive than your competitors'."
-                )}
+                {description}
               </p>
             </div>
 
@@ -108,7 +182,7 @@ export default function Footer({ locale }: FooterProps) {
                   style={{ fontFamily: "var(--font-goldman)" }}
                   className="text-[#ff8a3c] text-[11px] uppercase tracking-[0.2em] font-semibold"
                 >
-                  [ {t("Valmis aloittamaan?", "Ready to start?")} ]
+                  [ {ctaBadge} ]
                 </span>
                 
                 <div className="space-y-3">
@@ -116,14 +190,11 @@ export default function Footer({ locale }: FooterProps) {
                     style={{ fontFamily: "var(--font-goldman)" }}
                     className="text-3xl font-bold text-white transition-colors duration-500 group-hover:text-[#ff8a3c]"
                   >
-                    {t("Pyydä tarjous", "Get a Quote")}
+                    {ctaTitle}
                   </h3>
                   
                   <p className="max-w-sm text-sm leading-relaxed text-zinc-400 transition-colors duration-500 group-hover:text-zinc-300">
-                    {t(
-                      "Kerro meille projektistasi ja saat tarjouksen 24 tunnissa.",
-                      "Tell us about your project and get a quote within 24 hours."
-                    )}
+                    {ctaDescription}
                   </p>
                 </div>
                 
@@ -135,7 +206,7 @@ export default function Footer({ locale }: FooterProps) {
                     <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
                     <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#ff8a3c] transition-all duration-300 group-hover/btn:h-full group-hover/btn:w-full" />
                     <span className="absolute inset-0 -z-10 bg-[#ff8a3c] opacity-0 transition-opacity duration-300 group-hover/btn:opacity-10" />
-                    <span className="relative z-10" style={{ fontFamily: "var(--font-goldman)" }}>{t("Aloita tästä", "Start here")}</span>
+                    <span className="relative z-10" style={{ fontFamily: "var(--font-goldman)" }}>{ctaButton}</span>
                     <svg className="relative z-10 h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-1" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                 </div>
@@ -215,28 +286,43 @@ export default function Footer({ locale }: FooterProps) {
                  <div className="group space-y-1">
                     <p className="text-[10px] uppercase tracking-wider text-zinc-600">{t("Sähköposti", "Email")}</p>
                     <a 
-                      href="mailto:contact@digipaja.fi" 
+                      href={`mailto:${email}`} 
                       className="block text-sm text-white transition-colors duration-300 hover:text-[#ff8a3c]"
                     >
-                       contact@digipaja.fi
+                       {email}
                     </a>
                  </div>
-                 <div className="group space-y-1">
-                    <p className="text-[10px] uppercase tracking-wider text-zinc-600">{t("Puhelin", "Phone")}</p>
-                    <a 
-                      href="tel:+358401234567" 
-                      className="block text-sm text-white transition-colors duration-300 hover:text-[#ff8a3c]"
-                    >
-                       +358 40 123 4567
-                    </a>
-                 </div>
-                 <div className="space-y-1">
-                    <p className="text-[10px] uppercase tracking-wider text-zinc-600">{t("Y-tunnus", "Business ID")}</p>
-                    <p className="text-sm text-zinc-400">FI1234567-8</p>
-                 </div>
+                 {phoneMain && (
+                   <div className="group space-y-1">
+                      <p className="text-[10px] uppercase tracking-wider text-zinc-600">{t("Puhelin", "Phone")}</p>
+                      <a 
+                        href={`tel:${phoneMain.replace(/\s/g, "")}`} 
+                        className="block text-sm text-white transition-colors duration-300 hover:text-[#ff8a3c]"
+                      >
+                         {phoneMain}
+                      </a>
+                   </div>
+                 )}
+                 {phoneTechnical && (
+                   <div className="group space-y-1">
+                      <p className="text-[10px] uppercase tracking-wider text-zinc-600">{t("Tekninen tuki", "Technical")}</p>
+                      <a 
+                        href={`tel:${phoneTechnical.replace(/\s/g, "")}`} 
+                        className="block text-sm text-white transition-colors duration-300 hover:text-[#ff8a3c]"
+                      >
+                         {phoneTechnical}
+                      </a>
+                   </div>
+                 )}
+                 {businessId && (
+                   <div className="space-y-1">
+                      <p className="text-[10px] uppercase tracking-wider text-zinc-600">{t("Y-tunnus", "Business ID")}</p>
+                      <p className="text-sm text-zinc-400">{businessId}</p>
+                   </div>
+                 )}
                  <div className="space-y-1">
                     <p className="text-[10px] uppercase tracking-wider text-zinc-600">{t("Sijainti", "Location")}</p>
-                    <p className="text-sm text-zinc-400">Oulu, Finland</p>
+                    <p className="text-sm text-zinc-400">{location}</p>
                  </div>
               </div>
            </div>
@@ -260,7 +346,7 @@ export default function Footer({ locale }: FooterProps) {
               </div>
               <span className="text-zinc-800">•</span>
               <span className="text-[10px] uppercase tracking-wider text-zinc-600">
-                © {currentYear} Digipaja
+                © {currentYear} {companyName}
               </span>
             </div>
 

@@ -203,6 +203,7 @@ export default function Navbar({ locale }: NavbarProps) {
               transition-all duration-300 ease-in-out
               text-white fill-current
               max-w-[60vw]
+              overflow-visible
               ${scrolled ? "h-9 w-auto" : "h-16 w-auto"}
             `}
           >

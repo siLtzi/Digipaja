@@ -1,4 +1,3 @@
-// src/components/sections/References/index.tsx
 import { sanityClient } from "@/sanity/config";
 import { referencesQuery } from "@/sanity/queries";
 import type { ReferenceProject } from "./Content";
@@ -6,7 +5,6 @@ import dynamic from "next/dynamic";
 
 const ReferencesContent = dynamic(() => import("./Content"));
 
-// 1. DEFINE TYPE FOR YOUR JSON FILE
 type MessagesFile = {
   references: {
     eyebrow: string;
@@ -22,7 +20,6 @@ type MessagesFile = {
   };
 };
 
-// 2. DEFINE FALLBACK DATA
 const FALLBACK_PROJECTS: ReferenceProject[] = [
   {
     title: "Nordic Health App",
@@ -59,17 +56,17 @@ const FALLBACK_PROJECTS: ReferenceProject[] = [
 export default async function References({ locale }: { locale: "fi" | "en" }) {
   const isFi = locale === "fi";
 
-  // 3. LOAD TEXT FROM JSON
+  // LOAD TEXT FROM JSON
   const messages = (await import(`@/i18n/messages/${locale}.json`))
     .default as MessagesFile;
   const m = messages.references;
 
-  // 4. FETCH DATA FROM SANITY
+  // FETCH DATA FROM SANITY
   const data = await sanityClient.fetch(referencesQuery);
   const settings = data?.settings;
   const cmsProjects = data?.projects;
 
-  // 5. MERGE: USE SANITY IF AVAILABLE, OTHERWISE FALLBACK
+  // MERGE
   const projects: ReferenceProject[] = (cmsProjects && cmsProjects.length > 0)
     ? cmsProjects.map((p: any) => ({
         title: p.title,
@@ -83,7 +80,7 @@ export default async function References({ locale }: { locale: "fi" | "en" }) {
       }))
     : FALLBACK_PROJECTS;
 
-  // 6. DETERMINE TEXT
+  // DETERMINE TEXT
   const eyebrow = isFi
     ? settings?.eyebrow_fi || m.eyebrow
     : settings?.eyebrow_en || m.eyebrow;

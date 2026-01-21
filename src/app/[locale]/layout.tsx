@@ -5,6 +5,8 @@ import { NextIntlClientProvider } from "next-intl";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CookieConsent from "@/components/ui/CookieConsent";
+import { client } from "@/sanity/lib/client";
+import { siteSettingsQuery } from "@/sanity/queries";
 
 const BASE_URL = "https://digipajaoulu.fi";
 const locales = ["fi", "en"] as const;
@@ -58,6 +60,9 @@ export default async function LocaleLayout({
   const locale = localeParam as Locale;
   
   const messages = (await import(`@/i18n/messages/${locale}.json`)).default;
+  
+  // Fetch site settings from Sanity
+  const siteSettings = await client.fetch(siteSettingsQuery);
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
@@ -66,7 +71,7 @@ export default async function LocaleLayout({
         <Navbar locale={locale} />
 
         <main>{children}</main>
-        <Footer locale={locale} />
+        <Footer locale={locale} settings={siteSettings} />
         
         {/* GDPR Cookie Consent Banner */}
         <CookieConsent locale={locale} />

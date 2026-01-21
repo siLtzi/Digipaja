@@ -5,247 +5,139 @@ export default defineType({
   title: "Site Settings",
   type: "document",
   groups: [
-    { name: "finnish", title: "Finnish Content" },
-    { name: "english", title: "English Content" },
-    { name: "company", title: "Company Info" },
-    { name: "navigation", title: "Navigation" },
-    { name: "social", title: "Social Media" },
+    { name: "company", title: "🏢 Company Info", default: true },
+    { name: "social", title: "📱 Social Media" },
+    { name: "navigation", title: "🧭 Navigation" },
+    { name: "footer", title: "📄 Footer Content" },
   ],
   fields: [
-    // FINNISH CONTENT
-    defineField({
-      name: "footerTagline_fi",
-      title: "Footer Tagline (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerDescription_fi",
-      title: "Footer Description (FI)",
-      type: "text",
-      rows: 3,
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerCtaBadge_fi",
-      title: "Footer CTA - Badge (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerCtaTitle_fi",
-      title: "Footer CTA - Title (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerCtaDescription_fi",
-      title: "Footer CTA - Description (FI)",
-      type: "text",
-      rows: 2,
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerCtaButton_fi",
-      title: "Footer CTA - Button (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerNavTitle_fi",
-      title: "Footer Section - Navigation (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerSocialTitle_fi",
-      title: "Footer Section - Social (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "footerContactTitle_fi",
-      title: "Footer Section - Contact (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "labelEmail_fi",
-      title: "Label - Email (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "labelPhone_fi",
-      title: "Label - Phone (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "labelBusinessId_fi",
-      title: "Label - Business ID (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-    defineField({
-      name: "labelLocation_fi",
-      title: "Label - Location (FI)",
-      type: "string",
-      group: "finnish",
-    }),
-
-    // ENGLISH CONTENT
-    defineField({
-      name: "footerTagline_en",
-      title: "Footer Tagline (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "footerDescription_en",
-      title: "Footer Description (EN)",
-      type: "text",
-      rows: 3,
-      group: "english",
-    }),
-    defineField({
-      name: "footerCtaBadge_en",
-      title: "Footer CTA - Badge (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "footerCtaTitle_en",
-      title: "Footer CTA - Title (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "footerCtaDescription_en",
-      title: "Footer CTA - Description (EN)",
-      type: "text",
-      rows: 2,
-      group: "english",
-    }),
-    defineField({
-      name: "footerCtaButton_en",
-      title: "Footer CTA - Button (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "footerNavTitle_en",
-      title: "Footer Section - Navigation (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "footerSocialTitle_en",
-      title: "Footer Section - Social (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "footerContactTitle_en",
-      title: "Footer Section - Contact (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "labelEmail_en",
-      title: "Label - Email (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "labelPhone_en",
-      title: "Label - Phone (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "labelBusinessId_en",
-      title: "Label - Business ID (EN)",
-      type: "string",
-      group: "english",
-    }),
-    defineField({
-      name: "labelLocation_en",
-      title: "Label - Location (EN)",
-      type: "string",
-      group: "english",
-    }),
-
+    // ══════════════════════════════════════════════════════════════════════
     // COMPANY INFO
+    // These are the core company details used across the site
+    // ══════════════════════════════════════════════════════════════════════
     defineField({
       name: "companyName",
       title: "Company Name",
       type: "string",
-      description: "e.g. 'Digipaja'",
+      description: "Your company name. Used in copyright text and throughout the site.",
       group: "company",
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "email",
+      title: "Email Address",
+      type: "string",
+      description: "📧 Primary contact email - shown in Footer contact section",
+      group: "company",
+      validation: (Rule) => Rule.required().email(),
+    }),
+    defineField({
+      name: "phoneMain",
+      title: "Phone - Main Contact (Jouko)",
+      type: "string",
+      description: "📞 Primary contact phone - shown first in Footer (e.g. '+358 40 123 4567')",
+      group: "company",
+    }),
+    defineField({
+      name: "phoneTechnical",
+      title: "Phone - Technical Contact",
+      type: "string",
+      description: "🔧 Technical inquiries phone - shown second in Footer",
+      group: "company",
     }),
     defineField({
       name: "businessId",
       title: "Business ID (Y-tunnus)",
       type: "string",
-      description: "e.g. 'FI1234567-8'",
+      description: "🏷️ VAT/Business ID - shown in Footer contact section (e.g. 'FI1234567-8')",
       group: "company",
     }),
     defineField({
       name: "city",
       title: "City",
       type: "string",
+      description: "📍 City name - shown in Footer location (e.g. 'Oulu')",
       group: "company",
     }),
     defineField({
       name: "country",
       title: "Country",
       type: "string",
-      group: "company",
-    }),
-    defineField({
-      name: "email",
-      title: "Email Address",
-      type: "string",
-      description: "Primary contact email",
-      group: "company",
-      validation: (Rule) => Rule.required().email(),
-    }),
-    defineField({
-      name: "phone",
-      title: "Phone Number",
-      type: "string",
-      description: "e.g. '+358 40 123 4567'",
+      description: "📍 Country name - shown in Footer location (e.g. 'Finland')",
       group: "company",
     }),
 
+    // ══════════════════════════════════════════════════════════════════════
+    // SOCIAL MEDIA LINKS
+    // Links displayed in the Footer social section
+    // ══════════════════════════════════════════════════════════════════════
+    defineField({
+      name: "socialLinks",
+      title: "Social Media Links",
+      type: "array",
+      group: "social",
+      description: "🔗 Social media links shown in Footer 'Social' section",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "platform",
+              title: "Platform Name",
+              type: "string",
+              description: "Display name (e.g. 'LinkedIn', 'GitHub', 'Instagram')",
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "url",
+              title: "URL",
+              type: "url",
+              description: "Full URL to your profile",
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          preview: {
+            select: {
+              title: "platform",
+              subtitle: "url",
+            },
+          },
+        },
+      ],
+    }),
+
+    // ══════════════════════════════════════════════════════════════════════
     // NAVIGATION
+    // Main navbar items and footer links
+    // ══════════════════════════════════════════════════════════════════════
     defineField({
       name: "navItems",
-      title: "Navigation Items",
+      title: "Main Navigation (Navbar)",
       type: "array",
       group: "navigation",
-      description: "Main navigation menu items",
+      description: "🧭 Main menu items in the top Navbar. Each item scrolls to a section.",
       of: [
         {
           type: "object",
           fields: [
             defineField({
               name: "id",
-              title: "ID (for scroll targeting)",
+              title: "Section ID",
               type: "string",
-              description: "e.g. 'services', 'about-us'",
+              description: "ID of the section to scroll to (e.g. 'services', 'about-us', 'pricing')",
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: "label_fi",
               title: "Label (Finnish)",
               type: "string",
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: "label_en",
               title: "Label (English)",
               type: "string",
+              validation: (Rule) => Rule.required(),
             }),
           ],
           preview: {
@@ -253,15 +145,22 @@ export default defineType({
               title: "label_fi",
               subtitle: "id",
             },
+            prepare({ title, subtitle }) {
+              return {
+                title: title,
+                subtitle: `→ #${subtitle}`,
+              };
+            },
           },
         },
       ],
     }),
     defineField({
       name: "footerLinks",
-      title: "Footer Quick Links",
+      title: "Footer Navigation Links",
       type: "array",
       group: "navigation",
+      description: "📄 Quick links shown in Footer 'Navigation' column",
       of: [
         {
           type: "object",
@@ -270,17 +169,20 @@ export default defineType({
               name: "label_fi",
               title: "Label (Finnish)",
               type: "string",
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: "label_en",
               title: "Label (English)",
               type: "string",
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: "href",
-              title: "Link",
+              title: "Link URL",
               type: "string",
-              description: "e.g. '/', '/#services', '/contact'",
+              description: "Path or anchor (e.g. '/', '/#services', '/contact')",
+              validation: (Rule) => Rule.required(),
             }),
           ],
           preview: {
@@ -297,6 +199,7 @@ export default defineType({
       title: "Legal Links",
       type: "array",
       group: "navigation",
+      description: "⚖️ Legal page links shown at the bottom of the Footer (Privacy, Terms, etc.)",
       of: [
         {
           type: "object",
@@ -305,16 +208,20 @@ export default defineType({
               name: "label_fi",
               title: "Label (Finnish)",
               type: "string",
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: "label_en",
               title: "Label (English)",
               type: "string",
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: "href",
-              title: "Link",
+              title: "Link URL",
               type: "string",
+              description: "Path to the legal page (e.g. '/tietosuoja', '/kayttoehdot')",
+              validation: (Rule) => Rule.required(),
             }),
           ],
           preview: {
@@ -327,43 +234,104 @@ export default defineType({
       ],
     }),
 
-    // SOCIAL MEDIA
+    // ══════════════════════════════════════════════════════════════════════
+    // FOOTER CONTENT
+    // Text content displayed in the footer sections
+    // ══════════════════════════════════════════════════════════════════════
     defineField({
-      name: "socialLinks",
-      title: "Social Media Links",
-      type: "array",
-      group: "social",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({
-              name: "platform",
-              title: "Platform Name",
-              type: "string",
-              description: "e.g. 'LinkedIn', 'GitHub', 'Instagram'",
-            }),
-            defineField({
-              name: "url",
-              title: "URL",
-              type: "url",
-            }),
-          ],
-          preview: {
-            select: {
-              title: "platform",
-              subtitle: "url",
-            },
-          },
-        },
-      ],
+      name: "footerTagline_fi",
+      title: "Footer Tagline (Finnish)",
+      type: "string",
+      group: "footer",
+      description: "🎯 Large headline text in Footer left section (e.g. 'Rakennamme digitaalista ylivoimaa.')",
+    }),
+    defineField({
+      name: "footerTagline_en",
+      title: "Footer Tagline (English)",
+      type: "string",
+      group: "footer",
+      description: "🎯 Large headline text in Footer left section (e.g. 'We build digital superiority.')",
+    }),
+    defineField({
+      name: "footerDescription_fi",
+      title: "Footer Description (Finnish)",
+      type: "text",
+      rows: 3,
+      group: "footer",
+      description: "📝 Paragraph text below the tagline in Footer left section",
+    }),
+    defineField({
+      name: "footerDescription_en",
+      title: "Footer Description (English)",
+      type: "text",
+      rows: 3,
+      group: "footer",
+      description: "📝 Paragraph text below the tagline in Footer left section",
+    }),
+    defineField({
+      name: "footerCtaBadge_fi",
+      title: "CTA Badge Text (Finnish)",
+      type: "string",
+      group: "footer",
+      description: "🏷️ Small badge text above CTA title (e.g. 'Valmis aloittamaan?')",
+    }),
+    defineField({
+      name: "footerCtaBadge_en",
+      title: "CTA Badge Text (English)",
+      type: "string",
+      group: "footer",
+      description: "🏷️ Small badge text above CTA title (e.g. 'Ready to start?')",
+    }),
+    defineField({
+      name: "footerCtaTitle_fi",
+      title: "CTA Title (Finnish)",
+      type: "string",
+      group: "footer",
+      description: "📣 Main CTA heading on right side of Footer (e.g. 'Pyydä tarjous')",
+    }),
+    defineField({
+      name: "footerCtaTitle_en",
+      title: "CTA Title (English)",
+      type: "string",
+      group: "footer",
+      description: "📣 Main CTA heading on right side of Footer (e.g. 'Get a Quote')",
+    }),
+    defineField({
+      name: "footerCtaDescription_fi",
+      title: "CTA Description (Finnish)",
+      type: "text",
+      rows: 2,
+      group: "footer",
+      description: "💬 Short description below CTA title",
+    }),
+    defineField({
+      name: "footerCtaDescription_en",
+      title: "CTA Description (English)",
+      type: "text",
+      rows: 2,
+      group: "footer",
+      description: "💬 Short description below CTA title",
+    }),
+    defineField({
+      name: "footerCtaButton_fi",
+      title: "CTA Button Text (Finnish)",
+      type: "string",
+      group: "footer",
+      description: "🔘 Text on the CTA button (e.g. 'Aloita tästä')",
+    }),
+    defineField({
+      name: "footerCtaButton_en",
+      title: "CTA Button Text (English)",
+      type: "string",
+      group: "footer",
+      description: "🔘 Text on the CTA button (e.g. 'Start here')",
     }),
   ],
   preview: {
     prepare() {
       return {
         title: "Site Settings",
-        subtitle: "Global site configuration",
+        subtitle: "Company info, social links, navigation & footer content",
       };
     },
   },

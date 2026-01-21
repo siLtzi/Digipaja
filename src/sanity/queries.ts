@@ -419,12 +419,30 @@ export const contactPageSettingsQuery = `
 
 // SITE SETTINGS
 export const siteSettingsQuery = groq`
-  *[_type == "siteSettings"][0]{
+  *[_type == "siteSettings" && _id == "siteSettings"][0]{
     companyName,
     businessId,
-    location,
+    city,
+    country,
     email,
-    phone,
+    phoneMain,
+    phoneTechnical,
+    
+    // Footer content
+    footerTagline_fi,
+    footerTagline_en,
+    footerDescription_fi,
+    footerDescription_en,
+    footerCtaBadge_fi,
+    footerCtaBadge_en,
+    footerCtaTitle_fi,
+    footerCtaTitle_en,
+    footerCtaDescription_fi,
+    footerCtaDescription_en,
+    footerCtaButton_fi,
+    footerCtaButton_en,
+    
+    // Links
     socialLinks[]{
       platform,
       url
@@ -433,38 +451,6 @@ export const siteSettingsQuery = groq`
       id,
       label_fi,
       label_en
-    },
-    "footerTagline_fi": footerTagline.fi,
-    "footerTagline_en": footerTagline.en,
-    "footerDescription_fi": footerDescription.fi,
-    "footerDescription_en": footerDescription.en,
-    footerCta{
-      "badge_fi": badge.fi,
-      "badge_en": badge.en,
-      "title_fi": title.fi,
-      "title_en": title.en,
-      "description_fi": description.fi,
-      "description_en": description.en,
-      "buttonText_fi": buttonText.fi,
-      "buttonText_en": buttonText.en
-    },
-    footerSectionTitles{
-      "navigation_fi": navigation.fi,
-      "navigation_en": navigation.en,
-      "social_fi": social.fi,
-      "social_en": social.en,
-      "contact_fi": contact.fi,
-      "contact_en": contact.en
-    },
-    footerLabels{
-      "email_fi": email.fi,
-      "email_en": email.en,
-      "phone_fi": phone.fi,
-      "phone_en": phone.en,
-      "businessId_fi": businessId.fi,
-      "businessId_en": businessId.en,
-      "location_fi": location.fi,
-      "location_en": location.en
     },
     footerLinks[]{
       label_fi,

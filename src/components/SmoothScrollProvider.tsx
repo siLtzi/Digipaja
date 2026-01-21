@@ -8,6 +8,11 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+  
+  // Disable browser's scroll restoration - we handle it ourselves
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
 }
 
 type SmoothScrollProviderProps = {
@@ -63,9 +68,18 @@ export default function SmoothScrollProvider({
 
     if (!window.location.hash) {
       smoother.scrollTop(0);
+      // Force scroll to top multiple times to fight browser restoration
       requestAnimationFrame(() => {
         smoother.scrollTop(0);
+        window.scrollTo(0, 0);
       });
+      setTimeout(() => {
+        smoother.scrollTop(0);
+        window.scrollTo(0, 0);
+      }, 50);
+      setTimeout(() => {
+        smoother.scrollTop(0);
+      }, 150);
     }
 
     let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
