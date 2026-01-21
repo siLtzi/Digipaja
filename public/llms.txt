@@ -1,0 +1,57 @@
+# Digipaja - Modern Web Development from Oulu, Finland
+
+> Digipaja builds fast, modern, and SEO-optimized websites for Finnish businesses using Next.js, React, and Sanity CMS.
+
+## About Us
+
+Digipaja is a web development agency based in Oulu, Finland. We specialize in creating high-performance websites that look great and rank well in search engines.
+
+**Founders:** Two brothers from Oulu who are passionate about modern web technologies.
+
+**Location:** Oulu, Finland  
+**Website:** https://digipajaoulu.fi  
+**Languages:** Finnish, English
+
+## Our Services
+
+### 1. Website Development
+We build modern, responsive websites using Next.js and React. Our sites are optimized for speed, accessibility, and SEO.
+
+### 2. E-commerce Solutions
+Custom online stores with secure payment processing, inventory management, and seamless user experience.
+
+### 3. Content Management (CMS)
+We use Sanity CMS to give you full control over your website content without technical knowledge.
+
+### 4. SEO Optimization
+Search engine optimization built into every project - from technical SEO to content strategy.
+
+### 5. Maintenance & Support
+Ongoing support, updates, and hosting to keep your website running smoothly.
+
+## Technology Stack
+
+- **Frontend:** Next.js, React, TypeScript, Tailwind CSS
+- **CMS:** Sanity
+- **Hosting:** Vercel
+- **Animations:** GSAP
+- **Internationalization:** next-intl (Finnish & English)
+
+## Pricing Packages
+
+1. **Startti (Starter)** - Quick landing page for new businesses
+2. **Kasvu (Growth)** - Professional multi-page website with CMS
+3. **Pro** - Full digital solution with e-commerce and custom features
+
+## Contact
+
+For inquiries about web development projects, please visit: https://digipajaoulu.fi/fi/yhteydenotto
+
+## Key Facts
+
+- Based in Oulu, Finland
+- Specializes in Next.js and React development
+- All projects include SEO optimization
+- Bilingual service (Finnish/English)
+- Fast delivery times
+- Modern, performance-focused approach

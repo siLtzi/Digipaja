@@ -217,12 +217,118 @@ function JsonLd({ locale }: { locale: string }) {
     ],
   };
 
+  // FAQ Schema - Great for AI citation (GEO)
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: isFi ? [
+      {
+        "@type": "Question",
+        name: "Mitä verkkosivut maksavat?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Digipajan verkkosivupaketit alkavat Startti-paketista edulliseen hintaan. Kasvu-paketti sopii ammattimaiseen verkkosivustoon ja Pro-paketti täysiin digitaalisiin ratkaisuihin. Pyydä tarjous saadaksesi tarkan hinnan projektiisi.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Kuinka kauan verkkosivujen tekeminen kestää?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yksinkertainen landing page valmistuu 1-2 viikossa. Laajempi verkkosivusto CMS-järjestelmällä kestää tyypillisesti 3-6 viikkoa. Verkkokaupat ja räätälöidyt ratkaisut 6-12 viikkoa projektin laajuudesta riippuen.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Mitä teknologioita Digipaja käyttää?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Käytämme moderneja teknologioita: Next.js ja React frontendissä, Sanity CMS sisällönhallintaan, Vercel hostingiin, Tailwind CSS tyylitykseen ja GSAP animaatioihin. Kaikki sivustot ovat responsiivisia ja hakukoneoptimoiduja.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Tarjoaako Digipaja ylläpitopalveluita?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Kyllä, tarjoamme jatkuvaa ylläpitoa, päivityksiä ja teknistä tukea. Voit hallita sivustosi sisältöä itse Sanity CMS:n kautta ilman teknistä osaamista.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Tekeekö Digipaja hakukoneoptimointia?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "SEO on sisäänrakennettu kaikkiin projekteihimme. Huolehdimme teknisestä SEO:sta, sivuston nopeudesta, rakenteellisesta datasta, meta-tiedoista ja mobiilioptimoidusta designista. Sivustot rakennetaan alusta asti hakukoneystävällisiksi.",
+        },
+      },
+    ] : [
+      {
+        "@type": "Question",
+        name: "How much does a website cost?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Digipaja offers website packages starting from an affordable Starter package. The Growth package suits professional websites, and the Pro package is for full digital solutions. Request a quote for exact pricing for your project.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How long does it take to build a website?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "A simple landing page is ready in 1-2 weeks. A larger website with CMS typically takes 3-6 weeks. E-commerce and custom solutions take 6-12 weeks depending on project scope.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What technologies does Digipaja use?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "We use modern technologies: Next.js and React for frontend, Sanity CMS for content management, Vercel for hosting, Tailwind CSS for styling, and GSAP for animations. All sites are responsive and SEO-optimized.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Does Digipaja offer maintenance services?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes, we offer ongoing maintenance, updates, and technical support. You can manage your site content yourself through Sanity CMS without technical knowledge.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Does Digipaja do SEO optimization?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "SEO is built into all our projects. We handle technical SEO, site speed, structured data, meta information, and mobile-optimized design. Sites are built search engine friendly from the ground up.",
+        },
+      },
+    ],
+  };
+
+  // Speakable schema for voice assistants (Siri, Google Assistant, Alexa)
+  const speakableSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${BASE_URL}/${locale}/#webpage`,
+    name: isFi ? "Digipaja - Modernit verkkosivut yrityksille" : "Digipaja - Modern Websites for Businesses",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "h2", ".hero-subtitle", ".about-description"],
+    },
+    mainEntity: {
+      "@id": `${BASE_URL}/#organization`,
+    },
+  };
+
   const schemas = [
     organizationSchema,
     websiteSchema,
     serviceSchema,
     localBusinessSchema,
     breadcrumbSchema,
+    faqSchema,
+    speakableSchema,
   ];
 
   return (

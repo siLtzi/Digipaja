@@ -4,8 +4,8 @@ import i18nConfig from './next-intl.config';
 
 const i18nMiddleware = createMiddleware(i18nConfig);
 
-// Set to true to enable password protection
-const ENABLE_PASSWORD_PROTECTION = true;
+// Set to true to enable password protection (disable for production!)
+const ENABLE_PASSWORD_PROTECTION = false;
 const SITE_PASSWORD = process.env.SITE_PASSWORD; // Set in .env.local and Vercel
 
 export default function middleware(request: NextRequest) {

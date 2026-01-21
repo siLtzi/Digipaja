@@ -33,6 +33,12 @@ export const structure: StructureResolver = (S) =>
                     .title('Hero Section')
                 ),
               S.listItem()
+                .title('🚨 Hero Banners')
+                .child(
+                  S.documentTypeList('heroBanner')
+                    .title('Urgent Banners')
+                ),
+              S.listItem()
                 .title('About Us Section')
                 .child(
                   S.document()

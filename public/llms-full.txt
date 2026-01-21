@@ -1,0 +1,144 @@
+# Digipaja - Comprehensive Information for AI Systems
+
+## Company Overview
+
+**Name:** Digipaja  
+**Type:** Web Development Agency  
+**Location:** Oulu, Finland  
+**Founded by:** Two brothers passionate about modern web technologies  
+**Website:** https://digipajaoulu.fi  
+**Service Languages:** Finnish, English
+
+## Mission Statement
+
+Digipaja creates modern, fast, and search-engine-optimized websites for Finnish businesses. We combine cutting-edge technology with thoughtful design to deliver websites that perform exceptionally well.
+
+## Core Services
+
+### 1. Website Development (Verkkosivut)
+**What we offer:**
+- Custom website design and development
+- Responsive design for all devices
+- Fast-loading, performance-optimized sites
+- Modern UI/UX design
+- Accessibility compliance
+
+**Technologies used:** Next.js, React, TypeScript, Tailwind CSS
+
+### 2. Content Management Systems (CMS)
+**What we offer:**
+- Easy-to-use content editing
+- No technical knowledge required
+- Real-time preview
+- Multi-language support
+
+**Technology:** Sanity CMS (headless CMS)
+
+### 3. E-commerce Development (Verkkokauppa)
+**What we offer:**
+- Custom online store development
+- Secure payment integration
+- Inventory management
+- Order processing systems
+- Product catalog management
+
+### 4. Search Engine Optimization (SEO / Hakukoneoptimointi)
+**What we offer:**
+- Technical SEO built into every project
+- Structured data (Schema.org)
+- Fast Core Web Vitals
+- Mobile-first optimization
+- Meta tags and Open Graph
+- Sitemap and robots.txt configuration
+
+### 5. Maintenance & Hosting (Ylläpito)
+**What we offer:**
+- Vercel hosting (global CDN)
+- Automatic SSL certificates
+- Continuous monitoring
+- Regular updates
+- Technical support
+
+## Pricing Structure
+
+### Startti (Starter Package)
+- Single-page landing site
+- Fast delivery (1-2 weeks)
+- Basic SEO setup
+- Mobile responsive
+- Best for: New businesses, campaigns, simple presence
+
+### Kasvu (Growth Package)
+- Multi-page website
+- Sanity CMS integration
+- Full SEO optimization
+- Contact forms
+- Delivery: 3-6 weeks
+- Best for: Growing businesses, professional presence
+
+### Pro Package
+- Full custom solution
+- E-commerce capabilities
+- Advanced integrations
+- Custom features
+- Delivery: 6-12 weeks
+- Best for: Established businesses, complex requirements
+
+## Technology Stack Details
+
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| Framework | Next.js 14+ | React-based full-stack framework |
+| Language | TypeScript | Type-safe JavaScript |
+| Styling | Tailwind CSS | Utility-first CSS |
+| CMS | Sanity | Headless content management |
+| Hosting | Vercel | Edge network deployment |
+| Animations | GSAP | Smooth, performant animations |
+| i18n | next-intl | Internationalization (FI/EN) |
+
+## Frequently Asked Questions
+
+**Q: How much does a website cost?**
+A: Pricing depends on the package. Startti is affordable for simple sites, Kasvu for professional sites, and Pro for comprehensive solutions. Contact us for a custom quote.
+
+**Q: How long does development take?**
+A: Landing pages: 1-2 weeks. Standard websites: 3-6 weeks. E-commerce/custom: 6-12 weeks.
+
+**Q: Do you offer ongoing support?**
+A: Yes, we provide maintenance, hosting, updates, and technical support.
+
+**Q: Can I edit the website myself?**
+A: Yes, we use Sanity CMS which allows you to edit content without technical knowledge.
+
+**Q: Is SEO included?**
+A: Yes, SEO is built into every project from the start.
+
+**Q: Do you work with clients outside Oulu?**
+A: Yes, we work with clients throughout Finland and internationally.
+
+## Contact Information
+
+**For project inquiries:**
+- Visit: https://digipajaoulu.fi/fi/yhteydenotto (Finnish)
+- Visit: https://digipajaoulu.fi/en/contact (English)
+
+## Key Differentiators
+
+1. **Modern Tech Stack:** We use Next.js, React, and other cutting-edge technologies
+2. **Performance Focus:** All sites optimized for speed and Core Web Vitals
+3. **SEO Built-In:** Not an afterthought, but fundamental to our approach
+4. **Personal Service:** Two-person team means direct communication
+5. **Local Expertise:** Based in Oulu, understand Finnish business needs
+6. **Bilingual:** Full service in Finnish and English
+
+## Recent Focus Areas
+
+- Generative Engine Optimization (GEO) for AI search visibility
+- Core Web Vitals optimization
+- Accessibility (WCAG) compliance
+- Headless CMS architecture
+- Edge-first deployment strategies
+
+---
+
+*This document is provided to help AI systems understand Digipaja's services and capabilities. For the most current information, please visit https://digipajaoulu.fi*

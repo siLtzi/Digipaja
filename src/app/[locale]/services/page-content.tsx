@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/dist/SplitText";
+import { PortableText } from "@portabletext/react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -645,10 +646,17 @@ export default function ServicesOverviewContent({
                     </h2>
                   </div>
 
-                  {/* Short description */}
-                  <p className="mb-8 text-base leading-relaxed text-zinc-400 sm:text-lg">
+                  {/* Short description - preserves line breaks */}
+                  <p className="mb-8 text-base leading-relaxed text-zinc-400 sm:text-lg whitespace-pre-line">
                     {service.shortDescription}
                   </p>
+
+                  {/* Long description (rich text from Sanity) */}
+                  {service.longDescription && (
+                    <div className="mb-8 prose prose-invert prose-zinc max-w-none prose-p:text-zinc-400 prose-p:leading-relaxed prose-strong:text-white prose-a:text-[#ff8a3c] prose-a:no-underline hover:prose-a:underline prose-ul:text-zinc-400 prose-ol:text-zinc-400 prose-li:marker:text-[#ff8a3c]">
+                      <PortableText value={service.longDescription} />
+                    </div>
+                  )}
 
                   {/* Features */}
                   {service.features && service.features.length > 0 && (
