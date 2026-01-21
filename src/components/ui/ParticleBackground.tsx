@@ -68,43 +68,46 @@ function weightedRandom(min: number, max: number, weight: number = 0.8): number 
 // Create ultra-soft horizontal glow - no visible edges
 function createLightBeamTexture(width: number, height: number, color: string): HTMLCanvasElement {
   const canvas = document.createElement("canvas");
-  // Very large canvas - gradient fills entire thing
-  canvas.width = width * 3;
-  canvas.height = height * 4;
+  // Much larger canvas to ensure gradient fully fades
+  const size = Math.max(width, height) * 4;
+  canvas.width = size;
+  canvas.height = size;
   const ctx = canvas.getContext("2d")!;
   
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2;
+  const cx = size / 2;
+  const cy = size / 2;
   
-  // Create horizontal elliptical glow using scale transform
-  ctx.save();
-  ctx.translate(cx, cy);
-  ctx.scale(width / height, 1); // Stretch horizontally
-  
-  // Single ultra-smooth radial gradient - no hard edges
-  const radius = canvas.height / 2;
-  const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius);
-  
-  // Very gradual falloff - many stops for smoothness
-  gradient.addColorStop(0, color + "40");      // 25% at center
-  gradient.addColorStop(0.05, color + "38");
-  gradient.addColorStop(0.1, color + "30");
-  gradient.addColorStop(0.15, color + "28");
-  gradient.addColorStop(0.2, color + "22");
-  gradient.addColorStop(0.3, color + "1a");
-  gradient.addColorStop(0.4, color + "14");
-  gradient.addColorStop(0.5, color + "0f");
-  gradient.addColorStop(0.6, color + "0a");
-  gradient.addColorStop(0.7, color + "06");
-  gradient.addColorStop(0.8, color + "03");
-  gradient.addColorStop(0.9, color + "01");
-  gradient.addColorStop(1, "transparent");
-  
-  ctx.fillStyle = gradient;
-  ctx.beginPath();
-  ctx.arc(0, 0, radius, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
+  // Draw multiple soft layers for a very diffuse look
+  const layers = 5;
+  for (let i = 0; i < layers; i++) {
+    const layerScale = 1 - (i * 0.15);
+    const layerAlpha = 0.15 - (i * 0.025);
+    
+    ctx.save();
+    ctx.translate(cx, cy);
+    // Stretch to make elliptical (wider than tall)
+    ctx.scale(width / height * 1.5, 1);
+    
+    const radius = (size / 2) * layerScale;
+    const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius);
+    
+    // Hex alpha values
+    const a1 = Math.floor(layerAlpha * 255).toString(16).padStart(2, '0');
+    const a2 = Math.floor(layerAlpha * 0.7 * 255).toString(16).padStart(2, '0');
+    const a3 = Math.floor(layerAlpha * 0.4 * 255).toString(16).padStart(2, '0');
+    const a4 = Math.floor(layerAlpha * 0.15 * 255).toString(16).padStart(2, '0');
+    
+    gradient.addColorStop(0, color + a1);
+    gradient.addColorStop(0.3, color + a2);
+    gradient.addColorStop(0.6, color + a3);
+    gradient.addColorStop(0.85, color + a4);
+    gradient.addColorStop(1, color + "00");
+    
+    ctx.fillStyle = gradient;
+    // Fill entire canvas with gradient - no arc clipping
+    ctx.fillRect(-size, -size, size * 2, size * 2);
+    ctx.restore();
+  }
   
   return canvas;
 }
