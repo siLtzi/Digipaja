@@ -384,7 +384,7 @@ export default function ParticleBackground({ className = "" }: { className?: str
 
     // Resize handler
     function handleResize() {
-      if (!parent) return;
+      if (!parent || !canvas) return;
       
       const newWidth = parent.offsetWidth;
       const newHeight = parent.offsetHeight;
