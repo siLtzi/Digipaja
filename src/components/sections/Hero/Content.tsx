@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollSmoother } from "gsap/ScrollSmoother"; // Import this!
+import ParticleBackground from "@/components/ui/ParticleBackground";
 
 // Register the plugin
 if (typeof window !== "undefined") {
@@ -31,8 +32,6 @@ type HeroProps = {
   subtitle: string;
   primaryCta: string;
   secondaryCta: string;
-  desktopVideo: string;
-  mobileVideo: string;
   banners?: Banner[];
 };
 
@@ -55,8 +54,6 @@ export default function HeroContent({
   subtitle,
   primaryCta,
   secondaryCta,
-  desktopVideo,
-  mobileVideo,
   banners = [],
 }: HeroProps) {
   // Refs for animation targets
@@ -425,25 +422,8 @@ export default function HeroContent({
 
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="block h-full w-full object-cover opacity-40 lg:hidden"
-        >
-          <source src={mobileVideo} type="video/mp4" />
-        </video>
-
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="hidden h-full w-full object-cover opacity-40 lg:block"
-        >
-          <source src={desktopVideo} type="video/mp4" />
-        </video>
+        {/* Particle Background Effect */}
+        <ParticleBackground />
       </div>
 
       {/* === SMOOTH AMBIENT GLOW === */}

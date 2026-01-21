@@ -44,9 +44,6 @@ type HeroSettings = {
   heroPrimaryCta_en?: string | null;
   heroSecondaryCta_fi?: string | null;
   heroSecondaryCta_en?: string | null;
-
-  heroDesktopVideo?: string | null;
-  heroMobileVideo?: string | null;
 };
 
 export default async function Hero({ locale }: { locale: "fi" | "en" }) {
@@ -96,9 +93,6 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
     ? heroSettings.heroSecondaryCta_fi || m.secondaryCta 
     : heroSettings.heroSecondaryCta_en || m.secondaryCta;
 
-  const desktopVideo = heroSettings.heroDesktopVideo || "/video/hero.mp4";
-  const mobileVideo = heroSettings.heroMobileVideo || "/video/heromobile3.mp4";
-
   // Transform banners for the current locale
   const localizedBanners = (banners || []).map((banner) => ({
     id: banner._id,
@@ -119,8 +113,6 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
       subtitle={subtitle}
       primaryCta={primaryCta}
       secondaryCta={secondaryCta}
-      desktopVideo={desktopVideo}
-      mobileVideo={mobileVideo}
       banners={localizedBanners}
     />
   );
