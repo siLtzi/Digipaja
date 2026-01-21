@@ -13,6 +13,15 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(useGSAP, ScrollSmoother);
 }
 
+type Banner = {
+  id: string;
+  message: string;
+  link?: string;
+  linkText?: string;
+  variant: "info" | "warning" | "success" | "urgent" | "promo";
+  icon: "none" | "info" | "warning" | "megaphone" | "sparkles" | "clock";
+};
+
 type HeroProps = {
   eyebrow: string;
   titleStart: string;
@@ -24,6 +33,7 @@ type HeroProps = {
   secondaryCta: string;
   desktopVideo: string;
   mobileVideo: string;
+  banners?: Banner[];
 };
 
 const STACK_ICONS = [
@@ -47,6 +57,7 @@ export default function HeroContent({
   secondaryCta,
   desktopVideo,
   mobileVideo,
+  banners = [],
 }: HeroProps) {
   // Refs for animation targets
   const containerRef = useRef<HTMLDivElement>(null);
@@ -281,12 +292,137 @@ export default function HeroContent({
     }
   };
 
+  // Banner variant styles
+  const bannerStyles: Record<Banner["variant"], { bg: string; border: string; text: string; accent: string }> = {
+    info: { 
+      bg: "bg-blue-500/10", 
+      border: "border-blue-500/30", 
+      text: "text-blue-100", 
+      accent: "text-blue-400" 
+    },
+    warning: { 
+      bg: "bg-orange-500/10", 
+      border: "border-orange-500/30", 
+      text: "text-orange-100", 
+      accent: "text-orange-400" 
+    },
+    success: { 
+      bg: "bg-emerald-500/10", 
+      border: "border-emerald-500/30", 
+      text: "text-emerald-100", 
+      accent: "text-emerald-400" 
+    },
+    urgent: { 
+      bg: "bg-red-500/15", 
+      border: "border-red-500/40", 
+      text: "text-red-100", 
+      accent: "text-red-400" 
+    },
+    promo: { 
+      bg: "bg-purple-500/10", 
+      border: "border-purple-500/30", 
+      text: "text-purple-100", 
+      accent: "text-purple-400" 
+    },
+  };
+
+  // Banner icon components
+  const BannerIcon = ({ icon, className }: { icon: Banner["icon"]; className?: string }) => {
+    switch (icon) {
+      case "info":
+        return (
+          <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
+          </svg>
+        );
+      case "warning":
+        return (
+          <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+          </svg>
+        );
+      case "megaphone":
+        return (
+          <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13.92 3.845a19.361 19.361 0 01-6.3 1.98C6.765 5.942 5.89 6 5 6a4 4 0 00-.504 7.969 15.974 15.974 0 001.271 3.341c.397.77 1.342 1 2.05.59l.867-.5c.726-.42.94-1.321.588-2.021-.166-.33-.315-.666-.448-1.004 1.8.358 3.511.964 5.096 1.78A17.964 17.964 0 0015 10c0-2.161-.381-4.234-1.08-6.155zM15.243 3.097A19.456 19.456 0 0116.5 10c0 2.431-.445 4.758-1.257 6.903l-.018.047a.5.5 0 00.575.687 17.48 17.48 0 002.443-.857.5.5 0 00.305-.503A18.967 18.967 0 0018.5 10c0-2.156-.359-4.231-1.02-6.168a.5.5 0 00-.305-.503 17.46 17.46 0 00-2.443-.857.5.5 0 00-.546.742l.057.083z" />
+          </svg>
+        );
+      case "sparkles":
+        return (
+          <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" />
+          </svg>
+        );
+      case "clock":
+        return (
+          <svg className={className} viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clipRule="evenodd" />
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <section
       id="hero"
       ref={containerRef} // Scope for GSAP
       className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-[#050609] pt-24 lg:pt-28"
     >
+      {/* === URGENT BANNERS === */}
+      {banners.length > 0 && (
+        <div className="absolute top-16 left-0 right-0 z-50 flex flex-col gap-2 px-4 sm:px-6 lg:top-20">
+          {banners.map((banner) => {
+            const style = bannerStyles[banner.variant];
+            const content = (
+              <div
+                key={banner.id}
+                className={`
+                  mx-auto max-w-4xl w-full rounded-lg border backdrop-blur-md
+                  ${style.bg} ${style.border}
+                  px-4 py-3 sm:px-6
+                  flex items-center justify-center gap-3
+                  animate-in
+                  shadow-lg
+                `}
+              >
+                {banner.icon !== "none" && (
+                  <BannerIcon 
+                    icon={banner.icon} 
+                    className={`h-5 w-5 flex-shrink-0 ${style.accent}`} 
+                  />
+                )}
+                <p className={`text-sm sm:text-base font-medium ${style.text} text-center`}>
+                  {banner.message}
+                </p>
+                {banner.link && banner.linkText && (
+                  <span className={`text-sm font-semibold ${style.accent} whitespace-nowrap hover:underline`}>
+                    {banner.linkText} →
+                  </span>
+                )}
+              </div>
+            );
+
+            if (banner.link) {
+              return (
+                <a
+                  key={banner.id}
+                  href={banner.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block transition-transform hover:scale-[1.01]"
+                >
+                  {content}
+                </a>
+              );
+            }
+
+            return content;
+          })}
+        </div>
+      )}
+
       {/* === BACKGROUND LAYER === */}
       <div className="absolute inset-0 z-0">
         <video

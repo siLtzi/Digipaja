@@ -1,5 +1,21 @@
 import { groq } from "next-sanity";
 
+// Fetch active hero banners, filtered by date and ordered by priority
+export const heroBannersQuery = groq`
+*[_type == "heroBanner" && isActive == true && 
+  (startDate == null || startDate <= now()) && 
+  (endDate == null || endDate >= now())] | order(priority asc) {
+  _id,
+  message_fi,
+  message_en,
+  link,
+  linkText_fi,
+  linkText_en,
+  variant,
+  icon
+}
+`;
+
 export const servicesOverviewQuery = groq`
   *[_type == "servicesOverview" && language == $locale][0]{
     eyebrow,

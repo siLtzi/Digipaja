@@ -1,5 +1,5 @@
 import { sanityClient } from "@/sanity/config";
-import { heroSettingsQuery } from "@/sanity/queries";
+import { heroSettingsQuery, heroBannersQuery } from "@/sanity/queries";
 import HeroContent from "./Content";
 
 type HeroMessages = {
@@ -14,6 +14,17 @@ type HeroMessages = {
 
 type MessagesFile = {
   hero: HeroMessages;
+};
+
+type HeroBanner = {
+  _id: string;
+  message_fi: string;
+  message_en: string;
+  link?: string;
+  linkText_fi?: string;
+  linkText_en?: string;
+  variant: "info" | "warning" | "success" | "urgent" | "promo";
+  icon: "none" | "info" | "warning" | "megaphone" | "sparkles" | "clock";
 };
 
 type HeroSettings = {
@@ -44,44 +55,59 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
 
   const m = messages.hero;
 
-  const cms =
-    (await sanityClient.fetch<HeroSettings | null>(heroSettingsQuery)) ?? {};
+  // Fetch hero settings and banners in parallel
+  const [cms, banners] = await Promise.all([
+    sanityClient.fetch<HeroSettings | null>(heroSettingsQuery),
+    sanityClient.fetch<HeroBanner[]>(heroBannersQuery),
+  ]);
+
+  const heroSettings = cms ?? {};
 
   const isFi = locale === "fi";
 
   const eyebrow = isFi 
-    ? cms.heroEyebrow_fi || m.eyebrow 
-    : cms.heroEyebrow_en || m.eyebrow;
+    ? heroSettings.heroEyebrow_fi || m.eyebrow 
+    : heroSettings.heroEyebrow_en || m.eyebrow;
   const titleStart = isFi 
-    ? cms.heroTitleStart_fi || m.titleStart 
-    : cms.heroTitleStart_en || m.titleStart;
+    ? heroSettings.heroTitleStart_fi || m.titleStart 
+    : heroSettings.heroTitleStart_en || m.titleStart;
   const titleAccent = isFi 
-    ? cms.heroTitleAccent_fi || m.titleAccent 
-    : cms.heroTitleAccent_en || m.titleAccent;
+    ? heroSettings.heroTitleAccent_fi || m.titleAccent 
+    : heroSettings.heroTitleAccent_en || m.titleAccent;
   
   // Rotating words - fallback to some defaults if not set in Sanity
   const defaultWordsFi = ["hyvältä", "modernilta", "nopealta", "ammattimaisilta"];
   const defaultWordsEn = ["great", "modern", "fast", "professional"];
   const rotatingWords = isFi
-    ? (cms.heroRotatingWords_fi?.length ? cms.heroRotatingWords_fi : defaultWordsFi)
-    : (cms.heroRotatingWords_en?.length ? cms.heroRotatingWords_en : defaultWordsEn);
+    ? (heroSettings.heroRotatingWords_fi?.length ? heroSettings.heroRotatingWords_fi : defaultWordsFi)
+    : (heroSettings.heroRotatingWords_en?.length ? heroSettings.heroRotatingWords_en : defaultWordsEn);
     
   const titleEnd = isFi 
-    ? cms.heroTitleEnd_fi || m.titleEnd 
-    : cms.heroTitleEnd_en || m.titleEnd;
+    ? heroSettings.heroTitleEnd_fi || m.titleEnd 
+    : heroSettings.heroTitleEnd_en || m.titleEnd;
   const subtitle = isFi 
-    ? cms.heroSubtitle_fi || m.subtitle 
-    : cms.heroSubtitle_en || m.subtitle;
+    ? heroSettings.heroSubtitle_fi || m.subtitle 
+    : heroSettings.heroSubtitle_en || m.subtitle;
 
   const primaryCta = isFi 
-    ? cms.heroPrimaryCta_fi || m.primaryCta 
-    : cms.heroPrimaryCta_en || m.primaryCta;
+    ? heroSettings.heroPrimaryCta_fi || m.primaryCta 
+    : heroSettings.heroPrimaryCta_en || m.primaryCta;
   const secondaryCta = isFi 
-    ? cms.heroSecondaryCta_fi || m.secondaryCta 
-    : cms.heroSecondaryCta_en || m.secondaryCta;
+    ? heroSettings.heroSecondaryCta_fi || m.secondaryCta 
+    : heroSettings.heroSecondaryCta_en || m.secondaryCta;
 
-  const desktopVideo = cms.heroDesktopVideo || "/video/hero.mp4";
-  const mobileVideo = cms.heroMobileVideo || "/video/heromobile3.mp4";
+  const desktopVideo = heroSettings.heroDesktopVideo || "/video/hero.mp4";
+  const mobileVideo = heroSettings.heroMobileVideo || "/video/heromobile3.mp4";
+
+  // Transform banners for the current locale
+  const localizedBanners = (banners || []).map((banner) => ({
+    id: banner._id,
+    message: isFi ? banner.message_fi : banner.message_en,
+    link: banner.link,
+    linkText: isFi ? banner.linkText_fi : banner.linkText_en,
+    variant: banner.variant,
+    icon: banner.icon,
+  }));
 
   return (
     <HeroContent
@@ -95,6 +121,7 @@ export default async function Hero({ locale }: { locale: "fi" | "en" }) {
       secondaryCta={secondaryCta}
       desktopVideo={desktopVideo}
       mobileVideo={mobileVideo}
+      banners={localizedBanners}
     />
   );
 }
