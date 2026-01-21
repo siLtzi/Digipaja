@@ -65,6 +65,7 @@ export default function HeroContent({
   const techStackRef = useRef<HTMLDivElement>(null);
   const stackButtonRef = useRef<HTMLButtonElement>(null);
   const rotatingWordRef = useRef<HTMLSpanElement>(null);
+  const highlightRef = useRef<HTMLSpanElement>(null);
   const [isStackOpen, setIsStackOpen] = useState(false);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   
@@ -85,30 +86,61 @@ export default function HeroContent({
   useEffect(() => {
     if (!rotatingWords || rotatingWords.length === 0) return;
     
+    // Initial highlight expand on mount
+    const highlightEl = highlightRef.current;
+    const wordEl = rotatingWordRef.current;
+    if (highlightEl && wordEl) {
+      // Start with word hidden
+      gsap.set(wordEl, { opacity: 0 });
+      // Expand highlight, then show word
+      gsap.to(highlightEl, {
+        scaleX: 1,
+        duration: 0.25,
+        ease: "power2.out",
+        delay: 0.5,
+        onComplete: () => {
+          gsap.to(wordEl, { opacity: 1, duration: 0.15 });
+        }
+      });
+    }
+    
     const interval = setInterval(() => {
       const wordEl = rotatingWordRef.current;
-      if (!wordEl) return;
+      const highlightEl = highlightRef.current;
+      if (!wordEl || !highlightEl) return;
 
-      // Animate out: slide up and fade
-      gsap.to(wordEl, {
-        y: -20,
+      // Create timeline for smooth sequence
+      const tl = gsap.timeline();
+      
+      // Phase 1: Fade out word
+      tl.to(wordEl, {
         opacity: 0,
-        duration: 0.35,
+        duration: 0.12,
         ease: "power2.in",
-        onComplete: () => {
-          // Update to next word
-          setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
-          
-          // Reset position to below and animate in
-          gsap.set(wordEl, { y: 20 });
-          gsap.to(wordEl, {
-            y: 0,
-            opacity: 1,
-            duration: 0.35,
-            ease: "power2.out",
-          });
-        },
+      })
+      // Phase 2: Collapse highlight to center
+      .to(highlightEl, {
+        scaleX: 0,
+        duration: 0.18,
+        ease: "power2.in",
+      })
+      // Phase 3: Update word
+      .call(() => {
+        setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
+      })
+      // Phase 4: Expand highlight from center
+      .to(highlightEl, {
+        scaleX: 1,
+        duration: 0.18,
+        ease: "power2.out",
+      })
+      // Phase 5: Fade in word
+      .to(wordEl, {
+        opacity: 1,
+        duration: 0.12,
+        ease: "power2.out",
       });
+      
     }, 3000); // Change word every 3 seconds
 
     return () => clearInterval(interval);
@@ -494,13 +526,25 @@ export default function HeroContent({
           >
             {titleStart}
             <br />
-            <span 
-              ref={rotatingWordRef}
-              className="inline-block bg-gradient-to-r from-[#ffb347] via-[#ff8a3c] to-[#ff6b00] bg-clip-text text-transparent"
-            >
-              {rotatingWords && rotatingWords.length > 0 
-                ? rotatingWords[currentWordIndex] 
-                : titleAccent}
+            <span className="relative inline-block">
+              {/* Highlight bar - stays visible */}
+              <span
+                ref={highlightRef}
+                className="absolute inset-y-0 -inset-x-3 bg-gradient-to-r from-[#ff6b00] via-[#ff8a3c] to-[#ffb347] rounded-md"
+                style={{ 
+                  transform: "scaleX(0)",
+                  transformOrigin: "center",
+                }}
+              />
+              {/* The rotating word - dark text on orange highlight */}
+              <span 
+                ref={rotatingWordRef}
+                className="relative inline-block px-1 text-zinc-900 font-bold"
+              >
+                {rotatingWords && rotatingWords.length > 0 
+                  ? rotatingWords[currentWordIndex] 
+                  : titleAccent}
+              </span>
             </span>
             <br />
             {titleEnd}
